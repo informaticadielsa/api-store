@@ -1,0 +1,55 @@
+{
+  "name": "epunto_commer_backend",
+  "version": "1.0.0",
+  "description": "Business point backend and integration with postgres [Api]",
+  "main": "index.js",
+  "scripts": {
+    "start": "export NODE_ENV=production &&  babel-node index.js --exec",
+    "dev": "set NODE_ENV=development&& nodemon index.js --exec babel-node"
+  },
+  "keywords": [
+    "APIREST",
+    "BACKEND",
+    "POSTGRESQL",
+    "NODEJS"
+  ],
+  "author": "PuntoCommerces",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marioCastell/ePunto_Commer_Backend/issues"
+  },
+  "homepage": "https://github.com/marioCastell/ePunto_Commer_Backend#readme",
+  "dependencies": {
+    "adm-zip": "^0.5.1",
+    "async": "^3.2.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "conekta": "^4.2.0",
+    "cors": "^2.8.5",
+    "date-and-time": "^2.1.0",
+    "dotenv": "^8.2.0",
+    "email-validator": "^2.0.4",
+    "express": "^4.17.1",
+    "express-promise-router": "^4.0.1",
+    "fs": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.13",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "node-cron": "^2.0.3",
+    "nodemailer": "^6.4.15",
+    "pg": "^8.5.0",
+    "pg-hstore": "^2.3.3",
+    "pm2": "^4.5.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "sequelize": "^6.3.5",
+    "xlsx": "^0.16.9"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "nodemon": "^2.0.6"
+  }
+}

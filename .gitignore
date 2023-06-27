@@ -1,0 +1,12 @@
+# You can install dependencies fot yourself.
+node_modules/
+## Only locale
+scripts/_last.txt
+##Not update development.env
+development.env
+
+## ignore files 
+src/
+public/img
+public/compressed
+public/pdf
