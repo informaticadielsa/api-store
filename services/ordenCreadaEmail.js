@@ -739,6 +739,8 @@ exports.ordenCreadaEmail = async function (order_id) {
             "gabriel@puntocommerce.com",
             "henry@puntocommerce.com",
             "aymara@puntocommerce.com",
+            "informatica@dielsa.com",
+            "oscar.espinosa@daltum.mx"
         ];
     }
     else

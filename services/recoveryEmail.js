@@ -134,6 +134,8 @@ exports.recoveryEmail = function (email, token) {
     "gabriel@puntocommerce.com",
     "henry@puntocommerce.com",
     "aymara@puntocommerce.com",
+    "informatica@dielsa.com",
+    "oscar.espinosa@daltum.mx"
   ];
   // Definimos el email
   const mailOptions = {

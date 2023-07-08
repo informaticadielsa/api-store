@@ -230,7 +230,8 @@ const ControlMestroMultiple = ({
         SECONDARY_BANNERS_BOTTOM    :   1000149,
         LOGO_HOME                   :   1000150,
         BRANDS_BANNER               :   1000193,
-        CLIENTS_BANNER              :   1000194
+        CLIENTS_BANNER              :   1000194,
+        MAIN_SLIDER_MOVIL           :   1000203
     },
     ESTATUS_WISH_LIST: {
         ACTIVO          :   1000161,
