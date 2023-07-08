@@ -1627,9 +1627,9 @@ export default{
 
 
 
-                //borrar despues el if y dejar solo codigo, Cuando se hace desde ENV no borra carrito
-                if(process.env.PORT != 5000)
-                {
+                // //borrar despues el if y dejar solo codigo, Cuando se hace desde ENV no borra carrito
+                // if(process.env.PORT != 5000)
+                // {
                     //Borrar carrito actual
                     await models.ProductoCarritoDeCompra.destroy({
                         where: {
@@ -1642,21 +1642,21 @@ export default{
                         }
                     });
                     
-                }
-                else
-                {
-                    var newNumeroOrden =  parseInt(constCarritoDeCompra.cdc_numero_orden)+1
-                    newNumeroOrden = "0000000" + newNumeroOrden
+                // }
+                // else
+                // {
+                //     var newNumeroOrden =  parseInt(constCarritoDeCompra.cdc_numero_orden)+1
+                //     newNumeroOrden = "0000000" + newNumeroOrden
 
                      
-                    const bodyUpdate = {
-                        "cdc_numero_orden": newNumeroOrden,
-                        updatedAt: Date()
-                    };
+                //     const bodyUpdate = {
+                //         "cdc_numero_orden": newNumeroOrden,
+                //         updatedAt: Date()
+                //     };
                     
-                    await constCarritoDeCompra.update(bodyUpdate);
+                //     await constCarritoDeCompra.update(bodyUpdate);
 
-                }
+                // }
 
 
 
