@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "export NODE_ENV=production &&  babel-node index.js --exec",
-    "dev": "set NODE_ENV=development&& nodemon index.js --exec babel-node"
+    "dev": "nodemon index.js --exec babel-node"
   },
   "keywords": [
     "APIREST",
@@ -20,12 +20,15 @@
   },
   "homepage": "https://github.com/marioCastell/ePunto_Commer_Backend#readme",
   "dependencies": {
+    "@graphql-tools/schema": "^10.0.0",
     "adm-zip": "^0.5.1",
+    "apollo-server-core": "^3.12.0",
+    "apollo-server-express": "^3.12.0",
     "async": "^3.2.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-3": "^6.24.1",
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.2",
     "conekta": "^4.2.0",
     "cors": "^2.8.5",
     "date-and-time": "^2.1.0",
@@ -34,6 +37,7 @@
     "express": "^4.17.1",
     "express-promise-router": "^4.0.1",
     "fs": "0.0.1-security",
+    "graphql": "^16.7.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.13",
     "morgan": "^1.10.0",
