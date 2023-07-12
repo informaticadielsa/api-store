@@ -15,34 +15,8 @@ import path from "path";
 import router from "./routes";
 
 // Example import file graphql
-const UsertypeDefs = `#graphql
-  type Query {
-    hello(nombreUsuario: String): String
-  }
-
-  type Mutation {
-    newUser(name: String, lastName: String): mngUser
-  }
-
-  type mngUser {
-    mng: String
-    code: Int
-  }
-`;
-const Userresolvers = {
-  Query: {
-    hello: (_, res) => {
-      console.log(res);
-      return `world ${res.nombreUsuario}`;
-    },
-  },
-  Mutation: {
-    newUser: (_, res) => {
-      console.log('res ', res);
-      return { mng: "Usuario guardado correctamente", code: 201 }
-    }
-  }
-};
+import { typeDefs as compraFinalizadaTypeDefs, resolver as compraFinalizadaResolvers } from './graphql/tCompraFinalizada';
+import { typeDefs as usuarioTypeDefs, resolver as usuarioResolvers } from "./graphql/Usuario";
 
 const Query = `
     scalar DateTime
@@ -51,10 +25,12 @@ const Query = `
 const schema = makeExecutableSchema({
   typeDefs: [
     Query,
-    UsertypeDefs,
+    compraFinalizadaTypeDefs,
+    usuarioTypeDefs
   ],
   resolvers: [
-    Userresolvers,
+    compraFinalizadaResolvers,
+    usuarioResolvers
   ]
 });
 
