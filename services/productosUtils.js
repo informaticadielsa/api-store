@@ -222,8 +222,6 @@ module.exports = {
                     where: {
                         prod_prod_producto_padre_sku: rows[i].prod_sku,
                         prod_cmm_estatus_id: statusControllers.ESTATUS_PRODUCTO.ACTIVO,
-                        prod_volumen: {[Op.ne] : 0 },
-                        prod_peso: {[Op.ne] : 0 },
                         prod_mostrar_en_tienda: true
                     },
                     attributes: ['prod_producto_id'],
@@ -253,8 +251,6 @@ module.exports = {
                     where: {
                         prod_producto_id: prod_child_id,
                         prod_cmm_estatus_id: statusControllers.ESTATUS_PRODUCTO.ACTIVO,
-                        prod_volumen: {[Op.ne] : 0 },
-                        prod_peso: {[Op.ne] : 0 },
                         prod_mostrar_en_tienda: true
                     },
                     //attributes: ['prod_producto_id', 'prod_nombre', 'prod_sku', 'prod_viñetas', 'prod_precio', 'prod_dias_resurtimiento', 'prod_es_stock_inactivo', 'prod_tipo_precio_base'],
