@@ -207,15 +207,6 @@ module.exports = {
                                         await constCompraFinalizada.update(bodyUpdate2);
 
 
-
-
-                                        if(process.env.EMAIL_ENV != "development")
-                                        {
-                                            
-                                        }
-                                        else
-                                        {
-
                                             console.log("Integrar 100000000000000")
                                             //INTEGRAR
                                             var options = {
@@ -259,7 +250,7 @@ module.exports = {
                                                 };
                                                 await constCompraFinalizada.update(bodyUpdate);
                                             }
-                                        }
+                                        
 
 
 
@@ -769,13 +760,6 @@ module.exports = {
                                     {
                                         
 
-
-                                        if(process.env.EMAIL_ENV == "development")
-                                        {
-                                            
-                                        }
-                                        else
-                                        {
                                             const bodyUpdate2 = {
                                                 "cf_sap_json_creacion" :  dataCreateOrderMXN
                                             };
@@ -821,7 +805,7 @@ module.exports = {
                                                 };
                                                 await constCompraFinalizada.update(bodyUpdate);
                                             }
-                                        }
+                                        
                                     }
 
 
@@ -888,12 +872,6 @@ module.exports = {
                                         await constCompraFinalizada.update(bodyUpdate2);
 
                                         
-                                        if(process.env.EMAIL_ENV == "development")
-                                        {
-                                            
-                                        }
-                                        else
-                                        {
                                             //INTEGRAR
                                             var options = {
                                                 'method': 'POST',
@@ -934,7 +912,7 @@ module.exports = {
                                                 };
                                                 await constCompraFinalizada.update(bodyUpdate);
                                             }
-                                        }
+                                        
                                     }
 
 
