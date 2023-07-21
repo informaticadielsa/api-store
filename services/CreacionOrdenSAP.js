@@ -209,7 +209,7 @@ module.exports = {
 
 
 
-                                        if(process.env.EMAIL_ENV == "development")
+                                        if(process.env.EMAIL_ENV != "development")
                                         {
                                             
                                         }
