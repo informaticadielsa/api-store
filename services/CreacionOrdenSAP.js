@@ -11,7 +11,7 @@ import date_and_time from 'date-and-time';
 module.exports = {
     CreacionOrdenSAP: async function (cdc_sn_socio_de_negocio_id, cf_compra_finalizada_id, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre) {
         try{
-
+ 
             console.log(cdc_politica_envio_surtir_un_solo_almacen)
             console.log(cdc_politica_envio_nombre)
             //Obtener Fecha
@@ -227,7 +227,8 @@ module.exports = {
                                             });
 
                                             var resultJson = JSON.parse(result);
-
+                                                console.log('OJO de DIOS')
+                                                console.log(resultJson)
                                             if(resultJson)
                                             {
                                                 if(resultJson.descripcion == "ERROR - Este documento ya ha sido creado en SAP")
