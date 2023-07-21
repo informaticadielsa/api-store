@@ -12,8 +12,10 @@ module.exports = {
     CreacionOrdenSAP: async function (cdc_sn_socio_de_negocio_id, cf_compra_finalizada_id, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre) {
         try{
  
-            console.log(cdc_politica_envio_surtir_un_solo_almacen)
-            console.log(cdc_politica_envio_nombre)
+
+            console.log('Inicia sesion')
+            //console.log(cdc_politica_envio_surtir_un_solo_almacen)
+            //console.log(cdc_politica_envio_nombre)
             //Obtener Fecha
             var obtenerFecha = await this.obtenerFecha()
             var direccionFacturacion
@@ -24,6 +26,8 @@ module.exports = {
             //Si la fecha se genero correctamente
             if(obtenerFecha.status == true)
             {
+
+                console.log("Prueba 1")
                 //Cargar informacion de la orden (compra finalizada)
                 const constCompraFinalizada = await models.CompraFinalizada.findOne(
                 {
@@ -65,6 +69,8 @@ module.exports = {
 
 
                 //Si ambas parte de la orden existen
+
+                console.log('pruebas 3')
                 if(constCompraFinalizada && constProductoCompraFinalizada)
                 {
                     //Obtener informacion del Socio de Negocio
@@ -77,6 +83,7 @@ module.exports = {
 
                     if(constSociosNegocio)
                     {
+                        console.log("-------------------------------Prueba-----------------------------------")
                         //Obtener direccion facturacion (campo sap)
                         var obtenerDireccionFacturacion = await this.obtenerDireccionFacturacion(constSociosNegocio)
 
@@ -208,6 +215,8 @@ module.exports = {
                                         }
                                         else
                                         {
+
+                                            console.log("Integrar 100000000000000")
                                             //INTEGRAR
                                             var options = {
                                                 'method': 'POST',
