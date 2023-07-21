@@ -8127,8 +8127,6 @@ export default {
                         cast (p1.prod_codigo_grupo as int) in (`+arrayCategoriasIDs+`)
                             and prod_cmm_estatus_id = 1000016 
                             and prod_prod_producto_padre_sku is not null 
-                            and prod_volumen != 0
-                            and prod_peso != 0
                             and prod_mostrar_en_tienda = true
                     )
             `;
@@ -10549,8 +10547,6 @@ export default {
                                     @@ to_tsquery('`+searchConditionSQL+`')
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
