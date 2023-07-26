@@ -1526,7 +1526,8 @@ export default {
                 {
                     const bodyCreate = {
                         "prod_sku" : constRawArticulos[i].dataValues.skuPadre,    //Se obtiene el sku padre
-                        "prod_nombre" : constRawArticulos[i].dataValues.nombreMarca.toUpperCase() + " " + constRawArticulos[i].dataValues.nombreArticulo.toUpperCase(),
+                        "prod_nombre" :// constRawArticulos[i].dataValues.nombreMarca.toUpperCase() + " " +
+                          constRawArticulos[i].dataValues.nombreArticulo.toUpperCase(),
                         "prod_descripcion":  "",
                         "prod_cat_categoria_id" : constRawArticulos[i].dataValues.codigoGrupo,
                         "prod_usu_usuario_creado_id" :  1,
@@ -1670,7 +1671,8 @@ export default {
                     {
                         const bodyCreate = {
                             "prod_sku" : constRawArticulos[i].dataValues.codigoArticulo,
-                            "prod_nombre" :  constRawArticulos[i].dataValues.nombreMarca.toUpperCase() + " " + constRawArticulos[i].dataValues.nombreArticulo.toUpperCase(),
+                            "prod_nombre" : // constRawArticulos[i].dataValues.nombreMarca.toUpperCase() + " " +
+                             constRawArticulos[i].dataValues.nombreArticulo.toUpperCase(),
                             "prod_descripcion":  "",
                             "prod_usu_usuario_creado_id" :  1,
                             "prod_cmm_estatus_id":  estatusProducto,
@@ -6478,7 +6480,8 @@ export default {
                 {
                     const bodyCreate = {
                         "prod_sku" : constRawArticulos[i].dataValues.skuPadre,    //Se obtiene el sku padre
-                        "prod_nombre" : constRawArticulos[i].dataValues.nombreMarca.toUpperCase() + " " + constRawArticulos[i].dataValues.nombreArticulo.toUpperCase(),
+                        "prod_nombre" : //constRawArticulos[i].dataValues.nombreMarca.toUpperCase() + " " + 
+                        constRawArticulos[i].dataValues.nombreArticulo.toUpperCase(),
                         "prod_descripcion":  "",
                         "prod_cat_categoria_id" : constRawArticulos[i].dataValues.codigoGrupo,
                         "prod_usu_usuario_creado_id" :  1,
@@ -6622,7 +6625,8 @@ export default {
                     {
                         const bodyCreate = {
                             "prod_sku" : constRawArticulos[i].dataValues.codigoArticulo,
-                            "prod_nombre" :  constRawArticulos[i].dataValues.nombreMarca.toUpperCase() + " " + constRawArticulos[i].dataValues.nombreArticulo.toUpperCase(),
+                            "prod_nombre" :  //constRawArticulos[i].dataValues.nombreMarca.toUpperCase() + " " + 
+                            constRawArticulos[i].dataValues.nombreArticulo.toUpperCase(),
                             "prod_descripcion":  "",
                             "prod_usu_usuario_creado_id" :  1,
                             "prod_cmm_estatus_id":  estatusProducto,
