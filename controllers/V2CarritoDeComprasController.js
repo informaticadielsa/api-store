@@ -1032,7 +1032,7 @@ export default{
             var checkoutJson = await getCheckout.getCheckoutAPI(req.body.cdc_sn_socio_de_negocio_id);
 
             checkoutJson.dataValues.productos = await getCheckout.removerLineasCantidadCeroDeStockInactivo(checkoutJson.dataValues.productos);
-
+ 
 
             res.status(200).send({
                 message: 'Checkout Obtenido',
