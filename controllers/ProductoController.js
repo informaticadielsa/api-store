@@ -8195,6 +8195,12 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
 
+            //Mole
+            //rows = await productosUtils.setChildsUSDChange(rows);
+
+            //Arroz
+            //rows = await productosUtils.setOnlyChildsUSDChange(rows);
+
             
 
             res.status(200).send({
@@ -9368,6 +9374,11 @@ export default {
             //obtener stock detalle por hijo
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
+             //Mole
+             //rows = await productosUtils.setChildsUSDChange(rows);
+
+             //Arroz
+             //rows = await productosUtils.setOnlyChildsUSDChange(rows);
             
 
 
@@ -9468,6 +9479,15 @@ export default {
                 {
                     type: sequelize.QueryTypes.SELECT 
                 });
+                
+                //Crear mas campos para el detalle.
+
+            //Mole
+            //rows = await productosUtils.setChildsUSDChange(rows);
+
+            //Arroz
+            //rows = await productosUtils.setOnlyChildsUSDChange(rows);
+
 
                 //Obtener Count de las rows
                 const constCount = await sequelize.query(sqlFinalRowsCount,
@@ -9480,6 +9500,12 @@ export default {
                     count: parseInt(constCount[0].count),
                     rows
                 }
+
+
+
+                //aqui Mero
+
+
             //FIN Obtener productos BASE para luego obtener mas cosas
 
 
@@ -9598,7 +9624,7 @@ export default {
                 idSocioNegocio = null
             }
 
-
+ 
             const constProductoHijo = await models.Producto.findOne(
             {
                 where: {
@@ -10392,6 +10418,7 @@ export default {
         }
     },
 
+    //GEt
     frontGetProductoMainV3OnlyChilds: async (req, res, next) =>{
         try{
 
