@@ -262,7 +262,8 @@ exports.recoveryEmail = async function (email, token, id_socio_negocio) {
       maillist = [
         
           "informatica@dielsa.com",
-          "oscar.espinosa@daltum.mx"
+          "oscar.espinosa@daltum.mx",
+          "luis.sanchez@daltum.mx"
       ];
   }
   else

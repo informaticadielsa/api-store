@@ -262,7 +262,8 @@ process.env.BACK_LINK +
             //"gabriel@puntocommerce.com",
             //"henry@puntocommerce.com",
             "informatica@dielsa.com",
-            "oscar.espinosa@daltum.mx"
+            "oscar.espinosa@daltum.mx",
+            "luis.sanchez@daltum.mx"
         ];
     }
     else
