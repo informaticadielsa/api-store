@@ -55,7 +55,7 @@ export default{
         try{
             var cdc_sn_socio_de_negocio_id = req.body.cdc_sn_socio_de_negocio_id
             var getCart = await getCheckout.getCartAPI(req.body.cdc_sn_socio_de_negocio_id);
-
+ 
             //Retornara el id del nuevo carrito
             res.status(200).send({
                 message: 'Carrito Obtenido Con Exito',
@@ -1032,7 +1032,7 @@ export default{
             var checkoutJson = await getCheckout.getCheckoutAPI(req.body.cdc_sn_socio_de_negocio_id);
 
             checkoutJson.dataValues.productos = await getCheckout.removerLineasCantidadCeroDeStockInactivo(checkoutJson.dataValues.productos);
-
+ 
 
             res.status(200).send({
                 message: 'Checkout Obtenido',
