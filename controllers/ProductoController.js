@@ -8195,6 +8195,12 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
 
+            //Mole
+            rows = await productosUtils.setChildsUSDChange(rows);
+
+            //Arroz
+            rows = await productosUtils.setOnlyChildsUSDChange(rows);
+
             
 
             res.status(200).send({
@@ -9598,7 +9604,7 @@ export default {
                 idSocioNegocio = null
             }
 
-
+ 
             const constProductoHijo = await models.Producto.findOne(
             {
                 where: {
@@ -10392,6 +10398,7 @@ export default {
         }
     },
 
+    //GEt
     frontGetProductoMainV3OnlyChilds: async (req, res, next) =>{
         try{
 
