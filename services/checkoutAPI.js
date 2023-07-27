@@ -6,6 +6,7 @@ import request from 'request-promise';
 import statusControllers from '../mapeos/mapeoControlesMaestrosMultiples';
 import productosUtils from "../services/productosUtils";
 import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
+import Producto from '../models/ProductoModel';
 
 
 module.exports = {
@@ -28,7 +29,11 @@ module.exports = {
 
             //SN Carrito Activo
             const constCarritoDeCompra = await models.CarritoDeCompra.findOne(
-            {
+            { include: [
+                {
+                    model: models.Producto
+                }
+            ],
                 where: {
                     cdc_sn_socio_de_negocio_id: cdc_sn_socio_de_negocio_id
                 }
@@ -1795,6 +1800,11 @@ module.exports = {
             //Buscara si el Socio de negocio tiene un carrito activo.
             const constCarritoDeCompra = await models.CarritoDeCompra.findOne(
             {
+                include: [
+                    {
+                        model: models.Producto
+                    }
+                ],
                 where: {
                     cdc_sn_socio_de_negocio_id: cdc_sn_socio_de_negocio_id
                 }
@@ -1809,6 +1819,7 @@ module.exports = {
                     where: {
                         sn_socios_negocio_id: cdc_sn_socio_de_negocio_id
                     },
+                  
                     attributes:  ["sn_socios_negocio_id", "sn_cardcode", "sn_codigo_direccion_facturacion", "sn_lista_precios", "sn_codigo_grupo",
                     "sn_porcentaje_descuento_total"]
                 });
