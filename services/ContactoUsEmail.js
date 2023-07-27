@@ -252,7 +252,8 @@ exports.contacto_us = function (data) {
             "henry@puntocommerce.com",
             "aymara@puntocommerce.com",
             "informatica@dielsa.com",
-            "oscar.espinosa@daltum.mx"
+            "oscar.espinosa@daltum.mx",
+            "luis.sanchez@daltum.mx"
         ];
     }
     else
