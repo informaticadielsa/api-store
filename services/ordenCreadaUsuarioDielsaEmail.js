@@ -200,6 +200,9 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
       },
     });
     let ordenCompraUrl = "/myprofile/pedidos";
+    // let ordenCompraUrl = orden_de_compra ? 
+    //                       orden_de_compra.odc_ruta_archivo.split("./public")[1]
+    //                       : "";
 
     //-----------------------------------------------------------------
     //Informacion final de pago
@@ -473,7 +476,7 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
               `<div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; padding-bottom: 50px; text-align: -webkit-left'>
                 <div class='contenido1'>
                 </div>
-                  <p><a href="`+ process.env.STORE_LINK +`/myprofile">Ver orden de compra</a></p>
+                  <p><a href="`+ process.env.STORE_LINK +`/myprofile/perfil">Ver orden de compra</a></p>
               </div>`
             }
 
