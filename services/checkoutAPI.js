@@ -29,14 +29,11 @@ module.exports = {
 
             //SN Carrito Activo
             const constCarritoDeCompra = await models.CarritoDeCompra.findOne(
-            { include: [
-                {
-                    model: models.Producto
-                }
-            ],
+            { 
                 where: {
                     cdc_sn_socio_de_negocio_id: cdc_sn_socio_de_negocio_id
-                }
+                },
+                
             });
 
 
@@ -46,6 +43,11 @@ module.exports = {
                 where: {
                     pcdc_carrito_de_compra_id: constCarritoDeCompra.cdc_carrito_de_compra_id
                 },
+                include: [
+                    {
+                        model: models.Producto
+                    }
+                ],
                 attributes: {
                     exclude: ['createdAt','updatedAt','pcdc_lista_precio','pcdc_precio','pcdc_prod_producto_id_regalo','pcdc_cantidad_producto_regalo',
                     'pcdc_descuento_promocion', 'pcdc_prod_producto_id_promocion', 'pcdc_cantidad_producto_promocion', 'pcdc_cupon_aplicado',
@@ -1800,14 +1802,15 @@ module.exports = {
             //Buscara si el Socio de negocio tiene un carrito activo.
             const constCarritoDeCompra = await models.CarritoDeCompra.findOne(
             {
+              
+                where: {
+                    cdc_sn_socio_de_negocio_id: cdc_sn_socio_de_negocio_id
+                },
                 include: [
                     {
                         model: models.Producto
                     }
                 ],
-                where: {
-                    cdc_sn_socio_de_negocio_id: cdc_sn_socio_de_negocio_id
-                }
             });
 
 
