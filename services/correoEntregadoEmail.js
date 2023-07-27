@@ -801,7 +801,8 @@ exports.correoEntregadoEmail = async function (order_id) {
             //"henry@puntocommerce.com",
             //"aymara@puntocommerce.com",
             "informatica@dielsa.com",
-            "oscar.espinosa@daltum.mx"
+            "oscar.espinosa@daltum.mx",
+            "luis.sanchez@daltum.mx"
         ];
     }
     else

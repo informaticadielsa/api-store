@@ -744,7 +744,8 @@ exports.ordenAbiertaCreadaEmail = async function (order_id) {
     {
         maillist = [
             "informatica@dielsa.com",
-            "oscar.espinosa@daltum.mx"
+            "oscar.espinosa@daltum.mx",
+            "luis.sanchez@daltum.mx"
         ];
     }
     else
