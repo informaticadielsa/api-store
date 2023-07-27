@@ -3179,7 +3179,6 @@ module.exports = {
                     // Conversión peso a dolar
                     precioTotal_usd += (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)/USDValor;
                     totalDescuentos_usd += (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor;
-                    console.log('------------------------------------------', totalDescuentos_usd);
 
                     //Variable que saca el total subtotal (cantidad x precio base)
                     precioTotalTemp = checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
