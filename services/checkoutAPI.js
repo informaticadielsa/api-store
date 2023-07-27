@@ -41,11 +41,6 @@ module.exports = {
                 where: {
                     pcdc_carrito_de_compra_id: constCarritoDeCompra.cdc_carrito_de_compra_id
                 },
-                include: [
-                    {
-                        model: models.Producto
-                    }
-                ],
                 attributes: {
                     exclude: ['createdAt','updatedAt','pcdc_lista_precio','pcdc_precio','pcdc_prod_producto_id_regalo','pcdc_cantidad_producto_regalo',
                     'pcdc_descuento_promocion', 'pcdc_prod_producto_id_promocion', 'pcdc_cantidad_producto_promocion', 'pcdc_cupon_aplicado',
@@ -1864,11 +1859,6 @@ module.exports = {
                     where: {
                         pcdc_carrito_de_compra_id: constCarritoDeCompra.cdc_carrito_de_compra_id
                     },
-                    include: [
-                        {
-                            model: models.Producto
-                        }
-                    ],
                     attributes: {
                         exclude: ['createdAt','updatedAt','pcdc_lista_precio','pcdc_precio','pcdc_prod_producto_id_regalo','pcdc_cantidad_producto_regalo',
                         'pcdc_descuento_promocion', 'pcdc_prod_producto_id_promocion', 'pcdc_cantidad_producto_promocion', 'pcdc_cupon_aplicado',
@@ -1877,7 +1867,7 @@ module.exports = {
                     order: [
                         ['createdAt', 'ASC']
                     ],
-                }); 
+                });
 
                 for (var i = 0; i < constProductoCarritoDeCompra.length; i++) 
                 {
@@ -2002,7 +1992,6 @@ module.exports = {
 
                 }
 
-                
                 constCarritoDeCompra.dataValues.productos = constProductoCarritoDeCompra
                 
                 //Totales finales
@@ -2200,7 +2189,7 @@ module.exports = {
                         precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
                     }
 
-                } 
+                }
 
 
 
@@ -3166,9 +3155,16 @@ module.exports = {
                         //Calculara el total de descuentos
                         totalDescuentos_usd += (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor
 
+                        let precioTotalTemp1 = checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal;
+                        precioTotal += precioTotalTemp1;
+                        totalDescuentos += checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.totalDescuento;
                     }
                     else
                     {
+                        let precioTotalTemp1 = (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)/USDValor;
+                        precioTotal_usd += precioTotalTemp1;
+                        totalDescuentos_usd += (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor;
+
                         //Variable que saca el total subtotal (cantidad x precio base)
                         precioTotalTemp = checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
                         precioTotal += precioTotalTemp
@@ -3180,6 +3176,11 @@ module.exports = {
                 }
                 else
                 {
+                    // Conversión peso a dolar
+                    precioTotal_usd += (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)/USDValor;
+                    totalDescuentos_usd += (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor;
+                    console.log('------------------------------------------', totalDescuentos_usd);
+
                     //Variable que saca el total subtotal (cantidad x precio base)
                     precioTotalTemp = checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
                     precioTotal += precioTotalTemp
