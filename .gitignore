@@ -10,3 +10,4 @@ src/
 public/img
 public/compressed
 public/pdf
+/package-lock.json

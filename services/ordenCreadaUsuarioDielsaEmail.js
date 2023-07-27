@@ -801,13 +801,6 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
     if(process.env.EMAIL_ENV == "development")
     {
         maillist = [
-            "baltazar.ibarra@dielsa.com",
-            "gustavo.arizpe@dielsa.com",
-            "marlen.pena@dielsa.com",
-            "gabriel@puntocommerce.com",
-            "henry@puntocommerce.com",
-            "aymara@puntocommerce.com",
-            "alfredo@puntocommerce.com",
             "informatica@dielsa.com",
             "oscar.espinosa@daltum.mx"
         ];
