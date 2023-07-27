@@ -9591,7 +9591,7 @@ export default {
             rows = await productosUtils.setChildsUSDChange(rows);
 
           
-            rows = await productosUtils.setOnlyChildsUSDChange(rows);
+           // rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
 
 
