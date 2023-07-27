@@ -8196,10 +8196,10 @@ export default {
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
 
             //Mole
-            rows = await productosUtils.setChildsUSDChange(rows);
+            //rows = await productosUtils.setChildsUSDChange(rows);
 
             //Arroz
-            rows = await productosUtils.setOnlyChildsUSDChange(rows);
+            //rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
             
 
@@ -9375,10 +9375,10 @@ export default {
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
              //Mole
-             rows = await productosUtils.setChildsUSDChange(rows);
+             //rows = await productosUtils.setChildsUSDChange(rows);
 
              //Arroz
-             rows = await productosUtils.setOnlyChildsUSDChange(rows);
+             //rows = await productosUtils.setOnlyChildsUSDChange(rows);
             
 
 
@@ -9483,10 +9483,10 @@ export default {
                 //Crear mas campos para el detalle.
 
             //Mole
-            rows = await productosUtils.setChildsUSDChange(rows);
+            //rows = await productosUtils.setChildsUSDChange(rows);
 
             //Arroz
-            rows = await productosUtils.setOnlyChildsUSDChange(rows);
+            //rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
 
                 //Obtener Count de las rows
