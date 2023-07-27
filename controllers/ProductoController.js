@@ -9482,11 +9482,7 @@ export default {
                 
                 //Crear mas campos para el detalle.
 
-            //Mole
-            //rows = await productosUtils.setChildsUSDChange(rows);
-
-            //Arroz
-            //rows = await productosUtils.setOnlyChildsUSDChange(rows);
+            
 
 
                 //Obtener Count de las rows
@@ -9591,7 +9587,11 @@ export default {
             //obtener stock detalle por hijo
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
-            
+            //es el bueno
+            rows = await productosUtils.setChildsUSDChange(rows);
+
+          
+            rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
 
 
