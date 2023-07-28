@@ -247,7 +247,7 @@ exports.ordenCreadaEmail = async function (order_id) {
       <head>
         <title>Pendiente de confirmación</title>
         <link href="` +
-  process.env.BACK_LINK +
+  process.env.BACK_LINK_OUT +
   `/recursos/bootstrap.min.css" rel="stylesheet">
         <style type="text/css">
           @font-face {
@@ -318,7 +318,7 @@ exports.ordenCreadaEmail = async function (order_id) {
       </head>
       <body>
         <header class="header_logo">
-          <img src='` + process.env.BACK_LINK + `/recursos/logo.png' / style='max-height: 70px; margin-top: 10px; margin: auto'>          
+          <img src='` + process.env.BACK_LINK_OUT + `/recursos/logo.png' / style='max-height: 70px; margin-top: 10px; margin: auto'>          
         </header>
 
         <section style='background: white; width: 90%; max-width: 800px; margin: 20px auto; text-align: -webkit-center; margin-top: 50px;'>
@@ -480,7 +480,7 @@ exports.ordenCreadaEmail = async function (order_id) {
         imagen = constImagenProducto.imgprod_ruta_archivo;
         imagen = imagen.split("./public");
         imagen = imagen[1];
-        imagen = process.env.BACK_LINK + imagen;
+        imagen = process.env.BACK_LINK_OUT + imagen;
       } else {
         imagen =
           "http://wws.com.pa/wp-content/plugins/wordpress-ecommerce/marketpress-includes/images/default-product.png";
@@ -665,22 +665,22 @@ exports.ordenCreadaEmail = async function (order_id) {
                                             <div class='social'>
                                               <a href='https://www.facebook.com/Dielsamsi/' style='text-decoration: none;' target="_blank">
                                                   <img src="` +
-      process.env.BACK_LINK +
+      process.env.BACK_LINK_OUT +
       `/recursos/Facebook.png" alt='facebook'>
                                               </a>
                                               <a href='https://www.linkedin.com/company/dielsa-telecomunicaciones/' style='text-decoration: none;' target="_blank">
                                                   <img src="` +
-      process.env.BACK_LINK +
+      process.env.BACK_LINK_OUT +
       `/recursos/LinkedIn.png" alt='linkedin'>
                                               </a>
                                               <a href='https://www.instagram.com/dielsamsi/?hl=es' style='text-decoration: none;' target="_blank">
                                                   <img src="` +
-      process.env.BACK_LINK +
+      process.env.BACK_LINK_OUT +
       `/recursos/Instagram.png" alt='instagram'>
                                               </a>
                                               <a href='https://www.youtube.com/channel/UCLYgOWzTRXXuJvMIcvB4GLw' style='text-decoration: none;' target="_blank">
                                                   <img src="` +
-      process.env.BACK_LINK +
+      process.env.BACK_LINK_OUT +
       `/recursos/Youtube.png" alt='youtube'>
                                               </a>
                                           </div>                                          
