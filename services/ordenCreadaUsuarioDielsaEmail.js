@@ -173,14 +173,10 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
       metodo_de_pago = "Tarjeta De Débito";
     }
 
-    var totalCompra = constCompraFinalizada.cf_total_compra;
-
     var formatter = new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
     });
-
-    totalCompra = formatter.format(totalCompra);
 
     //-----------------------------------------------------------------
     //Orden de compra
@@ -207,15 +203,31 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
     //-----------------------------------------------------------------
     //Informacion final de pago
 
-    var subTotal = constCompraFinalizada.cf_orden_subtotal;
-    var orderIVA = constCompraFinalizada.cf_order_iva;
-    var costoEnvio = constCompraFinalizada.cf_orden_gastos_envio;
-    var descuentos = constCompraFinalizada.cf_orden_descuento;
+    // var subTotal = constCompraFinalizada.cf_orden_subtotal;
+    // var orderIVA = constCompraFinalizada.cf_order_iva;
+    // var costoEnvio = constCompraFinalizada.cf_orden_gastos_envio;
+    // var descuentos = constCompraFinalizada.cf_orden_descuento;
+    var subTotal = constCompraFinalizada.cf_resume_mxn.precioTotal;
+    var orderIVA = constCompraFinalizada.cf_resume_mxn.TotalImpuesto;
+    var costoEnvio = constCompraFinalizada.cf_resume_mxn.cdc_costo_envio;
+    var descuentos = constCompraFinalizada.cf_resume_mxn.totalDescuentos;
+
+    var totalCompra = constCompraFinalizada.cf_resume_mxn.TotalFinal;
 
     subTotal = formatter.format(subTotal);
     orderIVA = formatter.format(orderIVA);
     costoEnvio = formatter.format(costoEnvio);
     descuentos = formatter.format(descuentos);
+
+    totalCompra = formatter.format(totalCompra);
+
+    // ---------------------- Informacion de pago en USD -----------------------------
+    var subTotalUSD = formatter.format(constCompraFinalizada.cf_resume_usd.precioTotal_usd);
+    var orderIVAUSD = formatter.format(constCompraFinalizada.cf_resume_usd.TotalImpuesto_usd);
+    var costoEnvioUSD = formatter.format(constCompraFinalizada.cf_resume_usd.cdc_costo_envio_usd);
+    var descuentosUSD = formatter.format(constCompraFinalizada.cf_resume_usd.totalDescuentos_usd);
+    
+    var totalCompraUSD = formatter.format(constCompraFinalizada.cf_resume_usd.TotalFinal_usd);
 
     //-----------------------------------------------------------------
     // Definimos el transporter
@@ -323,7 +335,7 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
           }
         </style>
       </head>
-      <body style="max-width:375px">
+      <body style="max-width:800px">
         <header class="header_logo">
           <img src='` + process.env.BACK_LINK + `/recursos/logo.png' / style='max-height: 70px; margin-top: 10px; margin: auto'>          
         </header>
@@ -620,81 +632,49 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
 
                       <section class='datos' style='background: #F5F5F5; padding-top: 30px; padding-left: 50px;'>
 
-                      <div style='color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
-                        <div class='contenidos'>
-                        </div>
-                        
-                        <p>Subtotal</p>
-                            
+      <table style="width: 500px; font-size: 16px;">
+        <tr>
+          <td></td>
+          <th style="text-align: center;">
+            MXN
+          </th>
+          <th style="text-align: center;">
+            USD
+          </th>
+        </tr>
+        <tr>
+          <th style="text-align: left;">Subtotal</th>
+          <td>`+subTotal+`</td>
+          <td>`+subTotalUSD+`</td>
+        </tr>
+        <tr>
+          <th style="text-align: left;">Gastos de envío</th>
+          <td>`+costoEnvio+`</td>
+          <td>`+costoEnvioUSD+`</td>
+        </tr>
+        <tr>
+          <th style="text-align: left;">
+            Descuento
+          </th>
+          <td>`+descuentos+`</td>
+          <td>`+descuentosUSD+`</td>
+        </tr>
+        <tr>
+          <th style="text-align: left;">
+            IVA 16%
+          </th>
+          <td>`+orderIVA+`</td>
+          <td>`+orderIVAUSD+`</td>
+        </tr>
+        <tr>
+          <th style="text-align: left;">
+            Total
+          </th>
+          <td>`+totalCompra+`</td>
+          <td>`+totalCompraUSD+`</td>
+        </tr>
+      </table>
 
-                        </div>
-                        <div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; text-align: -webkit-left'>
-                        <div class='contenido1'>
-                        </div>
-                              <p>` +
-      subTotal +
-      `</p>
-
-                      <div style='color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
-                        <div class='contenidos'>
-                        </div>
-                        
-                        <p>Gastos de envío</p>
-                            
-
-                        </div>
-                        <div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; text-align: -webkit-left'>
-                        <div class='contenido1'>
-                        </div>
-                              <p>` +
-      costoEnvio +
-      `</p>
-                              
-                      <div style='color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
-                        <div class='contenidos'>
-                        </div>
-                        
-                        <p>Descuento</p>
-                            
-
-                        </div>
-                        <div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; text-align: -webkit-left'>
-                        <div class='contenido1'>
-                        </div>
-                              <p>` +
-      descuentos +
-      `</p>
-                      <div style='color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
-                        <div class='contenidos'>
-                        </div>
-                        
-                        <p>IVA 16%</p>
-                            
-
-                        </div>
-                        <div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; padding-bottom: 50px; text-align: -webkit-left'>
-                        <div class='contenido1'>
-                        </div>
-                              <p>` +
-      orderIVA +
-      `</p>
-                      <div style='color: #000000; font-size: 24px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
-                        <div class='contenidos'>
-                        </div>
-                        
-                        <p>Total</p>
-                            
-
-                        </div>
-                        <div style='color: #000000; font-size: 19px; letter-spacing: 0; line-height: 20px; text-align: -webkit-left'>
-                        <div class='contenido1'>
-                        </div>
-                              <p>` +
-      totalCompra +
-      `</p>
-                      </div>
-                      </div>
-                      </div>
                       </section>
 
 
