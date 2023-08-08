@@ -10916,6 +10916,53 @@ export default {
             var mar_nombre = req.body.mar_nombre.toUpperCase()
             var cat_nombre = req.body.cat_nombre.toUpperCase()
 
+            // let dataWhere = {
+            //     where: {
+            //         prod_mostrar_en_tienda: true,
+            //     },
+            //     include: [
+            //         {
+            //             model: models.Categoria,
+            //         }
+            //     ],
+            //     limit: 2
+            // }
+
+            // dataWhere.where[Op.and] = [];
+
+            // if(req.body.prod_descripcion != '') {
+            //     dataWhere.where[Op.and].push({
+            //         prod_descripcion: {
+            //             [Op.iLike]: `%${req.body.prod_descripcion}%`
+            //         }
+            //     });
+            // }
+
+            // if(req.body.prod_sku) {
+            //     dataWhere.where[Op.and].push({
+            //         prod_sku: {
+            //             [Op.iLike]: `%${req.body.prod_sku}%`
+            //         }
+            //     });
+            // }
+
+            // console.log('dataWhere =====> ', dataWhere);
+
+            // const newDataProduct = await models.Producto.findAll(dataWhere);
+            // console.log('newDataProduct =================>');
+            // console.log(newDataProduct.map((item) => {
+            //     return item.dataValues;
+            // }));
+
+            // res.status(200).send({
+            //     message: 'Lista de productos',
+            //     row: {
+            //         count: newDataProduct.length,
+            //         rows: newDataProduct
+            //     }
+            // })
+            // return newDataProduct;
+
             //Variable en caso de que venga socio de negocio se obtendran precios de su lista de precios
             var idSocioNegocio
 
@@ -11051,12 +11098,11 @@ export default {
                                             left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                             left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                         where 
-                                            to_tsvector(p1.prod_nombre)
-                                            @@ to_tsquery('`+req.body.prod_nombre+`')
+                                            -- to_tsvector(p1.prod_nombre)
+                                            -- @@ to_tsquery('`+req.body.prod_nombre+`')
+                                            p1.prod_nombre like '%`+req.body.prod_nombre+`%'
                                             and prod_cmm_estatus_id = 1000016 
                                             and prod_prod_producto_padre_sku is not null 
-                                            and prod_volumen != 0
-                                            and prod_peso != 0
                                             and prod_mostrar_en_tienda = true
                                             and c2.cat_cmm_estatus_id = 1000010
                                     )
@@ -11085,8 +11131,6 @@ export default {
                                             @@ to_tsquery('`+req.body.prod_sku+`')
                                             and prod_cmm_estatus_id = 1000016 
                                             and prod_prod_producto_padre_sku is not null 
-                                            and prod_volumen != 0
-                                            and prod_peso != 0
                                             and prod_mostrar_en_tienda = true
                                             and c2.cat_cmm_estatus_id = 1000010
                                     )
@@ -11121,8 +11165,6 @@ export default {
                                             @@ to_tsquery('`+req.body.prod_nombre_extranjero+`')
                                             and prod_cmm_estatus_id = 1000016 
                                             and prod_prod_producto_padre_sku is not null 
-                                            and prod_volumen != 0
-                                            and prod_peso != 0
                                             and prod_mostrar_en_tienda = true
                                             and c2.cat_cmm_estatus_id = 1000010
                                     )   
@@ -11147,12 +11189,9 @@ export default {
                                             left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                             left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                         where 
-                                            to_tsvector(p1.prod_descripcion)
-                                            @@ to_tsquery('`+req.body.prod_descripcion+`')
+                                            p1.prod_descripcion ILIKE '%`+req.body.prod_descripcion+`%'
                                             and prod_cmm_estatus_id = 1000016 
                                             and prod_prod_producto_padre_sku is not null 
-                                            and prod_volumen != 0
-                                            and prod_peso != 0
                                             and prod_mostrar_en_tienda = true
                                             and c2.cat_cmm_estatus_id = 1000010
                                     )
@@ -11177,11 +11216,9 @@ export default {
                                             left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                             left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                         where 
-                                            m2.mar_nombre like '%`+req.body.mar_nombre+`%'  
+                                            m2.mar_nombre ILIKE '%`+req.body.mar_nombre+`%'  
                                             and prod_cmm_estatus_id = 1000016 
                                             and prod_prod_producto_padre_sku is not null 
-                                            and prod_volumen != 0
-                                            and prod_peso != 0
                                             and prod_mostrar_en_tienda = true
                                             and c2.cat_cmm_estatus_id = 1000010
                                     )
@@ -11206,11 +11243,9 @@ export default {
                                             left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                             left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                         where 
-                                            c2.cat_nombre like '%`+req.body.cat_nombre+`%'  
+                                            c2.cat_nombre ILIKE '%`+req.body.cat_nombre+`%'  
                                             and prod_cmm_estatus_id = 1000016 
                                             and prod_prod_producto_padre_sku is not null 
-                                            and prod_volumen != 0
-                                            and prod_peso != 0
                                             and prod_mostrar_en_tienda = true
                                             and c2.cat_cmm_estatus_id = 1000010
                                     )
@@ -11556,13 +11591,10 @@ export default {
                                             left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                             left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                         where 
-                                            to_tsvector(p1.prod_descripcion)
-                                            @@ to_tsquery('`+req.body.prod_descripcion+`')
-                                            and prod_cmm_estatus_id = 1000016 
+                                            prod_cmm_estatus_id = 1000016 
                                             and prod_prod_producto_padre_sku is not null 
-                                            and prod_volumen != 0
-                                            and prod_peso != 0
                                             and prod_mostrar_en_tienda = true
+                                            and prod_descripcion ilike '%`+req.body.prod_descripcion+`%'
                                     )
                 `
             }
