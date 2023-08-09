@@ -249,7 +249,7 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
       //maxConnections: 10,
       debug: true,
     });
-
+    var htmlOrdenCompra= ordenCompraUrl? `<a class="btnGotoOrder" href="${process.env.BACK_LINK + ordenCompraUrl}">Ver orden de compra</a>` :"";
     var htmlBody =
       `
       <!DOCTYPE html>
@@ -349,9 +349,10 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
             <div style='color: #0B3196; font-size: 28px; font-weight: 500; letter-spacing: 0; '>
               <h1>Se ha generado un nuevo pedido</h1>                
             </div>
-            <div>
-                <a class="btnGotoOrder" href="${process.env.BACK_LINK + ordenCompraUrl}">Ver orden de compra</a>
-            </div>
+            <div> `+
+            htmlOrdenCompra
+              +
+            `</div>
           </header>
             
         <div style='padding-top: 50px; color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
