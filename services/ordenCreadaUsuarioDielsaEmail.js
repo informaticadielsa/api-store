@@ -195,10 +195,10 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
           ]
       },
     });
-    let ordenCompraUrl = "/myprofile/pedidos";
-    // let ordenCompraUrl = orden_de_compra ? 
-    //                       orden_de_compra.odc_ruta_archivo.split("./public")[1]
-    //                       : "";
+    //let ordenCompraUrl = "/myprofile/pedidos";
+     let ordenCompraUrl = orden_de_compra ? 
+                         orden_de_compra.odc_ruta_archivo.split("./public")[1]
+                    : "";
 
     //-----------------------------------------------------------------
     //Informacion final de pago
@@ -508,7 +508,7 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
           "pcf_prod_producto_id",
           "pcf_fecha_entrega",
           "pcf_cantidad_producto",
-          "pcf_precio",
+          "pcf_precio", 
         ],
       });
 

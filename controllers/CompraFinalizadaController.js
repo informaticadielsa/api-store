@@ -1323,7 +1323,7 @@ export default{
     V2finalizarCompra: async(req, res, next) =>{
         try{
 
-
+ 
             //Obtener tipo de cambio
             const constTipoCambio = await models.ControlMaestroMultiple.findOne(
             {
@@ -1658,7 +1658,9 @@ export default{
 
                 // }
 
+               //Revisar aqui
 
+               //Envia correo a usuarios clientres de dielsa.com
 
                 await ordenCreadaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
 
