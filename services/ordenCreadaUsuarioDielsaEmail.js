@@ -250,6 +250,7 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
       debug: true,
     });
     var htmlOrdenCompra= ordenCompraUrl? `<a class="btnGotoOrder" href="${process.env.BACK_LINK + ordenCompraUrl}">Ver orden de compra</a>` :"";
+    var htmlUrlOrdenCompra = ordenCompraUrl ?  `<a href="`+ process.env.BACK_LINK +ordenCompraUrl`">Ver orden de compra</a>` :"";
     var htmlBody =
       `
       <!DOCTYPE html>
@@ -489,7 +490,7 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
               `<div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; padding-bottom: 50px; text-align: -webkit-left'>
                 <div class='contenido1'>
                 </div>
-                  <p><a href="`+ process.env.STORE_LINK +`/myprofile/perfil">Ver orden de compra</a></p>
+                  <p>`+htmlUrlOrdenCompra+`</p>
               </div>`
             }
 
