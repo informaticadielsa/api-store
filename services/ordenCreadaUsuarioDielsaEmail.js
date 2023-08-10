@@ -253,6 +253,7 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
     });
     var htmlOrdenCompra="";
     var htmlUrlOrdenCompra="";
+    console.log("URL:"+ ordenCompraUrl)
     //var htmlOrdenCompra= ordenCompraUrl? `<a class="btnGotoOrder" href="${process.env.BACK_LINK + ordenCompraUrl}">Ver orden de compra</a>` :"";
     //var htmlUrlOrdenCompra = ordenCompraUrl ?  `<a href="`+ process.env.BACK_LINK +ordenCompraUrl`">Ver orden de compra</a>` :"";
     var htmlBody =
