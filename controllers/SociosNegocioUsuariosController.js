@@ -572,7 +572,7 @@ export default {
                     'snu_primer_apellido' : usuario.dataValues.snu_primer_apellido
                   }
                   let tokenReturn = await token.encode(tokenData);
-                  usuario.dataValues.idUser= usuarioLogin.usu_usuario_id.
+                  usuario.dataValues.idUser= usuarioLogin.usu_usuario_id
                   usuario.dataValues.token = tokenReturn;
                   delete usuario.dataValues['snu_contrasenia'];
                   const carrito_de_compras = await models.CarritoDeCompra.findOne({
