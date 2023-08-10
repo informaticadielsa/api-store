@@ -7,6 +7,8 @@ import {  Sequelize } from 'sequelize';
 const sequelize = new Sequelize(process.env.POSTGRESQL);
 const {recoveryEmail} = require('../services/recoveryEmailB2B');
 const { nuevoUsuario } = require('../services/nuevoClienteB2B');
+
+
 import bcrypt from 'bcryptjs';
 
 const generadorPassword = function(num){
@@ -548,19 +550,29 @@ export default {
                     ],
                     snu_cmm_estatus_id: statusControles.ESTATUS_SOCIOS_NEGOCIO_USUARIO.ACTIVA
                 }
-            });
+            }); 
 
             if(usuario){
+              const usuarioLogin = await models.Usuario.findOne({
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt']
+                }, 
+                where: {
+                    usu_correo_electronico: req.body.snu_correo_electronico, 
+                    usu_cmm_estatus_id : statusControles.ESTATUS_USUARIO.ACTIVO
+                } 
+            });
                 const match = await bcrypt.compare(req.body.snu_contrasenia, usuario.dataValues.snu_contrasenia);
                 if(match){
                   const tokenData = {
                     'snu_socio': true,
-                    'snu_usuario_snu_id':  usuario.dataValues.snu_usuario_snu_id,
+                    'snu_usuario_snu_id':  usuarioLogin.dataValues.usu_usuario_id,
                     'snu_correo_electronico' : usuario.dataValues.snu_correo_electronico,
                     'snu_nombre' : usuario.dataValues.snu_nombre,
                     'snu_primer_apellido' : usuario.dataValues.snu_primer_apellido
                   }
                   let tokenReturn = await token.encode(tokenData);
+                  usuario.dataValues.idUser= usuarioLogin.dataValues.usu_usuario_id.
                   usuario.dataValues.token = tokenReturn;
                   delete usuario.dataValues['snu_contrasenia'];
                   const carrito_de_compras = await models.CarritoDeCompra.findOne({

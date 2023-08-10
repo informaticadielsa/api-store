@@ -373,7 +373,7 @@ export default {
                         },
                         include: [
                             {
-                                iduser:models.Usuario,
+                            
                                 model: models.ControlMaestroMultiple,
                                 as: 'estatus_usuario'
                             },

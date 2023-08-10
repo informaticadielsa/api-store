@@ -503,7 +503,7 @@ export default{
                                     });
                                 });  
                                 //Modificamos la relación en la base de datos 
-                                await orden_de_compra.update({ 
+                                await orden_de_compra.update({  
                                     odc_nombre_archivo: nombreDest,
                                     odc_ruta_archivo: DIRFILECHECKOUT + dirDest + nombreDest,
                                     odc_usu_usuario_creador_id: req.body.odc_usu_usuario_creador_id
