@@ -521,7 +521,7 @@ export default{
                                     odc_numero_orden: req.body.odc_numero_orden,
                                     odc_nombre_archivo: nombreDest,
                                    odc_ruta_archivo: DIRFILECHECKOUT + dirDest + nombreDest,
-                                 // odc_usu_usuario_creador_id: req.body.odc_usu_usuario_creador_id
+                                   odc_usu_usuario_creador_id: req.body.odc_usu_usuario_creador_id
                                 });
                                 console.log('File create!', orden_de_compra_new);
                             }
