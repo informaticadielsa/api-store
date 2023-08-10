@@ -553,15 +553,7 @@ export default {
             }); 
 
             if(usuario){
-              const usuarioLogin = await models.Usuario.findOne({
-                attributes: {
-                    exclude: ['createdAt', 'updatedAt']
-                }, 
-                where: {
-                    usu_correo_electronico: req.body.snu_correo_electronico, 
-                    usu_cmm_estatus_id : statusControles.ESTATUS_USUARIO.ACTIVO
-                } 
-            });
+            
                 const match = await bcrypt.compare(req.body.snu_contrasenia, usuario.dataValues.snu_contrasenia);
                 if(match){
                   const tokenData = {
@@ -572,7 +564,7 @@ export default {
                     'snu_primer_apellido' : usuario.dataValues.snu_primer_apellido
                   }
                   let tokenReturn = await token.encode(tokenData);
-                  usuario.dataValues.idUser= usuarioLogin.usu_usuario_id
+                  //usuario.dataValues.idUser= usuarioLogin.usu_usuario_id
                   usuario.dataValues.token = tokenReturn;
                   delete usuario.dataValues['snu_contrasenia'];
                   const carrito_de_compras = await models.CarritoDeCompra.findOne({
