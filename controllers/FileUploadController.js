@@ -512,11 +512,16 @@ export default{
                             }else{
                                 console.log("Entrar al creat");
                                 // Creamos la relación en la base de datos 
+
+                                console.log(DIRFILECHECKOUT + dirDest + nombreDest)
+                                console.log(req.body.odc_usu_usuario_creador_id)
+                                console.log(nombreDest)
+                                console.log(req.body.odc_numero_orden)
                                 const orden_de_compra_new = await models.OrdenDeCompra.create({
                                     odc_numero_orden: req.body.odc_numero_orden,
-                                    odc_nombre_archivo: nombreDest,
-                                    odc_ruta_archivo: DIRFILECHECKOUT + dirDest + nombreDest,
-                                    odc_usu_usuario_creador_id: req.body.odc_usu_usuario_creador_id
+                                   // odc_nombre_archivo: nombreDest,
+                                  //  odc_ruta_archivo: DIRFILECHECKOUT + dirDest + nombreDest,
+                                  //  odc_usu_usuario_creador_id: req.body.odc_usu_usuario_creador_id
                                 });
                                 console.log('File create!', orden_de_compra_new);
                             }
