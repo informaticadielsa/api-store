@@ -22,7 +22,7 @@ const OrdenDeCompra = sequelize.define('orden_de_compra',
     },
     odc_usu_usuario_creador_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        //allowNull: false
     },
     createdAt: {
         type: Sequelize.DATE,
