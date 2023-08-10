@@ -1665,7 +1665,9 @@ export default{
                 await ordenCreadaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
 
                 //Para los usuarios de dielsa mandar correo cuando se crea una orden
-                //await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+                
+                
+                await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
 
 
                 
