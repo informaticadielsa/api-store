@@ -558,7 +558,7 @@ export default {
                 if(match){
                   const tokenData = {
                     'snu_socio': true,
-                    'snu_usuario_snu_id':  usuarioLogin.usu_usuario_id,
+                    'snu_usuario_snu_id':  usuario.dataValues.snu_usuario_snu_id,
                     'snu_correo_electronico' : usuario.dataValues.snu_correo_electronico,
                     'snu_nombre' : usuario.dataValues.snu_nombre,
                     'snu_primer_apellido' : usuario.dataValues.snu_primer_apellido
