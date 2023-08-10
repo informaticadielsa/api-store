@@ -1662,7 +1662,7 @@ export default{
 
                //Envia correo a usuarios clientres de dielsa.com
 
-                //await ordenCreadaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+                await ordenCreadaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
 
                 //Para los usuarios de dielsa mandar correo cuando se crea una orden
                 //await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
