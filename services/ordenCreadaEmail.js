@@ -326,7 +326,7 @@ exports.ordenCreadaEmail = async function (order_id) {
             <header>
               <div style='color: #0B3196; font-size: 28px; font-weight: 500; letter-spacing: 0;'>
                 <h1>Pendiente de confirmación</h1>                  
-              </div>
+              </div> 
             </header>
 
             <div style='padding-top: 20px; color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>

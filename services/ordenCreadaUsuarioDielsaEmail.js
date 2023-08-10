@@ -186,7 +186,7 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
           odc_numero_orden: constCompraFinalizada.cf_compra_numero_orden,
       },
       attributes: {
-          exclude: [
+          exclude: [ 
               "odc_orden_de_compra_id",
               "odc_numero_orden",
               "odc_usu_usuario_creador_id",

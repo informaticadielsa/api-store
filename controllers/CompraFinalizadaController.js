@@ -1508,7 +1508,7 @@ export default{
 
 
 
-
+ 
             if(constCompraFinalizada)
             {
                 //Obtener Lineas para insertar en la tabla productos compra finalizada y para sap
@@ -1662,10 +1662,10 @@ export default{
 
                //Envia correo a usuarios clientres de dielsa.com
 
-                await ordenCreadaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+                //await ordenCreadaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
 
                 //Para los usuarios de dielsa mandar correo cuando se crea una orden
-                await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+                //await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
 
 
                 
@@ -1681,7 +1681,7 @@ export default{
             else
             {
                 res.status(500).send({
-                    message: 'No fue posible crear la orden'
+                    message: 'No fue posible crear la orden de compra. revisar.'
                 })
             }
 
