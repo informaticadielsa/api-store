@@ -196,6 +196,7 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
       },
     });
     //let ordenCompraUrl = "/myprofile/pedidos";
+      console.log("Orden de commpra:" + orden_de_compra )
      let ordenCompraUrl = orden_de_compra ? 
                          orden_de_compra.odc_ruta_archivo.split("./public")[1]
                     : "";
