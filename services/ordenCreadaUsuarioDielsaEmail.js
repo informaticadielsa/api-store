@@ -190,6 +190,7 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
               "odc_orden_de_compra_id",
               "odc_numero_orden",
               "odc_usu_usuario_creador_id",
+              "odc_usu_usuario_creador_socio_id",
               'createdAt',
               'updatedAt'
           ]
