@@ -251,8 +251,10 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
       //maxConnections: 10,
       debug: true,
     });
-    var htmlOrdenCompra= ordenCompraUrl? `<a class="btnGotoOrder" href="${process.env.BACK_LINK + ordenCompraUrl}">Ver orden de compra</a>` :"";
-    var htmlUrlOrdenCompra = ordenCompraUrl ?  `<a href="`+ process.env.BACK_LINK +ordenCompraUrl`">Ver orden de compra</a>` :"";
+    var htmlOrdenCompra="";
+    var htmlUrlOrdenCompra="";
+    //var htmlOrdenCompra= ordenCompraUrl? `<a class="btnGotoOrder" href="${process.env.BACK_LINK + ordenCompraUrl}">Ver orden de compra</a>` :"";
+    //var htmlUrlOrdenCompra = ordenCompraUrl ?  `<a href="`+ process.env.BACK_LINK +ordenCompraUrl`">Ver orden de compra</a>` :"";
     var htmlBody =
       `
       <!DOCTYPE html>
