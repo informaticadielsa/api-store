@@ -4,6 +4,7 @@ node_modules/
 scripts/_last.txt
 ##Not update development.env
 development.env
+production.env
 
 ## ignore files 
 src/
