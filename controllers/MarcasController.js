@@ -52,8 +52,8 @@ export default{
                 where: {
                     mar_cmm_estatus_id: { [Op.ne] : statusControlesMaestros.ESTATUS_MARCAS.ELIMINADA }
                 },
-                include: [
-                    {
+                include: [ 
+                    {  
                         model: models.ControlMaestroMultiple,
                         attributes: {
                             exclude: ['cmm_control_id','cmm_nombre','cmm_sistema','cmm_activo','cmm_usu_usuario_creado_por_id','createdAt','cmm_usu_usuario_modificado_por_id','updatedAt']

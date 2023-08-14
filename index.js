@@ -4,13 +4,13 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import path from "path";
-import crons from "./services/Crons"
+import crons from "./services/Crons" 
 
 // routes
 import router from "./routes";
 // create your server here with express
 const app = express();
-app.use(morgan("dev"));
+app.use(morgan("dev")); 
 app.use(cors());
 app.use(express.json({ limit: "50mb", extended: true }));
 app.use(express.urlencoded({ extended: true, limit: "100mb", extended: true }));
