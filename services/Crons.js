@@ -15,10 +15,12 @@ cron.schedule("0 5 * * *", () =>{integrations.ExecuteEndpoint("/api/productos/ca
 cron.schedule("*/30 * * * *", () =>{integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionCorreos/")});
 
 //actualizar ordenes cada 2 minutos
+console.log('Empezamos 1')
 cron.schedule("*/2 * * * *", () =>{integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionActualizarOrdenes/")});
+console.log('Terminamos 2')
 
 
-
+cron.schedule("1 * * * *", () =>{ console.log('hola oscar')});
 
 
 
