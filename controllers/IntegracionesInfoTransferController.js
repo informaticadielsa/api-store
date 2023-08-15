@@ -4557,7 +4557,8 @@ export default {
                         if(constProducto)
                         {
                             jsonLineaTemp.push(resultJson.documentos[0].lineas[u].estatusLinea)
-
+                            
+                            console.log(constProducto)
                             //Busca los productos de la orden para actualizar por linea
                             const constProductoCompraFinalizada = await models.ProductoCompraFinalizada.findOne(
                             {
