@@ -4435,7 +4435,7 @@ export default {
 
             var ordenesMXN = []
             var ordenesUSD = []
-
+  
             const constCompraFinalizada = await models.CompraFinalizada.findAll(
             {
                 where: {
@@ -4448,7 +4448,6 @@ export default {
                     ]
                 }
             });
-
 
             //Actualizar cada orden (SUBJETO A CAMBIOS PARA DESPUES USAR FECHAS TAL VEz?)
             for (var i = 0; i < constCompraFinalizada.length; i++) 
