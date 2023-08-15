@@ -4830,7 +4830,7 @@ export default {
         }catch(e){
             console.log(e)
             res.status(500).send({
-                message: 'Error en la petición',
+                message: 'Error en la petición:' + e,
                 e
             });
             next(e);
