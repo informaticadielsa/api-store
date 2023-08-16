@@ -4570,7 +4570,8 @@ export default {
                                 },
                                 attributes: {exclude: ['createdAt', 'updatedAt']}   
                             })
-
+                            console.log('Empezamos las integraciones');
+                            console.log(constProductoCompraFinalizada)
                             //Crear correo para el cron de lineas que cambias de status
                             if(
                                 (constProductoCompraFinalizada.pcf_linea_estatus_sap == 'En proceso' && resultJson.documentos[0].lineas[u].estatusLinea.slice(0, 11) == 'En tránsito')
