@@ -51,8 +51,12 @@ const Categoria = sequelize.define('categoria', {
     cat_categoria_link:{
         type: Sequelize.STRING,
     },
+    cat_img_link:{
+        type: Sequelize.STRING,
+    }
+
 },
-{
+{ 
     //Options
     tableName: 'categorias'
 }

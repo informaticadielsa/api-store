@@ -4573,6 +4573,7 @@ export default {
                             console.log('Empezamos las integraciones');
                             console.log(constProductoCompraFinalizada)
                             //Crear correo para el cron de lineas que cambias de status
+                            if(constProductoCompraFinalizada){
                             if(
                                 (constProductoCompraFinalizada.pcf_linea_estatus_sap == 'En proceso' && resultJson.documentos[0].lineas[u].estatusLinea.slice(0, 11) == 'En tránsito')
                                 || (constProductoCompraFinalizada.pcf_linea_estatus_sap == 'Pendiente de confirmar' && resultJson.documentos[0].lineas[u].estatusLinea.slice(0, 11) == 'En tránsito')
@@ -4604,7 +4605,7 @@ export default {
                                 await models.Correos.create(bodyCreate);
                             }
 
-
+                        
 
                             const bodyUpdate = {
                                 pcf_linea_estatus_sap : resultJson.documentos[0].lineas[u].estatusLinea,
@@ -4612,6 +4613,7 @@ export default {
                                 updatedAt: Date()
                             };
                             await constProductoCompraFinalizada.update(bodyUpdate);
+                         }
                         }
                     }
                 }
