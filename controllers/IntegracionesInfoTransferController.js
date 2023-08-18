@@ -4570,10 +4570,12 @@ export default {
                                 },
                                 attributes: {exclude: ['createdAt', 'updatedAt']}   
                             })
-                            console.log('Empezamos las integraciones');
-                            console.log(constProductoCompraFinalizada)
+                            //console.log('Empezamos las integraciones');
+                            //console.log(constProductoCompraFinalizada)
                             //Crear correo para el cron de lineas que cambias de status
                             if(constProductoCompraFinalizada){
+
+                                console.log('Empezamos las integraciones')
                             if(
                                 (constProductoCompraFinalizada.pcf_linea_estatus_sap == 'En proceso' && resultJson.documentos[0].lineas[u].estatusLinea.slice(0, 11) == 'En tránsito')
                                 || (constProductoCompraFinalizada.pcf_linea_estatus_sap == 'Pendiente de confirmar' && resultJson.documentos[0].lineas[u].estatusLinea.slice(0, 11) == 'En tránsito')
