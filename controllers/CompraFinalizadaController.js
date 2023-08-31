@@ -1675,8 +1675,9 @@ export default{
                                 usu_codigo_vendedor: constBussinessPartner.sn_vendedor_codigo_sap
                             }
                         })
+                 console.log('Socio de negocio:'+ constBussinessPartner.sn_cardcode )
                  console.log('hola vendedor:'+constBussinessPartner.sn_vendedor_codigo_sap);
-                 console.log('vendedor info',constUsuarioSellerID )
+                 console.log('vendedor info',constUsuarioSellerID.usu_correo_electronico)
                 await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id,);
 
 
