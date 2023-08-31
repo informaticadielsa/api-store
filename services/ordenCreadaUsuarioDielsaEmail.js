@@ -6,7 +6,7 @@ const sequelize = new Sequelize(process.env.POSTGRESQL);
 import date_and_time from "date-and-time";
 
 // exports.creadaOrden = async function(email, id_usuario_socio, orden){
-exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
+exports.ordenCreadaUsuarioDielsaEmail = async function (order_id, mail = null) {
   try {
     var metodo_de_pago;
 
@@ -791,13 +791,15 @@ exports.ordenCreadaUsuarioDielsaEmail = async function (order_id) {
         maillist = [
             "informatica@dielsa.com",
             "oscar.espinosa@daltum.mx",
-            "luis.sanchez@daltum.mx"
+            "luis.sanchez@daltum.mx",
+            mail === null ? '' : mail
         ];
     }
     else
     {
         maillist = [
             "ov@dielsa.com",
+            mail === null ? '' : mail
         ];
     }
 
