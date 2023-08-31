@@ -1322,7 +1322,7 @@ export default{
 
     V2finalizarCompra: async(req, res, next) =>{
         try{
-
+            
  
             //Obtener tipo de cambio
             const constTipoCambio = await models.ControlMaestroMultiple.findOne(
@@ -1407,8 +1407,6 @@ export default{
 
 
 
-
-
             //informacion Vendedor
             var cf_vendido_por_usu_usuario_id
             if(req.body.cf_vendido_por_usu_usuario_id)
@@ -1424,7 +1422,7 @@ export default{
                         sn_socios_negocio_id: constCarritoDeCompra.cdc_sn_socio_de_negocio_id
                     }
                 })
-
+                
                 //Obtener carrito
                 const constUsuarioSellerID = await models.Usuario.findOne(
                 {
@@ -1658,15 +1656,21 @@ export default{
 
                 // }
 
-               //Revisar aqui
+               //Revisar aqui envia un correo
 
                //Envia correo a usuarios clientres de dielsa.com
 
                 await ordenCreadaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
 
                 //Para los usuarios de dielsa mandar correo cuando se crea una orden
+                const constBussinessPartner = await models.SociosNegocio.findOne(
+                    {
+                        where: {
+                            sn_socios_negocio_id: constCarritoDeCompra.cdc_sn_socio_de_negocio_id
+                        }
+                    })
                 
-                
+                 console.log('hola vendedor'+constBussinessPartner);
                 await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
 
 

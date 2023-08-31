@@ -10756,7 +10756,7 @@ export default {
                                     and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
-                            )
+                            ) 
                         )  as p1 
                     ) 
                     `;
