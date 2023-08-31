@@ -1669,9 +1669,15 @@ export default{
                             sn_socios_negocio_id: constCarritoDeCompra.cdc_sn_socio_de_negocio_id
                         }
                     })
-                
+                    const constUsuarioSellerID = await models.Usuario.findOne(
+                        {
+                            where: {
+                                usu_codigo_vendedor: constBussinessPartner.sn_vendedor_codigo_sap
+                            }
+                        })
                  console.log('hola vendedor:'+constBussinessPartner.sn_vendedor_codigo_sap);
-                await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+                 console.log('vendedor info',constUsuarioSellerID )
+                await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id,);
 
 
                 
