@@ -1670,7 +1670,7 @@ export default{
                         }
                     })
                 
-                 console.log('hola vendedor'+constBussinessPartner);
+                 console.log('hola vendedor:'+constBussinessPartner.sn_vendedor_codigo_sap);
                 await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
 
 
