@@ -4435,7 +4435,7 @@ export default {
 
             var ordenesMXN = []
             var ordenesUSD = []
-
+  
             const constCompraFinalizada = await models.CompraFinalizada.findAll(
             {
                 where: {
@@ -4448,7 +4448,6 @@ export default {
                     ]
                 }
             });
-
 
             //Actualizar cada orden (SUBJETO A CAMBIOS PARA DESPUES USAR FECHAS TAL VEz?)
             for (var i = 0; i < constCompraFinalizada.length; i++) 
@@ -4558,7 +4557,8 @@ export default {
                         if(constProducto)
                         {
                             jsonLineaTemp.push(resultJson.documentos[0].lineas[u].estatusLinea)
-
+                            
+                            console.log(constProducto)
                             //Busca los productos de la orden para actualizar por linea
                             const constProductoCompraFinalizada = await models.ProductoCompraFinalizada.findOne(
                             {
@@ -4570,8 +4570,12 @@ export default {
                                 },
                                 attributes: {exclude: ['createdAt', 'updatedAt']}   
                             })
-
+                            //console.log('Empezamos las integraciones');
+                            //console.log(constProductoCompraFinalizada)
                             //Crear correo para el cron de lineas que cambias de status
+                            if(constProductoCompraFinalizada){
+
+                                console.log('Empezamos las integraciones')
                             if(
                                 (constProductoCompraFinalizada.pcf_linea_estatus_sap == 'En proceso' && resultJson.documentos[0].lineas[u].estatusLinea.slice(0, 11) == 'En tránsito')
                                 || (constProductoCompraFinalizada.pcf_linea_estatus_sap == 'Pendiente de confirmar' && resultJson.documentos[0].lineas[u].estatusLinea.slice(0, 11) == 'En tránsito')
@@ -4603,7 +4607,7 @@ export default {
                                 await models.Correos.create(bodyCreate);
                             }
 
-
+                        
 
                             const bodyUpdate = {
                                 pcf_linea_estatus_sap : resultJson.documentos[0].lineas[u].estatusLinea,
@@ -4611,6 +4615,7 @@ export default {
                                 updatedAt: Date()
                             };
                             await constProductoCompraFinalizada.update(bodyUpdate);
+                         }
                         }
                     }
                 }
@@ -4831,7 +4836,7 @@ export default {
         }catch(e){
             console.log(e)
             res.status(500).send({
-                message: 'Error en la petición',
+                message: 'Error en la petición:' + e,
                 e
             });
             next(e);

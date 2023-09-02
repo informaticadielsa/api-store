@@ -75,7 +75,7 @@ export default{
         }
     },
     getCategoriasPublic: async(req, res, next) =>{
-        try{
+        try{ 
             const categorias = await models.Categoria.findAll({
                 attributes: {exclude: ['cat_usu_usuario_creador_id', 'createdAt', 'cat_usu_usuario_modificador_id', 'updatedAt']},
                 order: [
