@@ -38,7 +38,7 @@ module.exports = {
 
 
             //Productos de Carrito Activo
-            const constProductoCarritoDeCompra = await models.ProductoCarritoDeCompra.findAll(
+            let constProductoCarritoDeCompra = await models.ProductoCarritoDeCompra.findAll(
             {
                 where: {
                     pcdc_carrito_de_compra_id: constCarritoDeCompra.cdc_carrito_de_compra_id
@@ -122,6 +122,10 @@ module.exports = {
                             ]
                         });
 
+                        const dataProductFilter = constProductoCarritoDeCompra
+                            .filter((item) => item.dataValues.producto.prod_producto_id == constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id);
+
+                        // console.log('dataProductFilter ', dataProductFilter);
                         var newCantidad = constTieneStockGeneral.prod_total_stock - cantidadOriginal
                         console.log(newCantidad)
                         if(newCantidad < 0)
@@ -129,7 +133,987 @@ module.exports = {
                             newCantidad = newCantidad*-1
                         }
                         newElemento.dataValues.pcdc_producto_cantidad = newCantidad
-                        newElemento.dataValues.backOrderPrecioLista = true
+                        newElemento.dataValues.backOrderPrecioLista = false
+                        newElemento.dataValues.producto = dataProductFilter[0].dataValues.producto;
+
+                        constProductoCarritoDeCompra.push(newElemento)
+                    }
+                    else
+                    {
+                        constProductoCarritoDeCompra[z].dataValues.backOrderPrecioLista = false
+                    }
+                }
+            }
+
+
+
+            //Set false el nuevo campo del backorder de productospreciolistanew
+            // console.log(constProductoCarritoDeCompra.length)
+            // constProductoCarritoDeCompra[0].dataValues.afsa = 0
+            // for (var f = 0; f < prodCarritoLenght; f++) 
+            // {
+            //     console.log(constProductoCarritoDeCompra[f].dataValues)
+            //     constProductoCarritoDeCompra[f].dataValues.backOrderPrecioLista = false
+            // }
+
+
+            
+
+
+            //Informacion Socio de negocio / Direccoin facturacion para impuestos
+                const constSociosNegocio = await models.SociosNegocio.findOne(
+                {
+                    where: {
+                        sn_socios_negocio_id: cdc_sn_socio_de_negocio_id
+                    },
+                    attributes:  ["sn_socios_negocio_id", "sn_cardcode", "sn_codigo_direccion_facturacion", "sn_lista_precios", "sn_codigo_grupo",
+                    "sn_porcentaje_descuento_total"]
+                });
+
+                
+                //obtener direccion de facturacion
+                const constSociosNegocioDirecciones = await models.SociosNegocioDirecciones.findOne(
+                {
+                    where: {
+                        snd_cardcode: constSociosNegocio.sn_cardcode,
+                        snd_idDireccion: constSociosNegocio.sn_codigo_direccion_facturacion,
+                        snd_tipoDir: "B"
+                    }
+                    // ,
+                    // attributes:  ["sn_socios_negocio_id", "sn_cardcode", "sn_codigo_direccion_facturacion"]
+                });
+
+                if(constSociosNegocioDirecciones.snd_codigo_postal)
+                {
+                    const constCodigosPostales = await models.CodigosPostales.findOne(
+                    {
+                        where: {
+                            cp_codigo_postal: constSociosNegocioDirecciones.snd_codigo_postal
+                        }
+                    });
+
+                    if(constCodigosPostales.cp_frontera == 1)
+                    {
+                        tipoImpuesto = 8
+                    }
+                    else
+                    {
+                        tipoImpuesto = 16
+                    }
+                }
+                else
+                {
+                    tipoImpuesto = 16
+                }  
+            // Fin informacion SN e Impuesto 
+
+
+
+
+
+
+
+
+
+
+
+
+            //Asignar stocks por producto
+            for (var f = 0; f < constProductoCarritoDeCompra.length; f++) 
+            {
+                //Obtener Stock X hijo
+                const constStockProducto = await models.StockProducto.findAll({
+                    where: {
+                        sp_prod_producto_id : constProductoCarritoDeCompra[f].dataValues.pcdc_prod_producto_id
+                    }
+                })
+                constProductoCarritoDeCompra[f].dataValues.ListaStock = constStockProducto
+            }
+
+
+
+
+
+            //Generar promociones y cupones (no calcula totales aun)
+            for (var i = 0; i < constProductoCarritoDeCompra.length; i++) 
+            {
+                var precioBaseFinal = 0
+
+                //Informacion base de productos
+                const constProducto = await models.Producto.findOne(
+                {
+                    where: {
+                        prod_producto_id: constProductoCarritoDeCompra[i].dataValues.pcdc_prod_producto_id
+                    }
+                });
+
+                constProductoCarritoDeCompra[i].dataValues.prod_sku = constProducto.prod_sku
+                constProductoCarritoDeCompra[i].dataValues.prod_nombre = constProducto.prod_nombre
+
+                constProductoCarritoDeCompra[i].dataValues.prod_prod_producto_padre_sku = constProducto.prod_prod_producto_padre_sku
+
+                //Agregar producto padre ID al carrito para la pagina de producto
+                const constProductoPadreID = await models.Producto.findOne(
+                {
+                    where: {
+                        prod_sku: constProducto.prod_prod_producto_padre_sku
+                    }
+                });
+
+
+                if(constProducto)
+                {
+                    constProductoCarritoDeCompra[i].dataValues.productoPadreId = constProductoPadreID.prod_producto_id
+                }
+
+                
+                constProductoCarritoDeCompra[i].dataValues.prod_precio = constProducto.prod_precio
+                constProductoCarritoDeCompra[i].dataValues.prod_total_stock = constProducto.prod_total_stock
+                constProductoCarritoDeCompra[i].dataValues.prod_nombre_extranjero = constProducto.prod_nombre_extranjero
+                constProductoCarritoDeCompra[i].dataValues.prod_tipo_precio_base = constProducto.prod_tipo_precio_base
+                constProductoCarritoDeCompra[i].dataValues.prod_dias_resurtimiento = constProducto.prod_dias_resurtimiento
+                constProductoCarritoDeCompra[i].dataValues.prod_tipo_precio_base = constProducto.prod_tipo_precio_base
+                constProductoCarritoDeCompra[i].dataValues.prod_es_stock_inactivo = constProducto.prod_es_stock_inactivo
+                constProductoCarritoDeCompra[i].dataValues.prod_tipo_cambio_base = constProducto.prod_tipo_cambio_base
+
+                //V4 values
+                constProductoCarritoDeCompra[i].dataValues.prod_codigo_grupo = constProducto.prod_codigo_grupo
+                constProductoCarritoDeCompra[i].dataValues.prod_codigo_marca = constProducto.prod_codigo_marca
+                constProductoCarritoDeCompra[i].dataValues.prod_codigo_prop_list = constProducto.prod_codigo_prop_list
+
+
+
+                if(constProductoCarritoDeCompra[i].dataValues.backOrderPrecioLista == true)
+                {
+                    constProductoCarritoDeCompra[i].dataValues.prod_tipo_precio_base = "Precio de Lista"
+
+                    //Informacion base de productos
+                    const newPriceProductoListaPrecio = await models.ProductoListaPrecio.findOne(
+                    {
+                        where: {
+                            pl_listp_lista_de_precio_id: 1,
+                            pl_prod_producto_id: constProductoCarritoDeCompra[i].dataValues.pcdc_prod_producto_id
+                        }
+                    });
+                    constProductoCarritoDeCompra[i].dataValues.prod_precio = newPriceProductoListaPrecio.pl_precio_producto
+                    constProductoCarritoDeCompra[i].dataValues.prod_es_stock_inactivo = false
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //Agregar aplica backorder bool
+                    if(constProductoCarritoDeCompra[i].dataValues.prod_dias_resurtimiento != '0')
+                    {
+                        constProductoCarritoDeCompra[i].dataValues.aplicaBackOrder = true
+                    }
+                    else
+                    {
+                        constProductoCarritoDeCompra[i].dataValues.aplicaBackOrder = false
+                    }
+                //
+
+
+
+
+                // Buscar precio por SN en caso de que no sea stock inactivo (precio base final)
+                    //El precio base siempre sera la misma variable porque ya no se usara lo de listas de precios de SN
+                    if(constProductoCarritoDeCompra[i].dataValues.backOrderPrecioLista == true)
+                    {
+                        constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = constProductoCarritoDeCompra[i].dataValues.prod_precio
+                    }
+                    else
+                    {
+                        precioBaseFinal = constProducto.prod_precio
+                        constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = precioBaseFinal
+                    }
+                    
+                    // if(constProducto.prod_es_stock_inactivo == true)
+                    // {
+                        //Se dejara el precio base que tenga el producto sin importar que
+                        // precioBaseFinal = constProducto.prod_precio
+                    // }
+                    // else
+                    // {
+                    //     //Buscar la lista de precio que tenga asignada el SN y buscar el precio que se le dara al carrito
+                    //     const constProductoListaPrecio = await models.ProductoListaPrecio.findOne(
+                    //     {
+                    //         where: {
+                    //             pl_prod_producto_id: constProductoCarritoDeCompra[i].dataValues.pcdc_prod_producto_id,
+                    //             pl_listp_lista_de_precio_id: constSociosNegocio.sn_lista_precios
+                    //         }
+                    //     });
+
+                    //     precioBaseFinal = constProductoListaPrecio.pl_precio_producto
+                    // }
+                    
+                    
+
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //PROMOCION
+                    //Si es stock inactivo no tendra ni revisara descuentos
+                    if(constProductoCarritoDeCompra[i].dataValues.prod_es_stock_inactivo == true)
+                    {
+                        constProductoCarritoDeCompra[i].dataValues.promocion = []
+                    }
+                    else
+                    {
+                        //Obtener Mejor Promocion y precio final
+                        var mejorPromocionPrecio = await productosUtils.getBestPromotionForProduct(constProductoCarritoDeCompra[i].dataValues.pcdc_prod_producto_id);
+
+                        // //Sett variable de promocion en el arreglo inicial
+                        constProductoCarritoDeCompra[i].dataValues.promocion = mejorPromocionPrecio
+                    }
+                //END PROMOCION
+
+
+
+
+
+
+                //DESCUENTOS SN/GRUPO/DIELSA
+                    //Este codigo se repite desde la util getChildsSNDiscounts
+                    //Si es stock inactivo no tendra ni revisara descuentos
+                    if(constProductoCarritoDeCompra[i].dataValues.prod_es_stock_inactivo == true)
+                    {
+                        constProductoCarritoDeCompra[i].dataValues.descuentoGrupoBool = false
+                        constProductoCarritoDeCompra[i].dataValues.descuentoGrupo = 0
+                        constProductoCarritoDeCompra[i].dataValues.snDescuento = 0
+                    }
+                    else
+                    {
+                        //Obtener Mejor Promocion y precio final
+                        var descuentoGrupo = await productosUtils.getSocioNegocioDiscountPerProduct(constProductoCarritoDeCompra[i].dataValues, constSociosNegocio);
+
+                        if(descuentoGrupo > 0 || constSociosNegocio.sn_porcentaje_descuento_total > 0)
+                        {
+                            constProductoCarritoDeCompra[i].dataValues.descuentoGrupoBool = true
+                            constProductoCarritoDeCompra[i].dataValues.descuentoGrupo = descuentoGrupo
+                            constProductoCarritoDeCompra[i].dataValues.snDescuento = parseFloat(constSociosNegocio.sn_porcentaje_descuento_total)
+                        }
+                        else
+                        {
+                            constProductoCarritoDeCompra[i].dataValues.descuentoGrupoBool = false
+                            constProductoCarritoDeCompra[i].dataValues.descuentoGrupo = 0
+                            constProductoCarritoDeCompra[i].dataValues.snDescuento = parseFloat(constSociosNegocio.sn_porcentaje_descuento_total)
+                        }
+                    }
+                //END DESCUENTOS SN/GRUPO/DIELSA
+
+
+
+
+                //CUPON
+                    if(constProductoCarritoDeCompra[i].dataValues.prod_es_stock_inactivo == true)
+                    {
+                        constProductoCarritoDeCompra[i].dataValues.cupon = []
+                    }
+                    else
+                    {
+                        //Obtener Mejor Promocion y precio final
+                        var mejorCuponPrecio = await productosUtils.getBestCuponForProduct(constProductoCarritoDeCompra[i].dataValues.pcdc_prod_producto_id, constCarritoDeCompra.cdc_promcup_promociones_cupones_id, cdc_sn_socio_de_negocio_id);
+                    
+                        //Set cupones
+                        constProductoCarritoDeCompra[i].dataValues.cupon = mejorCuponPrecio
+                    }
+                //ENDCUPON
+
+
+                //Concatenar imagenes
+                const constImagenProducto = await models.ImagenProducto.findOne(
+                {
+                    where: {
+                        imgprod_prod_producto_id: constProductoCarritoDeCompra[i].dataValues.pcdc_prod_producto_id
+                    },
+                    attributes: {
+                        exclude: ['createdAt','updatedAt','imgprod_usu_usuario_creador_id']
+                    },
+                    order: [
+                        ['imgprod_nombre_archivo', 'ASC']
+                    ],
+                });
+                constProductoCarritoDeCompra[i].dataValues.imagenes = constImagenProducto
+            }//Fin generar promociones
+
+
+
+            //Totales finales
+            var precioTotal = 0
+            var precioFinalTotal = 0
+
+            //total de descuentos en todos los productos
+            var totalDescuentosPromociones = 0
+            var totalDescuentosCupones = 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //Calcular totales por producto
+            for (var j = 0; j < constProductoCarritoDeCompra.length; j++) 
+            {
+                //Precio Base
+                var precioBase = constProductoCarritoDeCompra[j].dataValues.precioBaseFinal
+                var precioTemporal = constProductoCarritoDeCompra[j].dataValues.precioBaseFinal
+                var totalDescuentoTemporal = 0
+
+
+                //Si tiene promocion, descuento o cupon activo el producto calculara el precio
+                if(constProductoCarritoDeCompra[j].dataValues.promocion.length > 0 || (constProductoCarritoDeCompra[j].dataValues.cupon.length > 0 || constProductoCarritoDeCompra[j].dataValues.cupon.promcup_aplica_todo_carrito == false) || constProductoCarritoDeCompra[j].dataValues.descuentoGrupoBool == true)
+                {   
+
+
+
+                    //V4
+                    var totalPromocion = 0
+                    var tipoDescuento = ''
+                    var totalDescuentoPorcentual = 0
+
+
+
+                    //Buscar promocion por monto fijo
+                    if(constProductoCarritoDeCompra[j].dataValues.promocion.length > 0)
+                    {
+                        if(constProductoCarritoDeCompra[j].dataValues.promocion[0].cmm_valor == "Monto fijo")
+                        {   
+                            if(totalPromocion < constProductoCarritoDeCompra[j].dataValues.promocion[0].promdes_descuento_exacto)
+                            {
+                                totalPromocion = constProductoCarritoDeCompra[j].dataValues.promocion[0].promdes_descuento_exacto
+                                tipoDescuento = "Monto fijo"
+                            }
+                        }
+                    }
+
+
+                    //Buscar promocion por porcentaje
+                    if(constProductoCarritoDeCompra[j].dataValues.promocion.length > 0)
+                    {
+                        //Calcular precio promocion activa
+                        if(constProductoCarritoDeCompra[j].dataValues.promocion[0].cmm_valor == "Porcentaje")
+                        {   
+                            //Valor de la promocion por porcentaje
+                            var porcentajePromocion = constProductoCarritoDeCompra[j].dataValues.promocion[0].promdes_descuento_exacto
+
+                            //base - descuento = total Descuento
+                            var totalDescuento = (((porcentajePromocion/100) * precioTemporal).toFixed(2))
+
+                            if(totalPromocion < totalDescuento)
+                            {
+                                totalPromocion = totalDescuento
+                                tipoDescuento = "Porcentaje"
+                            }
+                        }
+                    }
+
+
+                    //Buscar promocion por grupo/marca/dielsa
+                    if(constProductoCarritoDeCompra[j].dataValues.descuentoGrupoBool == true)
+                    {
+                        //totalTemp es el resultado que queda
+                        var totalTemp = 0
+
+                        //Total acumulado es el total de descuento en INT
+                        var totalAcumulado = 0
+
+
+                        //$300   56% descuento   168 total
+                        //Descuento por lista de precios grupos
+                        if(constProductoCarritoDeCompra[j].dataValues.descuentoGrupo > 0)
+                        {
+                            totalTemp = precioTemporal - (((constProductoCarritoDeCompra[j].dataValues.descuentoGrupo/100) * precioTemporal))
+                            totalAcumulado = (((constProductoCarritoDeCompra[j].dataValues.descuentoGrupo/100) * precioTemporal))
+                        }
+
+                        //$300   56% descuento   168 total por grupo y 50% del SN = 84
+                        if(constProductoCarritoDeCompra[j].dataValues.snDescuento > 0)
+                        {
+                            //Si es mayor que 0 significa que primero tomara el primer descuento y luego este si no solo lo hara directo
+                            if(totalAcumulado > 0)
+                            {
+                                totalAcumulado = totalAcumulado + (((constProductoCarritoDeCompra[j].dataValues.snDescuento/100) * totalTemp))
+                                totalTemp = totalTemp - (((constProductoCarritoDeCompra[j].dataValues.snDescuento/100) * totalTemp))
+                                
+                            }
+                            else
+                            {
+                                totalAcumulado = (((constProductoCarritoDeCompra[j].dataValues.snDescuento/100) * precioTemporal))
+                                totalTemp = precioTemporal - (((constProductoCarritoDeCompra[j].dataValues.snDescuento/100) * precioTemporal))
+                            }
+                        }
+
+                        //ver si es mayor o menor que la promocion estandar
+                        if(totalPromocion < totalAcumulado)
+                        {
+                            totalPromocion = totalAcumulado
+                            tipoDescuento = "Grupos SN"
+                        }
+                    }
+
+
+                    //calcular el precio final del producto
+                    var precioMenosPromo = precioTemporal-totalPromocion
+                    if(precioMenosPromo < 0)
+                    {
+                        precioMenosPromo = 0
+                    }
+
+
+
+
+                    // totalPromocion
+                    // constProductoCarritoDeCompra[j].dataValues.totalDescuentoPorcentual = totalPromocion
+
+
+
+                    //Valores de promocion/descuento antes de cupon
+                    var cantidadPromocion = totalPromocion
+                    precioTemporal = precioMenosPromo
+
+                    constProductoCarritoDeCompra[j].dataValues.precioDespuesDePromocion = precioTemporal.toFixed(2)
+                    constProductoCarritoDeCompra[j].dataValues.cantidadDescuentoPromocion = cantidadPromocion
+
+                    //Calculara el total de descuentos por promocion
+                    totalDescuentoTemporal = totalDescuentoTemporal + cantidadPromocion
+                    totalDescuentosPromociones = totalDescuentosPromociones + (cantidadPromocion * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+
+
+
+
+
+
+
+                    //verificara si la promocion es mayor que la promocion de sn para dejar un doble promotion (cosas dielsa)
+                    var precioPromocionDielsaBool = false
+                    var DescuentoSNFijo = 0
+                    if(constProductoCarritoDeCompra[j].dataValues.promocion.length > 0 && constProductoCarritoDeCompra[j].dataValues.descuentoGrupoBool == true)
+                    {
+                        if(tipoDescuento == "Porcentaje" || tipoDescuento == 'Monto fijo')
+                        {
+                            precioPromocionDielsaBool = true
+                            var DescuentoSNFijo = constProductoCarritoDeCompra[j].dataValues.prod_precio
+
+                            if(constProductoCarritoDeCompra[j].dataValues.descuentoGrupo > 0)
+                            {
+                                DescuentoSNFijo = DescuentoSNFijo - (DescuentoSNFijo * (constProductoCarritoDeCompra[j].dataValues.descuentoGrupo / 100))
+                            }
+
+                            if(constProductoCarritoDeCompra[j].dataValues.snDescuento > 0)
+                            {
+                                DescuentoSNFijo = DescuentoSNFijo - (DescuentoSNFijo * (constProductoCarritoDeCompra[j].dataValues.snDescuento / 100))
+                            }
+                        }
+                    }
+
+
+                    constProductoCarritoDeCompra[j].dataValues.precioPromocionDielsaBool = precioPromocionDielsaBool
+                    constProductoCarritoDeCompra[j].dataValues.DescuentoDielsaFijo = DescuentoSNFijo
+
+
+
+
+
+
+
+
+
+                    //variables tipo v4
+                    //Tipo de promocion final
+                    constProductoCarritoDeCompra[j].dataValues.tipoPromocionFinal = tipoDescuento
+
+                    //total de promocion (precio prod - promocion o descuento (sin iva))
+                    constProductoCarritoDeCompra[j].dataValues.totalDescuentoFinal = parseFloat(totalPromocion)
+
+
+
+
+
+
+
+
+
+
+
+                    //V3
+                    // //Si existe promocion
+                    // if(constProductoCarritoDeCompra[j].dataValues.promocion.length > 0)
+                    // {
+                    //     //Calcular precio promocion activa
+                    //     if(constProductoCarritoDeCompra[j].dataValues.promocion[0].cmm_valor == "Porcentaje")
+                    //     {   
+                    //         //Valor de la promocion por porcentaje
+                    //         var cantidadPromocion = constProductoCarritoDeCompra[j].dataValues.promocion[0].promdes_descuento_exacto
+                    //         precioTemporal = precioTemporal-(((cantidadPromocion/ 100) * precioTemporal).toFixed(2))
+
+                    //         if(precioTemporal <= 0)
+                    //         {
+                    //             precioTemporal = 0
+                    //         }
+
+                    //         constProductoCarritoDeCompra[j].dataValues.promocion[0].precioDespuesDePromocion = precioTemporal.toFixed(2)
+                    //         constProductoCarritoDeCompra[j].dataValues.promocion[0].cantidadDescuentoPromocion = ((cantidadPromocion/ 100) * precioBase).toFixed(2)
+
+                    //         totalDescuentoTemporal = totalDescuentoTemporal + ((cantidadPromocion/ 100) * precioBase)
+                    //         totalDescuentosPromociones = totalDescuentosPromociones + (((cantidadPromocion/ 100) * precioBase) * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    //     }
+                    //     //Si es monto fijo
+                    //     else
+                    //     {
+                    //         //Valor de la promocion de procentaje o fijo
+                    //         var cantidadPromocion = constProductoCarritoDeCompra[j].dataValues.promocion[0].promdes_descuento_exacto
+                    //         precioTemporal = precioTemporal - cantidadPromocion
+
+                    //         //Si es mejor que 0 se setteara a 0 la variable para que el producto no cueste menos que 0 LOL
+                    //         if(precioTemporal <= 0)
+                    //         {
+                    //             precioTemporal = 0
+                    //         }
+
+                    //         constProductoCarritoDeCompra[j].dataValues.promocion[0].precioDespuesDePromocion = precioTemporal.toFixed(2)
+                    //         constProductoCarritoDeCompra[j].dataValues.promocion[0].cantidadDescuentoPromocion = cantidadPromocion.toFixed(2)
+
+                    //         //Calculara el total de descuentos por promocion
+                    //         totalDescuentoTemporal = totalDescuentoTemporal + cantidadPromocion
+                    //         totalDescuentosPromociones = totalDescuentosPromociones + (cantidadPromocion * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    //     }
+                    // }
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    //calcular total + cupones
+                    if(constProductoCarritoDeCompra[j].dataValues.cupon.length > 0 && constProductoCarritoDeCompra[j].dataValues.cupon[0].promcup_aplica_todo_carrito == false)
+                    {
+                        //calcular precio cupon activo
+                        if(constProductoCarritoDeCompra[j].dataValues.cupon[0].cmm_valor == "Porcentaje")
+                        {   
+                            //Valor del cupon de procentaje
+                            var cantidadPromocion = constProductoCarritoDeCompra[j].dataValues.cupon[0].promcup_descuento_exacto
+
+                            //Cantidad de descuento del cupon una vez que la promocion surtio efecto en el precio base
+                            constProductoCarritoDeCompra[j].dataValues.cantidadDescuentoCupon = ((cantidadPromocion/ 100) * precioTemporal).toFixed(2)
+                            totalDescuentoTemporal = totalDescuentoTemporal + ((cantidadPromocion/ 100) * precioTemporal)
+                            
+                            //variable general que ira calculando el total
+                            totalDescuentosCupones = totalDescuentosCupones + (((cantidadPromocion/ 100) * precioTemporal) * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+
+
+
+
+
+                            precioTemporal = precioTemporal-(((cantidadPromocion/ 100) * precioTemporal))
+                            if(precioTemporal <= 0)
+                            {
+                                precioTemporal = 0
+                            }
+
+                            //Precio despues del cupon
+                            constProductoCarritoDeCompra[j].dataValues.precioDespuesDeCupon = precioTemporal.toFixed(2)
+                        }
+                        else
+                        {
+                            //Valor del cupon de procentaje
+                            var cantidadPromocion = constProductoCarritoDeCompra[j].dataValues.cupon[0].promcup_descuento_exacto
+
+
+                            constProductoCarritoDeCompra[j].dataValues.cantidadDescuentoCupon = cantidadPromocion
+                            totalDescuentoTemporal = totalDescuentoTemporal + cantidadPromocion
+
+                            //variable general que ira calculando el total
+                            totalDescuentosCupones = totalDescuentosCupones + (cantidadPromocion * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+
+                            precioTemporal = precioTemporal-cantidadPromocion
+
+                            //Si es mejor que 0 se setteara a 0 la variable para que el producto no cueste menos que 0 LOL
+                            if(precioTemporal <= 0)
+                            {
+                                precioTemporal = 0
+                            }
+
+                            constProductoCarritoDeCompra[j].dataValues.precioDespuesDeCupon = precioTemporal.toFixed(2)
+                            
+
+                            //Calculara el total de descuentos por promocion
+                            
+                            
+                        }
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    //envio + 3%
+                    if(constCarritoDeCompra.cdc_forma_pago_codigo == "28" || constCarritoDeCompra.cdc_forma_pago_codigo == "04")
+                    {
+                        constProductoCarritoDeCompra[j].dataValues.precioFinal = parseFloat((precioTemporal * 1.03).toFixed(2))
+                    }
+                    else
+                    {
+                        constProductoCarritoDeCompra[j].dataValues.precioFinal = parseFloat((precioTemporal).toFixed(2))
+                    }
+                    
+
+
+                    constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = (constProductoCarritoDeCompra[j].dataValues.precioFinal * (1 + (tipoImpuesto / 100)))
+                    constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = parseFloat(constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto.toFixed(2))
+                    
+
+                    constProductoCarritoDeCompra[j].dataValues.totalDescuento = parseFloat(totalDescuentoTemporal)
+
+
+                    //Precio total sin promociones
+                    precioTotal = precioTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+
+
+                    //Precio total con promociones calculado por producto
+
+                    precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+
+
+
+                }
+                //si no tiene promocion solo calculara plano
+                else
+                {
+                    //envio + 3%
+                    if(constCarritoDeCompra.cdc_forma_pago_codigo == "28" || constCarritoDeCompra.cdc_forma_pago_codigo == "04")
+                    {
+                        constProductoCarritoDeCompra[j].dataValues.precioFinal = parseFloat((precioBase * 1.03).toFixed(2))
+                    }
+                    else
+                    {
+                        constProductoCarritoDeCompra[j].dataValues.precioFinal = parseFloat((precioBase).toFixed(2))
+                    }
+
+
+                    constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = (constProductoCarritoDeCompra[j].dataValues.precioFinal * (1 + (tipoImpuesto / 100)))
+                    constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = parseFloat(constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto.toFixed(2))
+                    constProductoCarritoDeCompra[j].dataValues.totalDescuento = 0
+
+                    //Precio total sin promociones
+                    precioTotal = precioTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+
+                    //Precio total con promociones calculado por producto
+                    // precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                }
+
+
+                // V5?
+                var tempPrecioBase = constProductoCarritoDeCompra[j].dataValues.prod_precio
+                var tempPrecioFinal = constProductoCarritoDeCompra[j].dataValues.precioFinal
+
+                var porcentajeDescuentoTemporal = 100-((tempPrecioFinal*100)/tempPrecioBase)
+
+                constProductoCarritoDeCompra[j].dataValues.totalDescuentoPorcentual = parseFloat(porcentajeDescuentoTemporal.toFixed(2))
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //Set precios nuevos y resumen
+            constCarritoDeCompra.dataValues.tipoImpuesto = tipoImpuesto + "%"
+            constCarritoDeCompra.dataValues.totalDescuentosPromociones = totalDescuentosPromociones.toFixed(2)
+            constCarritoDeCompra.dataValues.totalDescuentosCupones = totalDescuentosCupones.toFixed(2)
+            constCarritoDeCompra.dataValues.totalDescuentos = (totalDescuentosCupones+totalDescuentosPromociones).toFixed(2)
+            constCarritoDeCompra.dataValues.precioTotal = precioTotal.toFixed(2)
+            constCarritoDeCompra.dataValues.precioFinalTotal = precioFinalTotal.toFixed(2)
+
+
+            constCarritoDeCompra.dataValues.TotalImpuesto = precioFinalTotal * (tipoImpuesto / 100)
+            constCarritoDeCompra.dataValues.TotalImpuestoProductos = (constCarritoDeCompra.dataValues.TotalImpuesto).toFixed(2)
+            constCarritoDeCompra.dataValues.precioFinalTotalMasImpuestos = (precioFinalTotal * (1 + (tipoImpuesto / 100))).toFixed(2)
+
+
+
+
+            //envio + 3%
+            if(constCarritoDeCompra.cdc_forma_pago_codigo == "28" || constCarritoDeCompra.cdc_forma_pago_codigo == "04")
+            {
+                constCarritoDeCompra.dataValues.cdc_costo_envio = constCarritoDeCompra.dataValues.cdc_costo_envio * 1.03
+            }
+            else
+            {
+                constCarritoDeCompra.dataValues.cdc_costo_envio = constCarritoDeCompra.dataValues.cdc_costo_envio
+            }
+
+            constCarritoDeCompra.dataValues.costoEnvioMasImpuesto = constCarritoDeCompra.cdc_costo_envio * (1 + (tipoImpuesto / 100))
+            constCarritoDeCompra.dataValues.costoEnvioMasImpuesto = parseFloat(constCarritoDeCompra.dataValues.costoEnvioMasImpuesto.toFixed(2))
+
+            constCarritoDeCompra.dataValues.costoEnvioIVA = constCarritoDeCompra.cdc_costo_envio * ((tipoImpuesto / 100))
+            constCarritoDeCompra.dataValues.costoEnvioIVA = parseFloat(constCarritoDeCompra.dataValues.costoEnvioIVA.toFixed(2))
+
+
+            constCarritoDeCompra.dataValues.TotalImpuesto = constCarritoDeCompra.dataValues.TotalImpuesto + constCarritoDeCompra.dataValues.costoEnvioIVA
+            constCarritoDeCompra.dataValues.TotalImpuesto = parseFloat(constCarritoDeCompra.dataValues.TotalImpuesto.toFixed(2))
+
+            constCarritoDeCompra.dataValues.TotalFinal = parseFloat(constCarritoDeCompra.dataValues.precioFinalTotalMasImpuestos) + constCarritoDeCompra.dataValues.costoEnvioMasImpuesto
+            constCarritoDeCompra.dataValues.TotalFinal = parseFloat(constCarritoDeCompra.dataValues.TotalFinal.toFixed(2))
+
+
+            constCarritoDeCompra.dataValues.productos = constProductoCarritoDeCompra
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //Agregar valores finales en USD de productos
+            for (var y = 0; y < constCarritoDeCompra.dataValues.productos.length; y++) 
+            {
+                if(constCarritoDeCompra.dataValues.productos[y].dataValues.precioBaseFinal > 0)
+                {
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.precioBaseFinal_USD = parseFloat((constCarritoDeCompra.dataValues.productos[y].dataValues.precioBaseFinal/USDValor).toFixed(2))
+                }
+                else
+                {
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.precioBaseFinal_USD = 0
+                }
+
+                if(constCarritoDeCompra.dataValues.productos[y].dataValues.totalDescuento > 0)
+                {
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.totalDescuento_USD = parseFloat((constCarritoDeCompra.dataValues.productos[y].dataValues.totalDescuento/USDValor).toFixed(2))
+                }
+                else
+                {
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.totalDescuento_USD = 0
+                }
+
+                if(constCarritoDeCompra.dataValues.productos[y].dataValues.DescuentoDielsaFijo > 0)
+                {
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.DescuentoDielsaFijo_USD = parseFloat((constCarritoDeCompra.dataValues.productos[y].dataValues.DescuentoDielsaFijo/USDValor).toFixed(2))
+                }
+                else
+                {
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.DescuentoDielsaFijo_USD = 0
+                }
+
+                if(constCarritoDeCompra.dataValues.productos[y].dataValues.precioFinal > 0)
+                {
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.precioFinal_USD = parseFloat((constCarritoDeCompra.dataValues.productos[y].dataValues.precioFinal/USDValor).toFixed(2))
+                }
+                else
+                {
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.precioFinal_USD = 0
+                }
+            }
+
+
+
+
+            //Retorna el id del carrito segun el id del SN
+
+            return constCarritoDeCompra
+        }
+        catch(e){
+            console.log(e)
+            return "error"
+        }
+    },
+    getCheckoutAPI2: async function (cdc_sn_socio_de_negocio_id) {
+        try{
+
+            //Obtener tipo de cambio
+            const constTipoCambio = await models.ControlMaestroMultiple.findOne(
+            {
+                where: {
+                    cmm_nombre: "TIPO_CAMBIO_USD"
+                },
+                attributes: ["cmm_valor"]
+            })
+            var USDValor = constTipoCambio.cmm_valor
+
+
+
+            var tipoImpuesto = 16
+
+            //SN Carrito Activo
+            const constCarritoDeCompra = await models.CarritoDeCompra.findOne(
+            { 
+                where: {
+                    cdc_sn_socio_de_negocio_id: cdc_sn_socio_de_negocio_id
+                },
+                
+            });
+
+
+            //Productos de Carrito Activo
+            let constProductoCarritoDeCompra = await models.ProductoCarritoDeCompra.findAll(
+            {
+                where: {
+                    pcdc_carrito_de_compra_id: constCarritoDeCompra.cdc_carrito_de_compra_id
+                },
+                include: [
+                    {
+                        model: models.Producto
+                    }
+                ],
+                attributes: {
+                    exclude: ['createdAt','updatedAt','pcdc_lista_precio','pcdc_precio','pcdc_prod_producto_id_regalo','pcdc_cantidad_producto_regalo',
+                    'pcdc_descuento_promocion', 'pcdc_prod_producto_id_promocion', 'pcdc_cantidad_producto_promocion', 'pcdc_cupon_aplicado',
+                    'pcdc_mejor_descuento', 'pcdc_almacen_surtido', 'pcdc_no_disponible_para_compra', 'pcdc_back_order', 'pcdc_validado']
+                },
+                order: [
+                    ['pcdc_producto_carrito_id', 'ASC']
+                ]
+            });
+
+            constProductoCarritoDeCompra = constProductoCarritoDeCompra.filter((item) =>
+                item.dataValues.producto.prod_peso > 0 && item.dataValues.producto.prod_volumen > 0 && item.dataValues.producto.prod_precio);
+            //Buscar si tiene productos que sean Stock inactivo o Hasta agotar existencia con backorder
+            var prodCarritoLenght = constProductoCarritoDeCompra.length
+            for (var z = 0; z < prodCarritoLenght; z++) 
+            {
+                //Consultar tabla productos stock general por producto
+                const constTieneStockGeneral = await models.Producto.findOne(
+                {
+                    where: {
+                        prod_producto_id: constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id
+                    },
+                    attributes: ['prod_total_stock', 'prod_tipo_precio_base', 'prod_dias_resurtimiento']
+                    
+                });
+
+                //Si existe el producto
+                if(constTieneStockGeneral)
+                {
+                    //Comparar stock y ver si es diferente de lista de precios y si es backorder
+                    if(constProductoCarritoDeCompra[z].dataValues.pcdc_producto_cantidad > constTieneStockGeneral.prod_total_stock  
+                        && constTieneStockGeneral.prod_tipo_precio_base != 'Precio de Lista'
+                         && constTieneStockGeneral.prod_dias_resurtimiento > 0)
+                    {
+                        //Settear el arreglo actual como que no sera backorder  (cambiar si es o eliminarlo del objecto completo)
+                        // constProductoCarritoDeCompra[z].dataValues.backOrderPrecioLista = true
+
+
+
+
+                        //Nuevo objeto que sera para backorder
+                        // var clone = Object.assign({}, constProductoCarritoDeCompra[z]);
+                        // console.log(clone)
+                        // const newObject = Object.create(constProductoCarritoDeCompra[z]);
+                        // newObject.dataValues.backOrderPrecioLista = true
+                        
+                        // newObject.dataValues.pcdc_producto_cantidad = newCantidad
+
+                        //Agregar nuevo objeto
+                        // constProductoCarritoDeCompra.push(constProductoCarritoDeCompra[z])
+                        // Object.assign(constProductoCarritoDeCompra, newObject)
+
+
+                        var cantidadOriginal = constProductoCarritoDeCompra[z].dataValues.pcdc_producto_cantidad
+                        console.log(cantidadOriginal)
+                        constProductoCarritoDeCompra[z].dataValues.backOrderPrecioLista = false
+                        constProductoCarritoDeCompra[z].dataValues.pcdc_producto_cantidad = constTieneStockGeneral.prod_total_stock
+
+                        //Buscar nuevo elemento a agregar
+                        const newElemento = await models.ProductoCarritoDeCompra.findOne(
+                        {
+                            where: {
+                                pcdc_carrito_de_compra_id: constCarritoDeCompra.cdc_carrito_de_compra_id,
+                                pcdc_prod_producto_id: constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id
+                            },
+                            attributes: {
+                                exclude: ['createdAt','updatedAt','pcdc_lista_precio','pcdc_precio','pcdc_prod_producto_id_regalo','pcdc_cantidad_producto_regalo',
+                                'pcdc_descuento_promocion', 'pcdc_prod_producto_id_promocion', 'pcdc_cantidad_producto_promocion', 'pcdc_cupon_aplicado',
+                                'pcdc_mejor_descuento', 'pcdc_almacen_surtido', 'pcdc_no_disponible_para_compra', 'pcdc_back_order', 'pcdc_validado']
+                            },
+                            order: [
+                                ['pcdc_producto_carrito_id', 'ASC']
+                            ]
+                        });
+
+                        const dataProductFilter = constProductoCarritoDeCompra
+                            .filter((item) => item.dataValues.producto.prod_producto_id == constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id);
+
+                        // console.log('dataProductFilter ', dataProductFilter);
+                        var newCantidad = constTieneStockGeneral.prod_total_stock - cantidadOriginal
+                        console.log(newCantidad)
+                        if(newCantidad < 0)
+                        {
+                            newCantidad = newCantidad*-1
+                        }
+                        newElemento.dataValues.pcdc_producto_cantidad = newCantidad
+                        newElemento.dataValues.backOrderPrecioLista = false
+                        newElemento.dataValues.producto = dataProductFilter[0].dataValues.producto;
 
                         constProductoCarritoDeCompra.push(newElemento)
                     }
@@ -2455,9 +3439,14 @@ module.exports = {
                 //Obtener lineas
                 for (var i = 0; i < productos.length; i++) 
                 {
+                    // if(productos[i].dataValues.prod_precio > 0
+                    //     && productos[i].dataValues.producto.prod_volumen > 0
+                    //     && productos[i].dataValues.producto.prod_peso > 0) {
+                        
+                    //     }
                     var aplicaBackOrder = productos[i].dataValues.aplicaBackOrder
                     var inventarioFaltante = productos[i].dataValues.pcdc_producto_cantidad
-
+                    // console.log('inventarioFaltante ----------------------> ', i, inventarioFaltante);
                     var breaker = 0;
                     var stockDisponible = productos[i].dataValues.prod_total_stock
                     var stockPrimarioDisponible = true
@@ -2765,6 +3754,13 @@ module.exports = {
                 //Obtener lineas
                 for (var i = 0; i < productos.length; i++) 
                 {
+                    // if(productos[i].dataValues.prod_precio > 0
+                    //     && productos[i].dataValues.producto.prod_volumen > 0
+                    //     && productos[i].dataValues.producto.prod_peso > 0) {
+
+                            
+                    //         console.log('Resultado de arreglo global ____________________________________________________ ', lineasArray);
+                    //     }
                     var aplicaBackOrder = productos[i].dataValues.aplicaBackOrder
                     var inventarioFaltante = productos[i].dataValues.pcdc_producto_cantidad
 
@@ -2772,9 +3768,11 @@ module.exports = {
                     var stockDisponible = productos[i].dataValues.prod_total_stock
                     var stockPrimarioDisponible = true
                     var stockSecundarioDisponible = true
-
+                    // console.log('inventarioFaltante ----------------------> ', i, inventarioFaltante, stockDisponible);
+    
                     while(inventarioFaltante > 0)
                     {
+                        // console.log('esta es la iteracion de inventario faltante =============> ', inventarioFaltante);
                         //Stock disponible total 
                         if(stockDisponible > 0 && productos[i].dataValues.backOrderPrecioLista == false)
                         {
@@ -3152,56 +4150,70 @@ module.exports = {
 
             var precioTotalTemp
 
-
-            for (var i = 0; i < checkoutJson.dataValues.productos.length; i++) 
+            const lengthData = checkoutJson.dataValues.productos.length;
+            for (var i = 0; i < lengthData; i++) 
             {
 
-                // console.log(checkoutJson.dataValues.productos.pcdc_producto_carrito_id)
-                if(checkoutJson.dataValues.cdc_forma_pago_codigo == 99)
+                if((checkoutJson.dataValues.productos[i].dataValues.prod_total_stock > 0
+                    || checkoutJson.dataValues.productos[i].dataValues.aplicaBackOrder === true)
+                    && checkoutJson.dataValues.productos[i].dataValues.prod_precio > 0
+                    && checkoutJson.dataValues.productos[i].dataValues.producto.prod_peso > 0
+                    && checkoutJson.dataValues.productos[i].dataValues.producto.prod_volumen > 0
+                )
                 {
-                    // if(prod_tipo_cambio_base)
-                    if(checkoutJson.dataValues.productos[i].dataValues.prod_tipo_cambio_base == "USD")
+
+                    let totalCantidadProducto = 
+                        (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad > checkoutJson.dataValues.productos[i].dataValues.prod_total_stock
+                        && checkoutJson.dataValues.productos[i].dataValues.aplicaBackOrder === false)
+                        ? checkoutJson.dataValues.productos[i].dataValues.prod_total_stock
+                        : checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad;
+
+                    if(checkoutJson.dataValues.cdc_forma_pago_codigo == 99)
                     {
-
-                        //Variable que saca el total subtotal (cantidad x precio base)
-                        precioTotalTemp = (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)/USDValor
-                        precioTotal_usd += precioTotalTemp
-
-                        //Calculara el total de descuentos
-                        totalDescuentos_usd += (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor
-
-                        let precioTotalTemp1 = checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal;
-                        precioTotal += precioTotalTemp1;
-                        totalDescuentos += checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.totalDescuento;
+                        // if(prod_tipo_cambio_base)
+                        if(checkoutJson.dataValues.productos[i].dataValues.prod_tipo_cambio_base == "USD")
+                        {
+    
+                            //Variable que saca el total subtotal (cantidad x precio base)
+                            precioTotalTemp = (totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)/USDValor
+                            precioTotal_usd += precioTotalTemp
+    
+                            //Calculara el total de descuentos
+                            totalDescuentos_usd += (totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor
+    
+                            let precioTotalTemp1 = totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal;
+                            precioTotal += precioTotalTemp1;
+                            totalDescuentos += totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.totalDescuento;
+                        }
+                        else
+                        {
+                            let precioTotalTemp1 = (totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)/USDValor;
+                            precioTotal_usd += precioTotalTemp1;
+                            totalDescuentos_usd += (totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor;
+    
+                            //Variable que saca el total subtotal (cantidad x precio base)
+                            precioTotalTemp = totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
+                            precioTotal += precioTotalTemp
+    
+                            //Calculara el total de descuentos
+                            totalDescuentos += totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.totalDescuento
+                        }
+    
                     }
                     else
                     {
-                        let precioTotalTemp1 = (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)/USDValor;
-                        precioTotal_usd += precioTotalTemp1;
-                        totalDescuentos_usd += (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor;
-
+                        // Conversión peso a dolar
+                        precioTotal_usd += (totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)/USDValor;
+                        totalDescuentos_usd += (totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor;
+    
                         //Variable que saca el total subtotal (cantidad x precio base)
-                        precioTotalTemp = checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
+                        precioTotalTemp = totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
                         precioTotal += precioTotalTemp
-
+    
+    
                         //Calculara el total de descuentos
-                        totalDescuentos += checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.totalDescuento
+                        totalDescuentos += totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.totalDescuento
                     }
-
-                }
-                else
-                {
-                    // Conversión peso a dolar
-                    precioTotal_usd += (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)/USDValor;
-                    totalDescuentos_usd += (checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor;
-
-                    //Variable que saca el total subtotal (cantidad x precio base)
-                    precioTotalTemp = checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
-                    precioTotal += precioTotalTemp
-
-
-                    //Calculara el total de descuentos
-                    totalDescuentos += checkoutJson.dataValues.productos[i].dataValues.pcdc_producto_cantidad * checkoutJson.dataValues.productos[i].dataValues.totalDescuento
                 }
             }
 

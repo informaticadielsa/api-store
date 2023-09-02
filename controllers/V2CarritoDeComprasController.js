@@ -59,7 +59,7 @@ export default{
             //Retornara el id del nuevo carrito
             res.status(200).send({
                 message: 'Carrito Obtenido Con Exito',
-                constCarritoDeCompraRecienCreado: getCart
+                cdc_carrito_de_compra_id: getCart
             })
         }
         catch(e){
@@ -102,6 +102,7 @@ export default{
                         pcdc_carrito_de_compra_id: carrito_id
                     }
                 })
+                console.log('constProductoCarritoDeCompra ', constProductoCarritoDeCompra);
 
                 //Si es carrito existe y el producto esta
                 if(constProductoCarritoDeCompra)
@@ -837,7 +838,7 @@ export default{
             if(constControlMaestroMultiple.cmm_valor == "Envío domicilio")
             {
                 //usara la function de cotizador
-                var checkoutJson = await getCheckout.getCheckoutAPI(req.body.cdc_sn_socio_de_negocio_id);
+                var checkoutJson = await getCheckout.getCheckoutAPI2(req.body.cdc_sn_socio_de_negocio_id);
                 var CotizacionResult = await cotizarCarritoFunction.CotizarCarritoFunction(cdc_sn_socio_de_negocio_id, cdc_cmm_tipo_envio_id, cdc_direccion_envio_id, cdc_alm_almacen_recoleccion, cdc_fletera_id, checkoutJson);
 
 
@@ -1105,158 +1106,161 @@ export default{
             var boolValidarStock = await getCheckout.validarStockCarrito(constProductoCarritoDeCompra);
 
             //Validar si hay stock en los productos o aplican back orden
-            var boolValidarDimensiones = await cotizarCarritoFunction.validarDimensionesCarritoProducto(constProductoCarritoDeCompra);
+            var boolValidarDimensiones = await cotizarCarritoFunction
+                .validarDimensionesCarritoProducto(constProductoCarritoDeCompra
+                    .filter((item) => item.prod_peso > 0 && item.prod_volumen > 0));
 
 
 
             if(cuentaConFormaDePago == true)
             {
-                if(boolValidarStock == true)
+                console.log('boolValidarDimensiones ', boolValidarDimensiones);
+                if(boolValidarDimensiones == true)
                 {
-                    if(boolValidarDimensiones == true)
-                    {
-                        var existeEmail = true
+                    var existeEmail = true
 
+                    //validar email de facturacion para conekta
+                    const constSociosNegocio = await models.SociosNegocio.findOne({
+                        where: {
+                            sn_socios_negocio_id: cdc_sn_socio_de_negocio_id
+                        }
+                    });
+
+                    if(constSociosNegocio.sn_email_facturacion == null || constSociosNegocio.sn_email_facturacion == '')
+                    {
+                        existeEmail = false
+                    }
+
+
+                    if(existeEmail == false)
+                    {
                         //validar email de facturacion para conekta
-                        const constSociosNegocio = await models.SociosNegocio.findOne({
+                        const constSociosNegocioUsuario = await models.SociosNegocioUsuario.findOne({
                             where: {
-                                sn_socios_negocio_id: cdc_sn_socio_de_negocio_id
+                                snu_cardcode: constSociosNegocio.sn_cardcode,
+                                snu_super_usuario: true
                             }
                         });
 
-                        if(constSociosNegocio.sn_email_facturacion == null || constSociosNegocio.sn_email_facturacion == '')
+                        if(constSociosNegocioUsuario)
                         {
-                            existeEmail = false
-                        }
-
-
-                        if(existeEmail == false)
-                        {
-                            //validar email de facturacion para conekta
-                            const constSociosNegocioUsuario = await models.SociosNegocioUsuario.findOne({
-                                where: {
-                                    snu_cardcode: constSociosNegocio.sn_cardcode,
-                                    snu_super_usuario: true
-                                }
-                            });
-
-                            if(constSociosNegocioUsuario)
+                            if(constSociosNegocioUsuario.snu_correo_electronico != '' && constSociosNegocioUsuario.snu_correo_electronico != null)
                             {
-                                if(constSociosNegocioUsuario.snu_correo_electronico != '' && constSociosNegocioUsuario.snu_correo_electronico != null)
-                                {
-                                    existeEmail = true
-                                }
+                                existeEmail = true
                             }
                         }
+                    }
 
-                        
-
-
-
+                    
 
 
 
-                        if(existeEmail == true)
+
+
+
+                    if(existeEmail == true)
+                    {
+                        //Crear compra finalizada en tabla preValidadora
+                        const constPreCompraFinalizada = await models.PreCompraFinalizada.create({
+                            cf_compra_numero_orden: constCarritoDeCompra.cdc_numero_orden,
+                            cf_compra_fecha: Date(),
+                            cf_vendido_por_usu_usuario_id: /*!!req.body.cf_vendido_por_usu_usuario_id ? req.body.cf_vendido_por_usu_usuario_id : null,*/ null,
+                            cf_cmm_tipo_compra_id: null, //no aplica, porque existe el campo forma de pago
+                            cf_vendido_a_socio_negocio_id: constCarritoDeCompra.cdc_sn_socio_de_negocio_id,
+                            cf_cmm_tipo_envio_id: constCarritoDeCompra.cdc_cmm_tipo_envio_id, 
+                            cf_direccion_envio_id: constCarritoDeCompra.cdc_direccion_envio_id,
+                            cf_cmm_tipo_impuesto: constControlMaestroMultiple.cmm_control_id, 
+                            cf_alm_almacen_recoleccion: constCarritoDeCompra.cdc_alm_almacen_recoleccion,
+                            cf_total_compra: checkoutJson.dataValues.TotalFinal,
+                            cf_estatus_orden: 1000107,
+                            cf_fletera_id: constCarritoDeCompra.cdc_fletera_id,
+                            cf_sap_metodos_pago_codigo: /*!!req.body.cdc_forma_pago_codigo ? req.body.cdc_forma_pago_codigo : null,*/ "PUE", //pago unico
+                            cf_sap_forma_pago_codigo: constCarritoDeCompra.cdc_forma_pago_codigo ? constCarritoDeCompra.cdc_forma_pago_codigo : null,
+                            cf_estatus_creacion_sap: null,
+                            cf_descripcion_sap: null,
+                            cf_referencia: null,
+                            cf_promcup_promociones_cupones_id: constCarritoDeCompra.cdc_promcup_promociones_cupones_id,
+                            cf_cfdi: constCarritoDeCompra.cdc_cfdi
+                        });
+
+                        if(constPreCompraFinalizada)
                         {
-                            //Crear compra finalizada en tabla preValidadora
-                            const constPreCompraFinalizada = await models.PreCompraFinalizada.create({
-                                cf_compra_numero_orden: constCarritoDeCompra.cdc_numero_orden,
-                                cf_compra_fecha: Date(),
-                                cf_vendido_por_usu_usuario_id: /*!!req.body.cf_vendido_por_usu_usuario_id ? req.body.cf_vendido_por_usu_usuario_id : null,*/ null,
-                                cf_cmm_tipo_compra_id: null, //no aplica, porque existe el campo forma de pago
-                                cf_vendido_a_socio_negocio_id: constCarritoDeCompra.cdc_sn_socio_de_negocio_id,
-                                cf_cmm_tipo_envio_id: constCarritoDeCompra.cdc_cmm_tipo_envio_id, 
-                                cf_direccion_envio_id: constCarritoDeCompra.cdc_direccion_envio_id,
-                                cf_cmm_tipo_impuesto: constControlMaestroMultiple.cmm_control_id, 
-                                cf_alm_almacen_recoleccion: constCarritoDeCompra.cdc_alm_almacen_recoleccion,
-                                cf_total_compra: checkoutJson.dataValues.TotalFinal,
-                                cf_estatus_orden: 1000107,
-                                cf_fletera_id: constCarritoDeCompra.cdc_fletera_id,
-                                cf_sap_metodos_pago_codigo: /*!!req.body.cdc_forma_pago_codigo ? req.body.cdc_forma_pago_codigo : null,*/ "PUE", //pago unico
-                                cf_sap_forma_pago_codigo: constCarritoDeCompra.cdc_forma_pago_codigo ? constCarritoDeCompra.cdc_forma_pago_codigo : null,
-                                cf_estatus_creacion_sap: null,
-                                cf_descripcion_sap: null,
-                                cf_referencia: null,
-                                cf_promcup_promociones_cupones_id: constCarritoDeCompra.cdc_promcup_promociones_cupones_id,
-                                cf_cfdi: constCarritoDeCompra.cdc_cfdi
+                            //Obtener Lineas para insertar en la tabla productos compra finalizada y para sap
+                            var lineasTemporales = await getCheckout.getLineasProductosComprasFinalizadas(checkoutJson, constPreCompraFinalizada.dataValues.cf_compra_finalizada_id);
+                            console.log('Aquiiiiiiii lineasTemporales -----> ', lineasTemporales);
+                            //Insertar cada producto en la tabla de productos compras finalizadas
+                            for (var i = 0; i < lineasTemporales.length; i++) 
+                            {
+                                await models.PreProductoCompraFinalizada.create(lineasTemporales[i]);
+                            }
+
+                            //Validar el json de sap
+                            var validarOrdenSAP = await CreacionOrdenSAP.preValidarCreacionOrdenSAP(req.body.cdc_sn_socio_de_negocio_id, constPreCompraFinalizada.dataValues.cf_compra_finalizada_id);
+
+                            //Eliminar todo lo insertado en la tabla prevalidadora
+                            var DeleteAll = `
+                                delete from pre_productos_de_compra_finalizada
+                            `;
+
+                            await sequelize.query(DeleteAll,
+                            { 
+                                type: sequelize.QueryTypes.SELECT 
                             });
 
-                            if(constPreCompraFinalizada)
+
+                            var DeleteAll2 = `
+                                delete from pre_compras_finalizadas
+                            `;
+
+                            await sequelize.query(DeleteAll2,
+                            { 
+                                type: sequelize.QueryTypes.SELECT 
+                            });
+
+
+                            if(validarOrdenSAP.status == true)
                             {
-                                //Obtener Lineas para insertar en la tabla productos compra finalizada y para sap
-                                var lineasTemporales = await getCheckout.getLineasProductosComprasFinalizadas(checkoutJson, constPreCompraFinalizada.dataValues.cf_compra_finalizada_id);
-
-                                //Insertar cada producto en la tabla de productos compras finalizadas
-                                for (var i = 0; i < lineasTemporales.length; i++) 
-                                {
-                                    await models.PreProductoCompraFinalizada.create(lineasTemporales[i]);
-                                }
-
-                                //Validar el json de sap
-                                var validarOrdenSAP = await CreacionOrdenSAP.preValidarCreacionOrdenSAP(req.body.cdc_sn_socio_de_negocio_id, constPreCompraFinalizada.dataValues.cf_compra_finalizada_id);
-
-                                //Eliminar todo lo insertado en la tabla prevalidadora
-                                var DeleteAll = `
-                                    delete from pre_productos_de_compra_finalizada
-                                `;
-
-                                await sequelize.query(DeleteAll,
-                                { 
-                                    type: sequelize.QueryTypes.SELECT 
-                                });
-
-
-                                var DeleteAll2 = `
-                                    delete from pre_compras_finalizadas
-                                `;
-
-                                await sequelize.query(DeleteAll2,
-                                { 
-                                    type: sequelize.QueryTypes.SELECT 
-                                });
-
-
-                                if(validarOrdenSAP.status == true)
-                                {
-                                    res.status(200).send({
-                                        message: 'Prevalidar Inserciones OK'
-                                    })
-                                }
-                                else
-                                {
-                                    res.status(validarOrdenSAP.codigoStatus).send({
-                                        data: validarOrdenSAP
-                                    })
-                                }
-                            }  
-                            else
-                            {
-                                res.status(500).send({
-                                    message: 'Fallo al prevalidad insertar la orden'
+                                res.status(200).send({
+                                    message: 'Prevalidar Inserciones OK'
                                 })
                             }
-
-                        }
+                            else
+                            {
+                                res.status(validarOrdenSAP.codigoStatus).send({
+                                    data: validarOrdenSAP
+                                })
+                            }
+                        }  
                         else
                         {
                             res.status(500).send({
-                                message: 'El usuario no cuenta con Email de facturacion'
+                                message: 'Fallo al prevalidad insertar la orden'
                             })
                         }
+
                     }
                     else
                     {
                         res.status(500).send({
-                            message: 'Uno o mas articulos no pueden ser cotizados para envio'
+                            message: 'El usuario no cuenta con Email de facturacion'
                         })
                     }
                 }
                 else
                 {
                     res.status(500).send({
-                        message: 'Uno o mas Articulos no cuentan con suficiente stock'
+                        message: 'Uno o mas articulos no pueden ser cotizados para envio'
                     })
                 }
+                // if(boolValidarStock == true)
+                // {
+                // }
+                // else
+                // {
+                //     res.status(500).send({
+                //         message: 'Uno o mas Articulos no cuentan con suficiente stock'
+                //     })
+                // }
             }
             else
             {
@@ -1550,14 +1554,20 @@ export default{
 
     getPreOrdenDividida: async(req, res, next) =>{
         try{
-            var checkoutJson = await getCheckout.getCheckoutAPI(req.body.cdc_sn_socio_de_negocio_id);
-
-            var lineasTemporales = await getCheckout.getLineasProductosComprasFinalizadas(checkoutJson, 1);
-
-            console.log(lineasTemporales)
+            let checkoutJson = await getCheckout.getCheckoutAPI2(req.body.cdc_sn_socio_de_negocio_id);
+            console.log('conteo de checkoutJson ', checkoutJson.dataValues.productos.length);
+            let lineasTemporales = await getCheckout.getLineasProductosComprasFinalizadas(checkoutJson, 1);
+            console.log('conteo de lineasTemporales ', lineasTemporales.length, lineasTemporales);
+            // checkoutJson.dataValues.productos = checkoutJson.dataValues.productos.filter((item) => {
+            //     // console.log('filtro # ', i, ' data: ', item);
+            //     return item.prod_precio > 0 && item.producto.prod_volumen > 0 && item.producto.prod_peso > 0;
+            // });
+            // console.log('checkoutJson hola mundo antes ------> ', lineasTemporales.length);
+            // console.log(lineasTemporales)
 
             for (var i = 0; i < lineasTemporales.length; i++) 
             {
+                // console.log('Id de lineasTemporales[i] ', lineasTemporales[i]);
                 //Fecha de entrega informacion
                 var dateFinal
                 var day = new Date()
@@ -1675,7 +1685,7 @@ export default{
 
                 lineasTemporales[i].dateFinal = dateFinal
             }
-
+            // console.log('checkoutJson hola mundo despues ------> ', lineasTemporales.length);
             res.status(200).send({
                 message: 'get Pre Orden Dividida',
                 getPreOrdenDividida: lineasTemporales

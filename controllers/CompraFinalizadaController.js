@@ -1449,7 +1449,7 @@ export default{
             
 
             //Obtener Checkout
-            var checkoutJson = await getCheckout.getCheckoutAPI(req.body.cdc_sn_socio_de_negocio_id);
+            var checkoutJson = await getCheckout.getCheckoutAPI2(req.body.cdc_sn_socio_de_negocio_id);
 
             //Validar si el carrito es de tipo credito forma de pago y si lo es restar el credito y pasar la orden
             var creditoResult = await CreacionOrdenSAP.validarCreditoDisponible(constCarritoDeCompra.cdc_forma_pago_codigo, constCarritoDeCompra.cdc_sn_socio_de_negocio_id, checkoutJson.dataValues.TotalFinal);

@@ -549,7 +549,7 @@ module.exports = {
             var direccion_sn_id = cdc_direccion_envio_id
 
             //Obtener todos los productos del carrito
-            const constProductoCarritoDeCompra = await models.ProductoCarritoDeCompra.findAll(
+            let constProductoCarritoDeCompra = await models.ProductoCarritoDeCompra.findAll(
             {
                 where: {
                     pcdc_carrito_de_compra_id: carrito_id
@@ -563,7 +563,8 @@ module.exports = {
                 ]
             });
 
-
+            constProductoCarritoDeCompra = constProductoCarritoDeCompra.filter((item) =>
+                item.dataValues.producto.prod_peso > 0 && item.dataValues.producto.prod_volumen > 0 );
             //Validar si hay stock en los productos o aplican back orden
             var boolValidarDimensiones = await this.validarDimensionesCarritoProducto(constProductoCarritoDeCompra);
 
