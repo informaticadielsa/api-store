@@ -754,7 +754,7 @@ exports.pagoAceptado = async function (
           <p>IVA 16%</p>
         </div>
         <div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; text-align: -webkit-left'>
-          <p>$ ` +
+          <p>` +
       orderIVA +
       `</p>
         </div>
@@ -762,7 +762,7 @@ exports.pagoAceptado = async function (
           <p>Total</p>
         </div>
         <div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; text-align: -webkit-left'>
-          <p>$ ` +
+          <p>` +
       totalCompra +
       `</p>
         </div>

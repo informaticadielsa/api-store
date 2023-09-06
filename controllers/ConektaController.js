@@ -422,7 +422,7 @@ export default {
             }
         })
 
-        var checkoutJson = await getCheckout.getCheckoutAPI(cdc_sn_socio_de_negocio_id)
+        var checkoutJson = await getCheckout.getCheckoutAPI2(cdc_sn_socio_de_negocio_id)
         var productos = checkoutJson.dataValues.productos
 
         var array = []
