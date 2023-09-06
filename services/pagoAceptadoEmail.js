@@ -636,7 +636,7 @@ exports.pagoAceptado = async function (
       var imagen;
       var prod_nombre = constProducto.prod_nombre;
       var prod_nombre_foraneo = constProducto.prod_nombre_extranjero;
-      var cantidad = lineasTemporales[x].pcf_cantidad_entregada;
+      var cantidad = lineasTemporales[x].pcf_cantidad_producto;
       var precio = lineasTemporales[x].pcf_precio;
       precio = formatter.format(precio);
 
