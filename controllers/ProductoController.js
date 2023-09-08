@@ -11284,12 +11284,12 @@ export default {
             }
             
 
-            console.log('consulta a base de datos: ', rows)
+            
             //LA VARIABLE rows CONTIENE TODOS LOS PRODUCTOS OBTENIDOS
 
             //Obtener si aplica backorder para los hijos
             rows = await productosUtils.setImagenesOnlyChilds(rows);
-
+            console.log('consulta a base de datos2: ', rows)
             //Obtener si aplica backorder para los hijos
             rows = await productosUtils.setDiasResurtimientoIsBackOrderOnlyChilds(rows);
             
