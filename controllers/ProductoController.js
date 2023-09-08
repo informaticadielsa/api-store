@@ -11253,7 +11253,7 @@ export default {
             }
 
 
-
+ 
             //Final de la arquitectura SQL para la busqueda
             sqlBusqueda += `
                                 )  as p1
@@ -11264,12 +11264,13 @@ export default {
             var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
             var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
 
+           
             //Obtener Rows
             var rows = await sequelize.query(sqlFinalRows,
             {
                 type: sequelize.QueryTypes.SELECT 
             });
-
+            console.log('Obtener productos:', rows)
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
