@@ -342,6 +342,7 @@ module.exports = {
     },
     setImagenesOnlyChilds: async function (rows) {
         try{
+            const newRows= [];
             for (var i = 0; i < rows.length; i++) 
             {
                 //Validar que sea producto hijo
@@ -358,7 +359,8 @@ module.exports = {
                 
                 if(constImagenProducto)
                 {
-                    rows[i].imagen_productos = constImagenProducto
+                   rows[i].imagen_productos = constImagenProducto
+                   newRows.push(rows[i]);
                 }
                 else
                 {
@@ -366,7 +368,7 @@ module.exports = {
                 }
                 
             }
-            return rows
+            return newRows
         }
         catch(e){
             console.log(e)
@@ -1429,7 +1431,7 @@ module.exports = {
                     
                 }
             //Fin Calcular IVA
-
+ 
 
 
 
