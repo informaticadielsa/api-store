@@ -364,7 +364,7 @@ module.exports = {
                 }
                 else
                 {
-                    rows[i].imagen_productos = {}
+                   // rows[i].imagen_productos = {}
                 }
                 
             }
