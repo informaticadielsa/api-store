@@ -711,7 +711,7 @@ exports.pagoAceptado = async function (
           `</p>
                 <p style='font-size: 18px; line-height: 16px; text-align: justify; margin-top: 0px; margin-bottom: 10px;'>` +
           cantidad +
-          `</p>
+          ` piezas</p>
                 <p style='font-size: 18px; line-height: 16px; text-align: justify; margin-top: 0px; margin-bottom: 10px;'>` +
           precio +
           `</p>
