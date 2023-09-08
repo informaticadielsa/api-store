@@ -8148,10 +8148,7 @@ export default {
             });
 
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
-            const mainConsultaProductos = {
-                count: parseInt(constCount[0].count),
-                rows
-            }
+            
 
             console.log("llego al final")
 
@@ -8203,7 +8200,12 @@ export default {
 
             rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
-            console.log('filtra prods:', rows)
+           
+
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
