@@ -8203,6 +8203,7 @@ export default {
 
             rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
+            console.log('filtra prods:', rows)
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
