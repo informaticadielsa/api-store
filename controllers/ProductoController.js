@@ -11263,8 +11263,7 @@ export default {
             //Variables que concatenan TODO
             var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
             var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
-            console.log('Products 1: ', sqlFinalRows)
-            console.log('Product 2: ', sqlFinalRowsCount)
+          
            
             //Obtener Rows
             var rows = await sequelize.query(sqlFinalRows,
@@ -11285,7 +11284,7 @@ export default {
             }
             
 
-
+            console.log('consulta a base de datos: ', rows)
             //LA VARIABLE rows CONTIENE TODOS LOS PRODUCTOS OBTENIDOS
 
             //Obtener si aplica backorder para los hijos
