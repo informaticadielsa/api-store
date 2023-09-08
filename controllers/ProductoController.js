@@ -11270,7 +11270,7 @@ export default {
             {
                 type: sequelize.QueryTypes.SELECT 
             });
-            console.log('Obtener productos:', rows)
+          
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
@@ -11324,8 +11324,8 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
-            
-
+            console.log('Obtener productos con img:', mainConsultaProductos)
+            console.log('productos rows:', rows)
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
