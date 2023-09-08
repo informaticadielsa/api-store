@@ -340,9 +340,34 @@ module.exports = {
             return "No fue posible establecer si los hijos tienen backOrder"
         }
     },
-    setImagenesOnlyChilds: async function (rows) {
+    setFiltrarProductsSinImagen: async function(rows){
         try{
             const newRows= [];
+            for (var i = 0; i < rows.length; i++) 
+            {
+                //Validar que sea producto hijo
+               
+                if (rows[i].imagen_productos.length >=1)
+                {
+                   
+                   newRows.push(rows[i]);
+                }
+                else
+                {
+                   
+                }
+                
+            }
+            return newRows
+        }
+        catch(e){
+            console.log(e)
+            return "No fue posible establecer si tiene imagenes el productos."
+        }
+    },
+    setImagenesOnlyChilds: async function (rows) {
+        try{
+            //const newRows= [];
             for (var i = 0; i < rows.length; i++) 
             {
                 //Validar que sea producto hijo
@@ -360,15 +385,15 @@ module.exports = {
                 if(constImagenProducto)
                 {
                    rows[i].imagen_productos = constImagenProducto
-                   newRows.push(rows[i]);
+                 //  newRows.push(rows[i]);
                 }
                 else
                 {
-                   // rows[i].imagen_productos = {}
+                   rows[i].imagen_productos = {}
                 }
                 
             }
-            return newRows
+            return rows
         }
         catch(e){
             console.log(e)

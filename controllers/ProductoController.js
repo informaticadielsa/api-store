@@ -8201,7 +8201,7 @@ export default {
             //Arroz
             //rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
-            
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
             res.status(200).send({
                 message: 'Lista de productos',
@@ -8511,7 +8511,8 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
 
-            
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
 
             res.status(200).send({
                 message: 'Lista de productos',
@@ -9184,6 +9185,9 @@ export default {
             //obtener stock detalle por hijo
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
+
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
             
 
             res.status(200).send({
@@ -9593,6 +9597,7 @@ export default {
           
            // rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
+           rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
 
 
@@ -9803,6 +9808,7 @@ export default {
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
             
+           
 
 
 
@@ -10404,6 +10410,8 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
@@ -10887,6 +10895,10 @@ export default {
             //setteara el precio final y base en USD en un nuevo campo
             rows = await productosUtils.setOnlyChildsUSDChange(rows);
             
+
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
+
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
@@ -11324,6 +11336,8 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
             console.log('Obtener productos con img:', mainConsultaProductos)
             console.log('productos rows:', rows)
             res.status(200).send({
@@ -11727,6 +11741,8 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
             
 
             res.status(200).send({
