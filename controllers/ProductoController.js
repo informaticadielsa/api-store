@@ -8148,10 +8148,7 @@ export default {
             });
 
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
-            const mainConsultaProductos = {
-                count: parseInt(constCount[0].count),
-                rows
-            }
+            
 
             console.log("llego al final")
 
@@ -8201,8 +8198,14 @@ export default {
             //Arroz
             //rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
-            
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
+           
+
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
@@ -8511,7 +8514,8 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
 
-            
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
 
             res.status(200).send({
                 message: 'Lista de productos',
@@ -9184,6 +9188,9 @@ export default {
             //obtener stock detalle por hijo
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
+
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
             
 
             res.status(200).send({
@@ -9593,6 +9600,7 @@ export default {
           
            // rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
+           rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
 
 
@@ -9803,6 +9811,7 @@ export default {
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
             
+           
 
 
 
@@ -10404,6 +10413,8 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
@@ -10871,6 +10882,10 @@ export default {
             //setteara el precio final y base en USD en un nuevo campo
             rows = await productosUtils.setOnlyChildsUSDChange(rows);
             
+
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
+
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
@@ -11237,7 +11252,7 @@ export default {
             }
 
 
-
+ 
             //Final de la arquitectura SQL para la busqueda
             sqlBusqueda += `
                                 )  as p1
@@ -11247,13 +11262,14 @@ export default {
             //Variables que concatenan TODO
             var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
             var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
-
+          
+           
             //Obtener Rows
             var rows = await sequelize.query(sqlFinalRows,
             {
                 type: sequelize.QueryTypes.SELECT 
             });
-
+          
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
@@ -11267,12 +11283,12 @@ export default {
             }
             
 
-
+            
             //LA VARIABLE rows CONTIENE TODOS LOS PRODUCTOS OBTENIDOS
 
             //Obtener si aplica backorder para los hijos
             rows = await productosUtils.setImagenesOnlyChilds(rows);
-
+            console.log('consulta a base de datos2: ', rows)
             //Obtener si aplica backorder para los hijos
             rows = await productosUtils.setDiasResurtimientoIsBackOrderOnlyChilds(rows);
             
@@ -11307,8 +11323,10 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
-            
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
+            console.log('Obtener productos con img:', mainConsultaProductos)
+            console.log('productos rows:', rows)
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
@@ -11710,6 +11728,8 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
+            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
             
 
             res.status(200).send({
