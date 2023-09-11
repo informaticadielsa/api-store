@@ -10570,8 +10570,7 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    to_tsvector(p1.prod_nombre || ' ' ||p1.prod_descripcion || ' ' || p1.prod_nombre_extranjero || ' ' || p1.prod_sku)
-                                    @@ to_tsquery('`+searchConditionSQL+`')
+                                    p1.prod_nombre like '`+searchCondition+`%'
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true
@@ -10582,7 +10581,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when c2.cat_nombre like '%`+searchCondition+`%'  then 1.6 else 1.7 end as prioridad,
+                                    case when c2.cat_nombre like '`+searchCondition+`%'  then 1.6 else 1.7 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10593,11 +10592,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    c2.cat_nombre like '%`+searchCondition+`%'  
+                                    c2.cat_nombre like '`+searchCondition+`%'  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
@@ -10606,7 +10603,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when m2.mar_nombre like '%`+searchCondition+`%'  then 1.8 else 1.9 end as prioridad,
+                                    case when m2.mar_nombre like '`+searchCondition+`%'  then 1.8 else 1.9 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10617,11 +10614,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    m2.mar_nombre like '%`+searchCondition+`%'  
+                                    m2.mar_nombre like '`+searchCondition+`%'  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
@@ -10630,7 +10625,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when m2.mar_abreviatura like '%`+searchCondition+`%'  then 2 else 2.1 end as prioridad,
+                                    case when m2.mar_abreviatura like '`+searchCondition+`%'  then 2 else 2.1 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10641,11 +10636,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    m2.mar_abreviatura like '%`+searchCondition+`%'  
+                                    m2.mar_abreviatura like '`+searchCondition+`%'  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
@@ -10676,12 +10669,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    to_tsvector(p1.prod_nombre || ' ' ||p1.prod_descripcion || ' ' || p1.prod_nombre_extranjero || ' ' || p1.prod_sku)
-                                    @@ to_tsquery('`+searchConditionSQLDinamico+`')
+                                    p1.prod_nombre like '`+searchCondition+`%'
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
@@ -10690,7 +10680,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when c2.cat_nombre like '%`+searchCondition+`%'  then 1.6 else 1.7 end as prioridad,
+                                    case when c2.cat_nombre like '`+searchCondition+`%'  then 1.6 else 1.7 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10701,11 +10691,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    c2.cat_nombre like '%`+searchCondition+`%'  
+                                    c2.cat_nombre like '`+searchCondition+`%'  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
@@ -10714,7 +10702,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when m2.mar_nombre like '%`+searchCondition+`%'  then 1.8 else 1.9 end as prioridad,
+                                    case when m2.mar_nombre like '`+searchCondition+`%'  then 1.8 else 1.9 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10725,11 +10713,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    m2.mar_nombre like '%`+searchCondition+`%'  
+                                    m2.mar_nombre like '`+searchCondition+`%'  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
@@ -10738,7 +10724,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when m2.mar_abreviatura like '%`+searchCondition+`%'  then 2 else 2.1 end as prioridad,
+                                    case when m2.mar_abreviatura like '`+searchCondition+`%'  then 2 else 2.1 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10749,11 +10735,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    m2.mar_abreviatura like '%`+searchCondition+`%'  
+                                    m2.mar_abreviatura like '`+searchCondition+`%'  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             ) 
