@@ -8467,11 +8467,7 @@ export default {
             });
 
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
-            const mainConsultaProductos = {
-                count: parseInt(constCount[0].count),
-                rows
-            }
-
+          
             
 
             //LA VARIABLE rows CONTIENE TODOS LOS PRODUCTOS OBTENIDOS
@@ -8516,6 +8512,10 @@ export default {
 
             rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
 
             res.status(200).send({
                 message: 'Lista de productos',
@@ -9127,10 +9127,7 @@ export default {
             });
 
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
-            const mainConsultaProductos = {
-                count: parseInt(constCount[0].count),
-                rows
-            }
+          
             
 
 
@@ -9191,7 +9188,10 @@ export default {
 
             rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
-            
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
 
             res.status(200).send({
                 message: 'Lista de productos',
@@ -9499,12 +9499,7 @@ export default {
                 });
 
                 //Se regresa el esquema parecido a las consultas de SEQUALIZE
-                const mainConsultaProductos = {
-                    count: parseInt(constCount[0].count),
-                    rows
-                }
-
-
+             
 
                 //aqui Mero
 
@@ -9601,6 +9596,11 @@ export default {
            // rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
+           const mainConsultaProductos = {
+            count: parseInt(constCount[0].count),
+            rows
+        }
 
 
 
@@ -9913,10 +9913,7 @@ export default {
                 });
 
                 //Se regresa el esquema parecido a las consultas de SEQUALIZE
-                const mainConsultaProductos = {
-                    count: parseInt(constCount[0].count),
-                    rows
-                }
+              
             //FIN Obtener productos BASE para luego obtener mas cosas
 
 
@@ -10003,7 +10000,10 @@ export default {
             // rows = await productosUtils.getChildsStocksDetalle(rows);
             
             
-
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
 
 
 
@@ -10354,10 +10354,7 @@ export default {
                 });
 
                 //Se regresa el esquema parecido a las consultas de SEQUALIZE
-                const mainConsultaProductos = {
-                    count: parseInt(constCount[0].count),
-                    rows
-                }
+              
             //FIN Obtener productos BASE para luego obtener mas cosas
 
 
@@ -10414,6 +10411,12 @@ export default {
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
             rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
+
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
 
             res.status(200).send({
                 message: 'Lista de productos',
@@ -10797,10 +10800,7 @@ export default {
 
 
                 //Se regresa el esquema parecido a las consultas de SEQUALIZE
-                const mainConsultaProductos = {
-                    count: parseInt(constCount[0].count),
-                    rows
-                }
+             
             //FIN Obtener productos BASE para luego obtener mas cosas
 
 
@@ -10885,6 +10885,10 @@ export default {
 
             rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
 
             res.status(200).send({
                 message: 'Lista de productos',
@@ -11277,11 +11281,7 @@ export default {
             });
 
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
-            const mainConsultaProductos = {
-                count: parseInt(constCount[0].count),
-                rows
-            }
-            
+          
 
             
             //LA VARIABLE rows CONTIENE TODOS LOS PRODUCTOS OBTENIDOS
@@ -11325,8 +11325,12 @@ export default {
             
             rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
-            console.log('Obtener productos con img:', mainConsultaProductos)
-            console.log('productos rows:', rows)
+            
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
+            
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
@@ -11682,11 +11686,7 @@ export default {
             });
 
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
-            const mainConsultaProductos = {
-                count: parseInt(constCount[0].count),
-                rows
-            }
-            
+           
 
 
             //LA VARIABLE rows CONTIENE TODOS LOS PRODUCTOS OBTENIDOS
@@ -11731,7 +11731,11 @@ export default {
             rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
             
-
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
+            
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
