@@ -9595,7 +9595,7 @@ export default {
           
            // rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
-           rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+           //rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
            const mainConsultaProductos = {
             count: parseInt(constCount[0].count),
