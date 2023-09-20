@@ -4504,7 +4504,7 @@ export default {
                             // await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada[i].dataValues.cf_compra_finalizada_id);
                         }
 
-
+ 
                         orderJsonTemp = {
                             "orderID": orderID,
                             "cf_estatus_orden": StatusFinal
@@ -5183,7 +5183,7 @@ export default {
             
         }catch(e){
             res.status(500).send({
-                message: 'Error en la petición',
+                message: 'Error en la petición, al integrar las ordenes de compra.',
                 e
             });
             next(e);
