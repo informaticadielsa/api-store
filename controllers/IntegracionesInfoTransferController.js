@@ -4476,6 +4476,7 @@ export default {
                     var result = await request(options, function (error, response) {
                     });
 
+                    console.log('Resultados sap integrar', result)
                     var resultJson = JSON.parse(result);
 
                     //Busca la orden para luego actualizarla
