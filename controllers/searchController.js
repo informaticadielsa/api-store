@@ -12,6 +12,36 @@ export default {
             const wordToSearch = req.body.wordToSearch.toUpperCase();
             const word = wordToSearch.trim();
 
+            let respondProductsId = await models.Producto.findAll({
+                attributes: ['prod_nombre_extranjero', 'prod_cmm_estatus_id'],
+                where: {
+                    prod_cmm_estatus_id: 1000016,
+                    prod_nombre_extranjero: {
+                        [Sequelize.Op.like]: `${word}%`,
+                    }
+                },
+                limit: 10,
+            });
+
+            respondProductsId = respondProductsId.map((item) => {
+                return { prod_nombre: item.prod_nombre_extranjero }
+            });
+            
+            let respondProductMarca = await models.Marca.findAll({
+                attributes: ['mar_nombre', 'mar_cmm_estatus_id'],
+                where: {
+                    mar_cmm_estatus_id: 1000042,
+                    mar_nombre: {
+                        [Sequelize.Op.like]: `${word}%`,
+                    }
+                },
+                limit: 10,
+            });
+
+            respondProductMarca = respondProductMarca.map((item) => {
+                return { prod_nombre: item.mar_nombre }
+            });
+
             const respondProduct = await models.Producto.findAll({
                 attributes: ['prod_nombre'],
                 where: {
@@ -19,26 +49,16 @@ export default {
                     prod_nombre: {
                         [Sequelize.Op.like]: `${word}%`,
                     }
-                    // [Op.or]: [
-                    //     {
-                    //         prod_nombre: {
-                    //             [Sequelize.Op.like]: `${word}%`,
-                    //         }
-                    //     },
-                    //     {
-                    //         prod_nombre_extranjero: {
-                    //             [Sequelize.Op.like]: `${word}%`,
-                    //         }
-                    //     }
-                    // ],
                 },
                 limit: 10,
             });
 
+            const dataProd = [...respondProductsId, ...respondProductMarca, ...respondProduct];
+
             res.status(200).send(
             {
                 message: 'Busqueda realizada correctamente',
-                data: respondProduct
+                data: dataProd,
             });
         }
         catch(e)
