@@ -53,7 +53,22 @@ export default {
                 limit: 10,
             });
 
-            const dataProd = [...respondProductsId, ...respondProductMarca, ...respondProduct];
+            let respondProdDesc = await models.Producto.findAll({
+                attributes: ['prod_descripcion'],
+                where: {
+                    prod_cmm_estatus_id: 1000016,
+                    prod_descripcion: {
+                        [Op.iLike]: Sequelize.fn("LOWER", `${word}%`),
+                    }
+                },
+                limit: 10,
+            });
+
+            respondProdDesc = respondProdDesc.map((item) => {
+                return { prod_nombre: item.prod_descripcion.substring(0, 55) }
+            });
+
+            const dataProd = [...respondProductsId, ...respondProductMarca, ...respondProduct, ...respondProdDesc];
 
             res.status(200).send(
             {

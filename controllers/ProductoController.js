@@ -10595,7 +10595,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when c2.cat_nombre like '`+searchCondition+`%'  then 1.6 else 1.7 end as prioridad,
+                                    case when LOWER(c2.cat_nombre) like LOWER('`+searchCondition+`%')  then 1.6 else 1.7 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10606,7 +10606,7 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    c2.cat_nombre like '`+searchCondition+`%'  
+                                    LOWER(c2.cat_nombre) like LOWER('`+searchCondition+`%')  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true
@@ -10712,12 +10712,12 @@ export default {
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
-                            --Search Child by Categoria
+                            --Search Child by description
                             union 
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when c2.cat_nombre like '`+searchCondition+`%'  then 1.6 else 1.7 end as prioridad,
+                                    case when prod_descripcion != '' then 0.3 else 0.4 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10728,7 +10728,29 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    c2.cat_nombre like '`+searchCondition+`%'  
+                                    LOWER(p1.prod_descripcion) like LOWER('`+searchCondition+`%')
+                                    and prod_cmm_estatus_id = 1000016 
+                                    and prod_prod_producto_padre_sku is not null 
+                                    and prod_mostrar_en_tienda = true
+                                    and c2.cat_cmm_estatus_id = 1000010
+                            )
+                            --Search Child by Categoria
+                            union 
+                            (
+                                select
+                                    p1.prod_producto_id,
+                                    case when LOWER(c2.cat_nombre) like LOWER('`+searchCondition+`%')  then 1.6 else 1.7 end as prioridad,
+                                    p1.prod_sku,
+                                    p1.prod_prod_producto_padre_sku 
+                                from 
+                                    productos p1 
+                                    left join categorias c2 on cast (p1.prod_codigo_grupo as int) = c2.cat_categoria_id
+                                    left join proveedores pv on p1.prod_proveedor_id = pv.prv_proveedores_id 
+                                    left join marcas m2 on p1.prod_mar_marca_id = m2.mar_marca_id 
+                                    left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
+                                    left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
+                                where 
+                                    LOWER(c2.cat_nombre) like LOWER('`+searchCondition+`%')  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true
