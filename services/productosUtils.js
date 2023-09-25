@@ -345,7 +345,7 @@ module.exports = {
             const newRows= [];
             for (var i = 0; i < rows.length; i++)  
             {
-                //Validar que sea producto hijo
+               
                
                 if (rows[i].imagen_productos.length >=1)
                 {
@@ -363,6 +363,32 @@ module.exports = {
         catch(e){
             console.log(e)
             return "No fue posible establecer si tiene imagenes el productos."
+        }
+    },
+
+    setFiltrarProductsFinImagen: async function(rows){
+        try{
+            const newRows= [];
+            for (var i = 0; i < rows.length; i++)  
+            {
+               
+               
+                if (rows[i].imagen_productos.length >=1)
+                {
+                   
+                   
+                }
+                else
+                {
+                    newRows.push(rows[i]);
+                }
+                
+            }
+            return newRows
+        }
+        catch(e){
+            console.log(e)
+            return "No encontramos imagenes con fotos."
         }
     },
     setImagenesOnlyChilds: async function (rows) {

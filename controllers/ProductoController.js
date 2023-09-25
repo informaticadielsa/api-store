@@ -8141,18 +8141,25 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
 
-            var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
-                var rows2 = await sequelize.query(sqlFinalRows2,
-                    {
-                        type: sequelize.QueryTypes.SELECT 
-                    });
-
-                console.log('pagina res', rows2)
+           
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
                 type: sequelize.QueryTypes.SELECT 
             });
+
+            var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
 
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
             
@@ -8205,7 +8212,12 @@ export default {
             //Arroz
             //rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
-            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
+            
 
            
 
@@ -8467,19 +8479,25 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
 
-            var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
-                var rows2 = await sequelize.query(sqlFinalRows2,
-                    {
-                        type: sequelize.QueryTypes.SELECT 
-                    });
-
-                console.log('pagina res', rows2)
+            
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
                 type: sequelize.QueryTypes.SELECT 
             });
 
+            var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
           
             
@@ -8524,7 +8542,12 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
 
-            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
+            
 
             const mainConsultaProductos = {
                 count: parseInt(constCount[0].count),
@@ -9134,21 +9157,25 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
 
-
-            var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
-                var rows2 = await sequelize.query(sqlFinalRows2,
-                    {
-                        type: sequelize.QueryTypes.SELECT 
-                    });
-
-                console.log('pagina res', rows2)
-
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
                 type: sequelize.QueryTypes.SELECT 
             });
 
+
+            var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
           
             
@@ -9209,8 +9236,12 @@ export default {
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
 
-            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
-
+            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
+            
             const mainConsultaProductos = {
                 count: parseInt(constCount[0].count),
                 rows
@@ -10373,13 +10404,7 @@ export default {
                     type: sequelize.QueryTypes.SELECT 
                 });
 
-                var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
-                var rows2 = await sequelize.query(sqlFinalRows2,
-                    {
-                        type: sequelize.QueryTypes.SELECT 
-                    });
-
-                console.log('pagina res22', rows2)
+               
 
                 //Obtener Count de las rows
                 const constCount = await sequelize.query(sqlFinalRowsCount,
@@ -10387,6 +10412,19 @@ export default {
                     type: sequelize.QueryTypes.SELECT 
                 });
 
+
+                var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
                 //Se regresa el esquema parecido a las consultas de SEQUALIZE
               
             //FIN Obtener productos BASE para luego obtener mas cosas
@@ -10444,8 +10482,12 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
-            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
-
+            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
+            
 
             const mainConsultaProductos = {
                 count: parseInt(constCount[0].count),
@@ -10842,30 +10884,35 @@ export default {
                 //Variables que concatenan TODO
                 var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
                 var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
-
-
-               
-
-               
+  
                 //Obtener Rows
                 var rows = await sequelize.query(sqlFinalRows,
                 {
                     type: sequelize.QueryTypes.SELECT 
                 });
 
-                var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
-                var rows2 = await sequelize.query(sqlFinalRows2,
-                    {
-                        type: sequelize.QueryTypes.SELECT 
-                    });
+            
 
-                console.log('pagina res', rows2)
+               // console.log('pagina res', rows2)
 
                 //Obtener Count de las rows
                 var constCount = await sequelize.query(sqlFinalRowsCount,
                 { 
                     type: sequelize.QueryTypes.SELECT 
                 });
+
+                var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
 
 
                 if(constCount[0].count == 0)
@@ -10893,44 +10940,6 @@ export default {
                 //Se regresa el esquema parecido a las consultas de SEQUALIZE
              
             //FIN Obtener productos BASE para luego obtener mas cosas
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             //LA VARIABLE rows CONTIENE TODOS LOS PRODUCTOS OBTENIDOS
 
@@ -10973,9 +10982,14 @@ export default {
             //setteara el precio final y base en USD en un nuevo campo
             rows = await productosUtils.setOnlyChildsUSDChange(rows);
             
-
-            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
-
+            
+              
+                if(parseInt(req.body.pagina) == (numPaginas-1)){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
+            
             const mainConsultaProductos = {
                 count: parseInt(constCount[0].count),
                 rows
@@ -11366,18 +11380,27 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
           
-            var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
-            var rows2 = await sequelize.query(sqlFinalRows2,
-                {
-                    type: sequelize.QueryTypes.SELECT 
-                });
-
-            console.log('pagina res2', rows2)
+           
+           
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
                 type: sequelize.QueryTypes.SELECT 
             });
+
+
+            var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
 
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
           
@@ -11422,7 +11445,12 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
-            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
+            
 
             
             const mainConsultaProductos = {
@@ -11777,21 +11805,25 @@ export default {
             {
                 type: sequelize.QueryTypes.SELECT 
             });
-            var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
-            var rows2 = await sequelize.query(sqlFinalRows2,
-                {
-                    type: sequelize.QueryTypes.SELECT 
-                });
-
-            console.log('pagina res:', rows2)
-
-
-
+            
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
                 type: sequelize.QueryTypes.SELECT 
             });
+
+            var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
 
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
            
@@ -11836,7 +11868,12 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
-            rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
+            
 
             
             const mainConsultaProductos = {
