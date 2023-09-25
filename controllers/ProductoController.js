@@ -8151,6 +8151,7 @@ export default {
             var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
                
                 if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    console.log('Aqui andamos 22')
                     var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
                   
                     //Obtener Rows
@@ -8213,9 +8214,11 @@ export default {
             //rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
             if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
+                console.log('ultima pagina')
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
                 }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                console.log('pagina siguiente ')
                 }
             
 
