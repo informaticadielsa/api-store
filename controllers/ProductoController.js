@@ -8151,7 +8151,7 @@ export default {
             var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
                
                 if( parseInt(req.body.pagina) == (numPaginas-1)){
-                    console.log('Aqui andamos 22')
+                    console.log('Aqui andamos 22:', numPaginas)
                     var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
                   
                     //Obtener Rows
