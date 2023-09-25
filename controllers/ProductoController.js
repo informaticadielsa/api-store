@@ -8212,7 +8212,7 @@ export default {
             //Arroz
             //rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
-            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
                 }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
@@ -8542,7 +8542,7 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
 
-            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
                 }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
@@ -9236,7 +9236,7 @@ export default {
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
 
-            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
                 }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
@@ -10482,7 +10482,7 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
-            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
                 }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
@@ -10984,7 +10984,7 @@ export default {
             
             
               
-                if(parseInt(req.body.pagina) == (numPaginas-1)){  
+                if(parseInt(req.body.pagina) == (numPaginas-1) && constCount[0].count != 0){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
                 }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
@@ -11445,7 +11445,7 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
-            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
                 }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
@@ -11868,7 +11868,7 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
-            if(parseInt(req.body.pagina) == (numPaginas-1)){  
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
                 }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
