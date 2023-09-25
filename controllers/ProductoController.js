@@ -10341,6 +10341,10 @@ export default {
                 var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
                 var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
 
+
+                var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                console.log('Resultados 1: ', sqlFinalRows2)
+
                 //Obtener Rows
                 var rows = await sequelize.query(sqlFinalRows,
                 {
@@ -10764,6 +10768,10 @@ export default {
                 var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
                 var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
 
+
+                var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
+
+                console.log('pagina res', sqlFinalRows2)
                 //Obtener Rows
                 var rows = await sequelize.query(sqlFinalRows,
                 {
@@ -11267,6 +11275,9 @@ export default {
             var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
             var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
           
+            var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
+
+            console.log('pagina res2', sqlFinalRows2)
            
             //Obtener Rows
             var rows = await sequelize.query(sqlFinalRows,
