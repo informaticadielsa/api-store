@@ -10342,14 +10342,21 @@ export default {
                 var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
 
 
-                var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
-                console.log('Resultados 1: ', sqlFinalRows2)
+                
 
                 //Obtener Rows
                 var rows = await sequelize.query(sqlFinalRows,
                 {
                     type: sequelize.QueryTypes.SELECT 
                 });
+
+                var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
+                var rows2 = await sequelize.query(sqlFinalRows2,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                console.log('pagina res22', rows2)
 
                 //Obtener Count de las rows
                 const constCount = await sequelize.query(sqlFinalRowsCount,
@@ -10814,14 +10821,22 @@ export default {
                 var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
 
 
-                var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
+               
 
-                console.log('pagina res', sqlFinalRows2)
+               
                 //Obtener Rows
                 var rows = await sequelize.query(sqlFinalRows,
                 {
                     type: sequelize.QueryTypes.SELECT 
                 });
+
+                var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
+                var rows2 = await sequelize.query(sqlFinalRows2,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                console.log('pagina res', rows2)
 
                 //Obtener Count de las rows
                 var constCount = await sequelize.query(sqlFinalRowsCount,
@@ -11320,9 +11335,7 @@ export default {
             var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
             var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
           
-            var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
-
-            console.log('pagina res2', sqlFinalRows2)
+         
            
             //Obtener Rows
             var rows = await sequelize.query(sqlFinalRows,
@@ -11330,6 +11343,13 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
           
+            var sqlFinalRows2 = sqlRows + sqlFrom + sqlBusqueda + orderByFinal
+            var rows2 = await sequelize.query(sqlFinalRows2,
+                {
+                    type: sequelize.QueryTypes.SELECT 
+                });
+
+            console.log('pagina res2', rows2)
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
