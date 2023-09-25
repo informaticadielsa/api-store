@@ -8215,7 +8215,7 @@ export default {
 
             if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
 
@@ -8544,7 +8544,7 @@ export default {
 
             if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
             
@@ -9238,7 +9238,7 @@ export default {
 
             if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
             const mainConsultaProductos = {
@@ -10483,7 +10483,7 @@ export default {
 
             if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
             
@@ -10985,7 +10985,7 @@ export default {
               
            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
             const mainConsultaProductos = {
@@ -11445,7 +11445,7 @@ export default {
             
             if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
             
@@ -11868,7 +11868,7 @@ export default {
             
             if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
 
