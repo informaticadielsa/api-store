@@ -343,7 +343,7 @@ module.exports = {
     setFiltrarProductsSinImagen: async function(rows){
         try{
             const newRows= [];
-            for (var i = 0; i < rows.length; i++) 
+            for (var i = 0; i < rows.length; i++)  
             {
                 //Validar que sea producto hijo
                
