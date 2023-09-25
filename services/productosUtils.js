@@ -373,9 +373,15 @@ module.exports = {
             {
                
                
-                
+                if (rows[i].imagen_productos.length >=1)
+                {
+                   
+                   
+                }
+                else
+                {
                     newRows.push(rows[i]);
-               
+                }
                 
             }
             return newRows

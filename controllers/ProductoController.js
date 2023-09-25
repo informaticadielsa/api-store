@@ -8213,14 +8213,11 @@ export default {
             //Arroz
             //rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
-            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
-                console.log('ultima pagina')
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
-                console.log('pagina siguiente ')
                 }
-            
 
            
 
@@ -8545,9 +8542,9 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
 
-            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
             
@@ -9239,12 +9236,11 @@ export default {
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
 
-            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
-            
             const mainConsultaProductos = {
                 count: parseInt(constCount[0].count),
                 rows
@@ -10484,10 +10480,10 @@ export default {
 
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
-            
-            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
+
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
             
@@ -10987,12 +10983,11 @@ export default {
             
             
               
-                if(parseInt(req.body.pagina) == (numPaginas-1) && constCount[0].count != 0){  
+           if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
-            
             const mainConsultaProductos = {
                 count: parseInt(constCount[0].count),
                 rows
@@ -11448,9 +11443,9 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
-            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
             
@@ -11871,12 +11866,11 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
-            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0){  
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 && parseInt(req.body.pagina) !=0){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
                 }
-            
 
             
             const mainConsultaProductos = {
