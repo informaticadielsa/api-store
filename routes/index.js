@@ -55,6 +55,7 @@ import UsuariosProspectosRoutes from './UsuariosProspectosRoutes';
 import ElasticsearchRoutes from './ElasticsearchRoutes';
 import VendedoresRoutes from './VendedoresRoutes';
 import GerentesRoutes from './GerentesRoutes';
+import search from './search';
 
 import sitemapRouter from './SitemapRoutes';
 
@@ -119,4 +120,5 @@ router.use('/usuarios_prospectos', UsuariosProspectosRoutes);
 router.use('/elasticsearch', ElasticsearchRoutes);
 router.use('/vendedores', VendedoresRoutes);
 router.use('/gerentes', GerentesRoutes);
+router.use('/search', search);
 export default router;

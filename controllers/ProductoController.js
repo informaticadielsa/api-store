@@ -8141,17 +8141,29 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
 
+           
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
                 type: sequelize.QueryTypes.SELECT 
             });
 
+            var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    console.log('Aqui andamos 22:', numPaginas)
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
+
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
-            const mainConsultaProductos = {
-                count: parseInt(constCount[0].count),
-                rows
-            }
+            
 
             console.log("llego al final")
 
@@ -8201,8 +8213,18 @@ export default {
             //Arroz
             //rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
-            
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
 
+           
+
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
@@ -8457,18 +8479,27 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
 
+            
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
                 type: sequelize.QueryTypes.SELECT 
             });
 
-            //Se regresa el esquema parecido a las consultas de SEQUALIZE
-            const mainConsultaProductos = {
-                count: parseInt(constCount[0].count),
-                rows
-            }
+            var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
 
+                }
+            //Se regresa el esquema parecido a las consultas de SEQUALIZE
+          
             
 
             //LA VARIABLE rows CONTIENE TODOS LOS PRODUCTOS OBTENIDOS
@@ -8511,7 +8542,17 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
 
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
             
+
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
 
             res.status(200).send({
                 message: 'Lista de productos',
@@ -9122,11 +9163,21 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
 
+
+            var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
-            const mainConsultaProductos = {
-                count: parseInt(constCount[0].count),
-                rows
-            }
+          
             
 
 
@@ -9184,7 +9235,16 @@ export default {
             //obtener stock detalle por hijo
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
-            
+
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
 
             res.status(200).send({
                 message: 'Lista de productos',
@@ -9492,12 +9552,7 @@ export default {
                 });
 
                 //Se regresa el esquema parecido a las consultas de SEQUALIZE
-                const mainConsultaProductos = {
-                    count: parseInt(constCount[0].count),
-                    rows
-                }
-
-
+             
 
                 //aqui Mero
 
@@ -9593,6 +9648,12 @@ export default {
           
            // rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
+           //rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
+           const mainConsultaProductos = {
+            count: parseInt(constCount[0].count),
+            rows
+        }
 
 
 
@@ -9803,6 +9864,7 @@ export default {
             rows = await productosUtils.getChildsStocksDetalle(rows);
             
             
+           
 
 
 
@@ -9904,10 +9966,7 @@ export default {
                 });
 
                 //Se regresa el esquema parecido a las consultas de SEQUALIZE
-                const mainConsultaProductos = {
-                    count: parseInt(constCount[0].count),
-                    rows
-                }
+              
             //FIN Obtener productos BASE para luego obtener mas cosas
 
 
@@ -9994,7 +10053,10 @@ export default {
             // rows = await productosUtils.getChildsStocksDetalle(rows);
             
             
-
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
 
 
 
@@ -10332,11 +10394,16 @@ export default {
                 var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
                 var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
 
+
+                
+
                 //Obtener Rows
                 var rows = await sequelize.query(sqlFinalRows,
                 {
                     type: sequelize.QueryTypes.SELECT 
                 });
+
+               
 
                 //Obtener Count de las rows
                 const constCount = await sequelize.query(sqlFinalRowsCount,
@@ -10344,11 +10411,21 @@ export default {
                     type: sequelize.QueryTypes.SELECT 
                 });
 
-                //Se regresa el esquema parecido a las consultas de SEQUALIZE
-                const mainConsultaProductos = {
-                    count: parseInt(constCount[0].count),
-                    rows
+
+                var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
                 }
+                //Se regresa el esquema parecido a las consultas de SEQUALIZE
+              
             //FIN Obtener productos BASE para luego obtener mas cosas
 
 
@@ -10403,7 +10480,19 @@ export default {
 
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
+
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
             
+
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
+
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
@@ -10570,8 +10659,7 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    to_tsvector(p1.prod_nombre || ' ' ||p1.prod_descripcion || ' ' || p1.prod_nombre_extranjero || ' ' || p1.prod_sku)
-                                    @@ to_tsquery('`+searchConditionSQL+`')
+                                    p1.prod_nombre like '`+searchCondition+`%'
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true
@@ -10582,7 +10670,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when c2.cat_nombre like '%`+searchCondition+`%'  then 1.6 else 1.7 end as prioridad,
+                                    case when LOWER(c2.cat_nombre) like LOWER('`+searchCondition+`%')  then 1.6 else 1.7 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10593,11 +10681,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    c2.cat_nombre like '%`+searchCondition+`%'  
+                                    LOWER(c2.cat_nombre) like LOWER('`+searchCondition+`%')  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
@@ -10606,7 +10692,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when m2.mar_nombre like '%`+searchCondition+`%'  then 1.8 else 1.9 end as prioridad,
+                                    case when m2.mar_nombre like '`+searchCondition+`%'  then 1.8 else 1.9 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10617,11 +10703,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    m2.mar_nombre like '%`+searchCondition+`%'  
+                                    m2.mar_nombre like '`+searchCondition+`%'  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
@@ -10630,7 +10714,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when m2.mar_abreviatura like '%`+searchCondition+`%'  then 2 else 2.1 end as prioridad,
+                                    case when m2.mar_abreviatura like '`+searchCondition+`%'  then 2 else 2.1 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10641,11 +10725,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    m2.mar_abreviatura like '%`+searchCondition+`%'  
+                                    m2.mar_abreviatura like '`+searchCondition+`%'  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
@@ -10665,6 +10747,29 @@ export default {
                                 
                                 select
                                     p1.prod_producto_id,
+                                    case when prod_nombre_extranjero != '' then 0.3 else 0.4 end as prioridad,
+                                    p1.prod_sku,
+                                    p1.prod_prod_producto_padre_sku 
+                                from 
+                                    productos p1 
+                                    left join categorias c2 on cast (p1.prod_codigo_grupo as int) = c2.cat_categoria_id
+                                    left join proveedores pv on p1.prod_proveedor_id = pv.prv_proveedores_id 
+                                    left join marcas m2 on p1.prod_mar_marca_id = m2.mar_marca_id 
+                                    left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
+                                    left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
+                                where 
+                                    p1.prod_nombre_extranjero like '`+searchCondition+`%'
+                                    and prod_cmm_estatus_id = 1000016 
+                                    and prod_prod_producto_padre_sku is not null 
+                                    and prod_mostrar_en_tienda = true
+                                    and c2.cat_cmm_estatus_id = 1000010
+                            )
+                            --Search Child by Categoria
+                            union
+                            (
+                                
+                                select
+                                    p1.prod_producto_id,
                                     case when prod_nombre != '' then 0.3 else 0.4 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
@@ -10676,21 +10781,18 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    to_tsvector(p1.prod_nombre || ' ' ||p1.prod_descripcion || ' ' || p1.prod_nombre_extranjero || ' ' || p1.prod_sku)
-                                    @@ to_tsquery('`+searchConditionSQLDinamico+`')
+                                    p1.prod_nombre like '`+searchCondition+`%'
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
-                            --Search Child by Categoria
+                            --Search Child by description
                             union 
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when c2.cat_nombre like '%`+searchCondition+`%'  then 1.6 else 1.7 end as prioridad,
+                                    case when prod_descripcion != '' then 0.3 else 0.4 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10701,11 +10803,31 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    c2.cat_nombre like '%`+searchCondition+`%'  
+                                    LOWER(p1.prod_descripcion) like LOWER('`+searchCondition+`%')
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
+                                    and prod_mostrar_en_tienda = true
+                                    and c2.cat_cmm_estatus_id = 1000010
+                            )
+                            --Search Child by Categoria
+                            union 
+                            (
+                                select
+                                    p1.prod_producto_id,
+                                    case when LOWER(c2.cat_nombre) like LOWER('`+searchCondition+`%')  then 1.6 else 1.7 end as prioridad,
+                                    p1.prod_sku,
+                                    p1.prod_prod_producto_padre_sku 
+                                from 
+                                    productos p1 
+                                    left join categorias c2 on cast (p1.prod_codigo_grupo as int) = c2.cat_categoria_id
+                                    left join proveedores pv on p1.prod_proveedor_id = pv.prv_proveedores_id 
+                                    left join marcas m2 on p1.prod_mar_marca_id = m2.mar_marca_id 
+                                    left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
+                                    left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
+                                where 
+                                    LOWER(c2.cat_nombre) like LOWER('`+searchCondition+`%')  
+                                    and prod_cmm_estatus_id = 1000016 
+                                    and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
@@ -10714,7 +10836,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when m2.mar_nombre like '%`+searchCondition+`%'  then 1.8 else 1.9 end as prioridad,
+                                    case when m2.mar_nombre like '`+searchCondition+`%'  then 1.8 else 1.9 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10725,11 +10847,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    m2.mar_nombre like '%`+searchCondition+`%'  
+                                    m2.mar_nombre like '`+searchCondition+`%'  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
@@ -10738,7 +10858,7 @@ export default {
                             (
                                 select
                                     p1.prod_producto_id,
-                                    case when m2.mar_abreviatura like '%`+searchCondition+`%'  then 2 else 2.1 end as prioridad,
+                                    case when m2.mar_abreviatura like '`+searchCondition+`%'  then 2 else 2.1 end as prioridad,
                                     p1.prod_sku,
                                     p1.prod_prod_producto_padre_sku 
                                 from 
@@ -10749,11 +10869,9 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    m2.mar_abreviatura like '%`+searchCondition+`%'  
+                                    m2.mar_abreviatura like '`+searchCondition+`%'  
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
-                                    and prod_volumen != 0
-                                    and prod_peso != 0
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             ) 
@@ -10765,18 +10883,35 @@ export default {
                 //Variables que concatenan TODO
                 var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
                 var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
-
+  
                 //Obtener Rows
                 var rows = await sequelize.query(sqlFinalRows,
                 {
                     type: sequelize.QueryTypes.SELECT 
                 });
 
+            
+
+               // console.log('pagina res', rows2)
+
                 //Obtener Count de las rows
                 var constCount = await sequelize.query(sqlFinalRowsCount,
                 { 
                     type: sequelize.QueryTypes.SELECT 
                 });
+
+                var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
 
 
                 if(constCount[0].count == 0)
@@ -10802,49 +10937,8 @@ export default {
 
 
                 //Se regresa el esquema parecido a las consultas de SEQUALIZE
-                const mainConsultaProductos = {
-                    count: parseInt(constCount[0].count),
-                    rows
-                }
+             
             //FIN Obtener productos BASE para luego obtener mas cosas
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             //LA VARIABLE rows CONTIENE TODOS LOS PRODUCTOS OBTENIDOS
 
@@ -10887,6 +10981,18 @@ export default {
             //setteara el precio final y base en USD en un nuevo campo
             rows = await productosUtils.setOnlyChildsUSDChange(rows);
             
+            
+              
+           if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
+
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
@@ -11253,7 +11359,7 @@ export default {
             }
 
 
-
+ 
             //Final de la arquitectura SQL para la busqueda
             sqlBusqueda += `
                                 )  as p1
@@ -11263,32 +11369,46 @@ export default {
             //Variables que concatenan TODO
             var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
             var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
-
+          
+         
+           
             //Obtener Rows
             var rows = await sequelize.query(sqlFinalRows,
             {
                 type: sequelize.QueryTypes.SELECT 
             });
-
+          
+           
+           
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
                 type: sequelize.QueryTypes.SELECT 
             });
 
+
+            var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
+
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
-            const mainConsultaProductos = {
-                count: parseInt(constCount[0].count),
-                rows
-            }
+          
+
             
-
-
             //LA VARIABLE rows CONTIENE TODOS LOS PRODUCTOS OBTENIDOS
 
             //Obtener si aplica backorder para los hijos
             rows = await productosUtils.setImagenesOnlyChilds(rows);
-
+            console.log('consulta a base de datos2: ', rows)
             //Obtener si aplica backorder para los hijos
             rows = await productosUtils.setDiasResurtimientoIsBackOrderOnlyChilds(rows);
             
@@ -11323,8 +11443,19 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
             
 
+            
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
+            
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
@@ -11672,19 +11803,28 @@ export default {
             {
                 type: sequelize.QueryTypes.SELECT 
             });
-
+            
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
             { 
                 type: sequelize.QueryTypes.SELECT 
             });
 
+            var numPaginas = Math.ceil(parseInt(constCount[0].count)/req.body.limite);
+               
+                if( parseInt(req.body.pagina) == (numPaginas-1)){
+                    var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal 
+                  
+                    //Obtener Rows
+                     rows = await sequelize.query(sqlFinalRows,
+                    {
+                        type: sequelize.QueryTypes.SELECT 
+                    });
+
+                }
+
             //Se regresa el esquema parecido a las consultas de SEQUALIZE
-            const mainConsultaProductos = {
-                count: parseInt(constCount[0].count),
-                rows
-            }
-            
+           
 
 
             //LA VARIABLE rows CONTIENE TODOS LOS PRODUCTOS OBTENIDOS
@@ -11726,8 +11866,18 @@ export default {
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
             
-            
+            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
+                rows = await productosUtils.setFiltrarProductsFinImagen(rows);
+                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0 ){     
+                rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+                }
 
+            
+            const mainConsultaProductos = {
+                count: parseInt(constCount[0].count),
+                rows
+            }
+            
             res.status(200).send({
                 message: 'Lista de productos',
                 mainConsultaProductos
