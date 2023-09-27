@@ -522,7 +522,7 @@ export default {
             });
             next(e);
         }
-    },
+    }, 
     V2finalizarCompraCot: async(req, res, next) =>{
         try{
 
