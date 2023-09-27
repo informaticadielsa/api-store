@@ -7,6 +7,9 @@ import getCheckout from "../services/checkoutAPI";
 import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import CreacionOrdenSAP from "../services/CreacionOrdenSAP";
 const {ordenCreadaEmail} = require('../services/ordenCreadaEmail');
+const { cotizacionEmail } = require('../services/CotizacionEmail');
+
+
 const {ordenAbiertaCreadaEmail} = require('../services/ordenAbiertaCreadaEmail');
 import productosUtils from "../services/productosUtils";
 import cotizacionesUtils from "../services/cotizacionesUtils";
@@ -4752,12 +4755,13 @@ export default {
                             
                             const constSociosNegocio = await models.SociosNegocio.findOne(
                             {
-                                where: {
+                                where: { 
                                     sn_socios_negocio_id: req.body.cdc_sn_socio_de_negocio_id
                                 },
                                 attributes:  ["sn_socios_negocio_id", "sn_cardcode", "sn_codigo_direccion_facturacion", "sn_lista_precios", "sn_codigo_grupo",
                                 "sn_porcentaje_descuento_total"]
                             });
+                            
                             
                             //obtener direccion de facturacion
                             const constSociosNegocioDirecciones = await models.SociosNegocioDirecciones.findOne(
@@ -5078,7 +5082,7 @@ export default {
                     }
 
                     //Eliminar carrito pero cuando es ENV que no lo borre para no volver a generarlo de 0
-                    if(process.env.PORT != 5000 && req.body.cot_prospecto == false)
+                    if( req.body.cot_prospecto == false)
                     {
 
                         const constCarritoDeCompraBorrar = await models.CarritoDeCompra.findOne(
@@ -5118,6 +5122,31 @@ export default {
                 }
             //FIN Insertar Cotizacion
             console.log("/////////// FIN PASO 9 ///////////")
+            //Enviar Cotizacion
+            if(req.body.cot_prospecto == false)
+            {
+                const constSociosNegocio = await models.SociosNegocio.findOne(
+                    {
+                        where: { 
+                            sn_socios_negocio_id: req.body.cdc_sn_socio_de_negocio_id
+                        },
+                        attributes:  ["sn_socios_negocio_id", "sn_cardcode", "sn_codigo_direccion_facturacion", "sn_lista_precios", "sn_codigo_grupo",
+                        "sn_porcentaje_descuento_total"]
+                    });
+
+            await cotizacionEmail(constSociosNegocio.sn_email_facturacion,constCotizacionesResult.cot_cotizacion_id)
+            //constCotizacionesResult.cot_cotizacion_id
+            }else{
+                infoCliente = await models.UsuariosProspectos.findOne(
+                    {
+                        where: {
+                            up_usuarios_prospectos_id: req.body.up_usuarios_prospectos_id
+                        },
+                    });
+
+                await cotizacionEmail(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id)
+            }
+
 
             res.status(200).send({
                 message: 'Creado con exito',
