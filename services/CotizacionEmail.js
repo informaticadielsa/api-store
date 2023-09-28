@@ -26,7 +26,7 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
   // Definimos el email
 
  
-
+ console.log('prueba cotiza')
   const cotizacion = await models.CotizacionProyecto.findOne({
     where: {
       cot_cotizacion_id: cot_cotizacion_id,
