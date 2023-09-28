@@ -25,29 +25,86 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
   });
   // Definimos el email
 
- 
- console.log('prueba cotiza')
-  const cotizacion = await models.Cotizaciones.findOne({
+
+  const cotizacion = await models.CotizacionProyecto.findOne({
     where: {
       cot_cotizacion_id: cot_cotizacion_id,
     },
+    include: [
+      {
+        model: models.ControlMaestroMultiple,
+        as: "tipo_cotizacion",
+      },
+      {
+        model: models.ProductosCotizacionProyecto,
+        include: [
+          {
+            model: models.Producto,
+            include: [
+              {
+                model: models.ImagenProducto,
+              },
+            ],
+          },
+        ],
+      },
+    ],
   });
-  console.log('cotizacion:', cotizacion)
   if (!!cotizacion) {
-
-    let html = "hola prueba";
+    await sequelize.query(
+      "update cotizaciones_proyectos  set " +
+        " cot_fecha_envio  = current_date " +
+        " where " +
+        " cot_cotizacion_id  = " +
+        cotizacion.dataValues.cot_cotizacion_id
+    );
+    let html = "";
     let total;
     let descuento;
     let total_con_descuento;
-    console.log('cotizacion correo enviar', cotizacion )
-    const constCotizacionesProductos = await models.CotizacionesProductos.findAll(
-      {
-          where: {
-              cotp_cotizacion_id:cot_cotizacion_id
-          },
-      });
-  //fin Ge
-   console.log('Cotizacion detalle:', constCotizacionesProductos)
+   
+    cotizacion.dataValues.producto_cotizaciones.forEach(async function (
+      producto,
+      index
+    ) {
+      html += "<tr> ";
+      html += "<td>" + producto.dataValues.pc_prod_producto_id + "</td>";
+      html +=
+        "<td>" +
+        (!!producto.dataValues.producto.imagen_productos[0].dataValues
+          .imgprod_ruta_ar
+          ? '<img width="100px" height="100px" src="' +
+            process.env.BACK_LINK +
+            "/" +
+            producto.dataValues.producto.imagen_productos[0].dataValues.imgprod_ruta_ar.slice(
+              9,
+              producto.dataValues.producto.imagen_productos[0].dataValues
+                .imgprod_ruta_ar.length
+            ) +
+            '" />'
+          : "No disponible") +
+        "</td> ";
+      html +=
+        "<td>" +
+        (!!producto.dataValues.producto.prod_descripcion_corta
+          ? producto.dataValues.producto.prod_descripcion_corta
+          : "No disponible") +
+        "</td>";
+      html += "<td>" + producto.dataValues.pc_cantidad_producto + "</td>";
+      html += "<td>" + producto.dataValues.pc_prod_precio + "</td>";
+      html +=
+        "<td>" + producto.dataValues.producto.dataValues.prod_precio + "</td>";
+      html += "<td>" + producto.dataValues.pc_descuento + "%" + "</td>";
+      html +=
+        "<td>" +
+        (total =
+          producto.dataValues.pc_prod_precio *
+          producto.dataValues.pc_cantidad_producto) +
+        "</td> ";
+      descuento = total * Number("." + producto.dataValues.pc_descuento);
+      html += "<td>" + (total_con_descuento = total - descuento) + "</td>";
+      html += "</tr>";
+    });
 
     var htmlBody =
       "<!DOCTYPE html> " +
@@ -175,7 +232,10 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
       // to: email,
       // to: constSociosNegocio.sn_email_facturacion,
       subject:
-        "Cotización",
+        cotizacion.dataValues.tipo_cotizacion.dataValues.cmm_valor ==
+        "COTIZACION"
+          ? "Cotización"
+          : "Proyecto",
       html: htmlBody,
     };
     // Enviamos el email
