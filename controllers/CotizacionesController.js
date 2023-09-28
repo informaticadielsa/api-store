@@ -5048,6 +5048,7 @@ export default {
                     });
                 }
 
+                console.log('hj: ', constCotizacionesResult)
                 //Si se inserto correctamente la cotizacion insertara ahora los productos
                 if(constCotizacionesResult != '')
                 {   
@@ -5137,15 +5138,17 @@ export default {
             //constCotizacionesResult.cot_cotizacion_id
             }else{
                
-                infoCliente = await models.UsuariosProspectos.findOne(
+                const infoCliente = await models.UsuariosProspectos.findOne(
                     {
                         where: {
                             up_usuarios_prospectos_id: req.body.up_usuarios_prospectos_id
                         },
                     });
+
+                    console.log(infoCliente)
                     console.log('enviar correo'+infoCliente.up_email_facturacion+' cotizacion:'+constCotizacionesResult.cot_cotizacion_id)
 
-               // await cotizacionEnviar(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id,  req.body.cot_referencia);
+               await cotizacionEnviar(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id,  req.body.cot_referencia);
             }
 
 
