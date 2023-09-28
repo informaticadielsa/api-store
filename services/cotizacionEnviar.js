@@ -557,10 +557,14 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios) {
                     <p>${mantenerEnCopia}</p>
                   </div>
                 </div>
-                
+                <div style='padding-left: 15px; padding-top: 1px; color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
+                <div class='contenido'>
+                  <p>Comentarios:</p>
+                </div>
+              </div>
                 <div style='padding-left: 15px; color: #000000; font-size: 16px; letter-spacing: 0; line-height: 0px; text-align: -webkit-left'>
                 <div class='contenido1'>
-                  <p>Comentarios: ${comentarios}</p>
+                  <p>${comentarios}</p>
                 </div>
               </div>
                 
@@ -690,7 +694,7 @@ htmlBody +=
                       </div>
 
 
-                    <div style="max-width: 375px;" align="center">  
+                    <div style="max-width: 100%;" align="center">  
                       <div  class='datos' style="background-color: #f5f5f5;">
     
                         <table style="width: 100%; padding: 0px 15px;">
