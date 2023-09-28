@@ -175,10 +175,7 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
       // to: email,
       // to: constSociosNegocio.sn_email_facturacion,
       subject:
-        cotizacion.dataValues.tipo_cotizacion.dataValues.cmm_valor ==
-        "COTIZACION"
-          ? "Cotización"
-          : "Proyecto",
+        "Cotización",
       html: htmlBody,
     };
     // Enviamos el email
