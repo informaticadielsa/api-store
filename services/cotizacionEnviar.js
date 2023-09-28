@@ -771,15 +771,15 @@ htmlBody +=
            // "alfredo@puntocommerce.com",
             "informatica@dielsa.com",
             "oscar.espinosa@daltum.mx",
-            "luis.sanchez@daltum.mx",email,
-            mantenerEnCopia ? mantenerEnCopia.replace(';','') : ''
+            "luis.sanchez@daltum.mx"
+           // mantenerEnCopia ? mantenerEnCopia.replace(';','') : ''
         ];
     }
     else
     {
         maillist = [
-            "ov@dielsa.com",
-            email
+            "ov@dielsa.com"
+            //email
         ];
     }
 
@@ -789,7 +789,7 @@ htmlBody +=
       from: "no-responder@dielsa.com",
       to: maillist,
       // to: constSociosNegocio.sn_email_facturacion,
-      subject: "Nueva Cotizacion Dielsa.com v2",
+      subject: "Nueva cotización del portal Dielsa.com ",
       html: htmlBody,
     };
     // Enviamos el email
