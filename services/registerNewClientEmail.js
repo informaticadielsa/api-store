@@ -27,7 +27,7 @@ exports.registerNewClientEmail = function (data) {
     `<!Doctype html>
     <html>
       <head>
-        <title>Nuevo cliente potecial</title>
+        <title>Nuevo cliente potencial</title>
         <link href="` +
     process.env.BACK_LINK +
     `/recursos/bootstrap.min.css" rel="stylesheet">
@@ -289,7 +289,7 @@ exports.registerNewClientEmail = function (data) {
   const mailOptions = {
     from: "no-responder@dielsa.com",
     to: maillist,
-    subject: "Nuevo cliente potecial",
+    subject: "Nuevo cliente potencial",
     html: htmlBody,
   };
   // Enviamos el email
