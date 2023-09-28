@@ -771,7 +771,8 @@ htmlBody +=
            // "alfredo@puntocommerce.com",
             "informatica@dielsa.com",
             "oscar.espinosa@daltum.mx",
-            "luis.sanchez@daltum.mx",email
+            "luis.sanchez@daltum.mx",email,
+            mantenerEnCopia ? mantenerEnCopia.replace(';','') : ''
         ];
     }
     else
