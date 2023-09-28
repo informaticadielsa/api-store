@@ -31,12 +31,6 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
     where: {
       cot_cotizacion_id: cot_cotizacion_id,
     },
-    include: [
-      {
-        model: models.ControlMaestroMultiple,
-        as: "tipo_cotizacion",
-      },
-    ],
   });
   console.log('cotizacion:', cotizacion)
   if (!!cotizacion) {
