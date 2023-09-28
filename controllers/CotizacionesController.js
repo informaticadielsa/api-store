@@ -5125,17 +5125,15 @@ export default {
             //Enviar Cotizacion
             if(req.body.cot_prospecto == false)
             {
-                const constSociosNegocio = await models.SociosNegocio.findOne(
-                    {
-                        where: { 
-                            sn_socios_negocio_id: req.body.cdc_sn_socio_de_negocio_id
-                        },
-                        attributes:  ["sn_socios_negocio_id", "sn_cardcode", "sn_codigo_direccion_facturacion", "sn_lista_precios", "sn_codigo_grupo",
-                        "sn_porcentaje_descuento_total"]
+              
+                    const constSociosNegocioUsuario = await models.SociosNegocioUsuario.findOne({
+                        where: {
+                            snu_sn_socio_de_negocio_id: req.body.cdc_sn_socio_de_negocio_id,
+                            snu_super_usuario: true
+                        }
                     });
-
-                     console.log('enviar correo:'+constSociosNegocio.sn_email_facturacion+' cotizacion :'+constCotizacionesResult.cot_cotizacion_id)
-            await cotizacionEmail(constSociosNegocio.sn_email_facturacion,constCotizacionesResult.cot_cotizacion_id);
+                     console.log('enviar correo:'+constSociosNegocioUsuario.snu_correo_electronico+' cotizacion :'+constCotizacionesResult.cot_cotizacion_id)
+            await cotizacionEmail(constSociosNegocio.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id);
             //constCotizacionesResult.cot_cotizacion_id
             }else{
                
