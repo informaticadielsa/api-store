@@ -720,9 +720,7 @@ htmlBody +=
                           
                       <div style="max-width: 100%;" align="center">
                         <p style="font-size: 14px; margin-top: 25px; margin-bottom: 40px; padding: 0px 15px; text-align: justify;">Recuerda atender a la brevedad las cotizaciones incrementa las probabilidades de cerrar una venta.</p>
-                        <div styel='width:100%; text-align:center;'>
-                           <a href="`+ process.env.STORE_LINK +`/myprofile" style="font-size: 14px; text-decoration:  none; color: #FFFFFF; background-color: #0B3196; padding: 10px 25px;  border-radius:5px ;"> Ir a cotización </a>
-                        </div>
+                        
                       </div>
                       
                     </div>  
