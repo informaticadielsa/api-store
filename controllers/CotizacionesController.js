@@ -5134,7 +5134,7 @@ export default {
                         "sn_porcentaje_descuento_total"]
                     });
 
-            await cotizacionEmail(constSociosNegocio.sn_email_facturacion,constCotizacionesResult.cot_cotizacion_id)
+            await cotizacionEmail(constSociosNegocio.sn_email_facturacion,constCotizacionesResult.cot_cotizacion_id);
             //constCotizacionesResult.cot_cotizacion_id
             }else{
                 infoCliente = await models.UsuariosProspectos.findOne(
@@ -5144,7 +5144,7 @@ export default {
                         },
                     });
 
-                await cotizacionEmail(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id)
+                await cotizacionEmail(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id);
             }
 
 
