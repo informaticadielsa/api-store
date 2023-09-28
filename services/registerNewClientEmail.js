@@ -124,7 +124,7 @@ exports.registerNewClientEmail = function (data) {
                       <div class="col-sm">
                           <p style="text-align: center;">
                               <h4> ` +
-    (data.up_nombre_comercial != null && data.up_nombre_comercial !='null') ? data.up_nombre_comercial : '' +
+   data.up_nombre_comercial+
     ` </h4>
                           </p>
                       </div>
