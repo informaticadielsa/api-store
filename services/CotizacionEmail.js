@@ -25,6 +25,8 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
   });
   // Definimos el email
 
+ 
+
   const cotizacion = await models.CotizacionProyecto.findOne({
     where: {
       cot_cotizacion_id: cot_cotizacion_id,
@@ -219,8 +221,11 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
     // Definimos list email test
     var maillist = [
       "informatica@dielsa.com",
-      "oscar.espinosa@daltum.mx"
+      "oscar.espinosa@daltum.mx",
+      email
     ];
+
+    console.log('enviar correo', maillist)
     // Definimos el email
     const mailOptions = {
       from: "no-responder@dielsa.com",

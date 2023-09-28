@@ -5134,15 +5134,18 @@ export default {
                         "sn_porcentaje_descuento_total"]
                     });
 
+                     console.log('enviar correo')
             await cotizacionEmail(constSociosNegocio.sn_email_facturacion,constCotizacionesResult.cot_cotizacion_id);
             //constCotizacionesResult.cot_cotizacion_id
             }else{
+               
                 infoCliente = await models.UsuariosProspectos.findOne(
                     {
                         where: {
                             up_usuarios_prospectos_id: req.body.up_usuarios_prospectos_id
                         },
                     });
+                    console.log('enviar correo')
 
                 await cotizacionEmail(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id);
             }
