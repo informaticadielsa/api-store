@@ -5133,7 +5133,7 @@ export default {
                         }
                     });
                      console.log('enviar correo:'+constSociosNegocioUsuario.snu_correo_electronico+' cotizacion :'+constCotizacionesResult.cot_cotizacion_id)
-            await cotizacionEmail(constSociosNegocio.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id);
+            await cotizacionEmail(constSociosNegocioUsuario.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id);
             //constCotizacionesResult.cot_cotizacion_id
             }else{
                
