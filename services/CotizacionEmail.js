@@ -52,7 +52,7 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
           },
       });
   //fin Ge
- 
+   console.log('Cotizacion detalle:', constCotizacionesProductos)
 
     var htmlBody =
       "<!DOCTYPE html> " +
