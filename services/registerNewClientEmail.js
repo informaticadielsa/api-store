@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 // exports.usuarios_prospectos = function (data) {
 exports.registerNewClientEmail = function (data) {
-  console.log('prueba111:',data)
+
   // Definimos el transporter
   const transporter = nodemailer.createTransport({
     service: process.env.EMAIL_SERVICE,
@@ -27,7 +27,7 @@ exports.registerNewClientEmail = function (data) {
     `<!Doctype html>
     <html>
       <head>
-        <title>Nuevo cliente potencial</title>
+        <title>Nuevo cliente potecial</title>
         <link href="` +
     process.env.BACK_LINK +
     `/recursos/bootstrap.min.css" rel="stylesheet">
@@ -108,7 +108,7 @@ exports.registerNewClientEmail = function (data) {
         <section style='background: white; width: 90%; max-width: 800px; margin: 20px auto; text-align: -webkit-center; margin-top: 50px;'>
             <header>
               <div style='color: #0B3196; font-size: 28px; font-weight: 500; letter-spacing: 0; '>
-                <h1>¡Se ha efectuado un nuevo registro (Prospecto)!</h1>                
+                <h1>¡Se ha efectuado un nuevo registro(Prospecto)!</h1>                
               </div>
             </header>
             
@@ -124,7 +124,7 @@ exports.registerNewClientEmail = function (data) {
                       <div class="col-sm">
                           <p style="text-align: center;">
                               <h4> ` +
-   data.up_nombre_comercial+
+    data.up_nombre_comercial +
     ` </h4>
                           </p>
                       </div>
@@ -137,34 +137,34 @@ exports.registerNewClientEmail = function (data) {
                       <div class="col-sm"></div>
                       <div class="col-sm">
                           <p><strong>Razón social: </strong>` +
-    data.up_razon_social  +
+    data.up_razon_social +
     `</p>
                           <p><strong>RFC: </strong>` +
     data.up_rfc +
     `</p>
                           <p><strong>Sitio web: </strong>` +
-    data.up_datos_b2b.up_sitio_web  +
+    data.up_datos_b2b.up_sitio_web +
     `</p>
                           <p><strong>Cfdi: </strong>` +
-   data.up_cfdi  +
+    data.up_cfdi +
     `</p>
                           <p><strong>Dirección de facturación: </strong>` +
-   data.up_direccion_facturacion +
+    data.up_direccion_facturacion +
     `</p>
                           <p><strong>Correo de facturación: </strong>` +
-   data.up_email_facturacion  +
+    data.up_email_facturacion +
     `</p>
                           <p><strong>Forma de pago: </strong>` +
-    data.up_datos_b2b.up_forma_pago  +
+    data.up_datos_b2b.up_forma_pago +
     `</p>
                           <p><strong>Medio de pago: </strong>` +
-   data.up_datos_b2b.up_medio_pago +
+    data.up_datos_b2b.up_medio_pago +
     `</p>
                           <p><strong>Banco: </strong>` +
-   data.up_datos_b2b.up_nombre_banco +
+    data.up_datos_b2b.up_nombre_banco +
     `</p>
                           <p><strong>No. cuenta: </strong>` +
-    data.up_datos_b2b.up_numero_cuenta_banco  +
+    data.up_datos_b2b.up_numero_cuenta_banco +
     `</p>                          
                       </div>
                       <div class="col-sm"></div>
