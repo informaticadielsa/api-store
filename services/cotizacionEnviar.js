@@ -562,7 +562,7 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios) {
                   <p>Comentarios:</p>
                 </div>
               </div>
-                <div style='padding-left: 15px; color: #000000; font-size: 16px; letter-spacing: 0; line-height: 0px; text-align: -webkit-left'>
+                <div style='padding-left: 15px; color: #000000; font-size: 16px; letter-spacing: 0;'>
                 <div class='contenido1'>
                   <p>${comentarios}</p>
                 </div>
