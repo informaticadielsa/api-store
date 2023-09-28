@@ -657,7 +657,7 @@ if (fecha_actual == fecha_temp) {
               <div style='width: 15%; display: inline-block; vertical-align: top;'>
                 <img src='` +
     imagen +
-    `' style='width: 50px; height:50px;' />
+    `' style='width: 200px; height:200px;' />
               </div>
               <div style='display: inline-block; width: 70%; margin-left: 5%;'>
                 <p style='font-size: 18px; line-height: 16px; text-align: justify; margin-top: 0px; margin-bottom: 10px;'>` +
@@ -752,7 +752,7 @@ htmlBody +=
         maillist = [
             // "baltazar.ibarra@dielsa.com",
             // "gustavo.arizpe@dielsa.com",
-            // "marlen.pena@dielsa.com",
+             "marlen.pena@dielsa.com",
             // "gabriel@puntocommerce.com",
            // "henry@puntocommerce.com",
             // "aymara@puntocommerce.com",
