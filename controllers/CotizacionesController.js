@@ -7,7 +7,7 @@ import getCheckout from "../services/checkoutAPI";
 import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import CreacionOrdenSAP from "../services/CreacionOrdenSAP";
 const {ordenCreadaEmail} = require('../services/ordenCreadaEmail');
-const { cotizacionEmail } = require('../services/CotizacionEmail');
+const { cotizacionEnviar } = require('../services/cotizacionEnviar');
 
 
 const {ordenAbiertaCreadaEmail} = require('../services/ordenAbiertaCreadaEmail');
@@ -5133,7 +5133,7 @@ export default {
                         }
                     });
                      console.log('enviar correo:'+constSociosNegocioUsuario.snu_correo_electronico+' cotizacion :'+constCotizacionesResult.cot_cotizacion_id)
-            await cotizacionEmail(constSociosNegocioUsuario.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id);
+            await cotizacionEnviar(constSociosNegocioUsuario.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id);
             //constCotizacionesResult.cot_cotizacion_id
             }else{
                
@@ -5145,7 +5145,7 @@ export default {
                     });
                     console.log('enviar correo'+infoCliente.up_email_facturacion+' cotizacion:'+constCotizacionesResult.cot_cotizacion_id)
 
-                await cotizacionEmail(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id);
+                await cotizacionEnviar(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id);
             }
 
 
