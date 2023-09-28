@@ -657,7 +657,7 @@ if (fecha_actual == fecha_temp) {
               <div style='width: 15%; display: inline-block; vertical-align: top;'>
                 <img src='` +
     imagen +
-    `' style='width: 100%;' />
+    `' style='width: 50px; height:50px;' />
               </div>
               <div style='display: inline-block; width: 70%; margin-left: 5%;'>
                 <p style='font-size: 18px; line-height: 16px; text-align: justify; margin-top: 0px; margin-bottom: 10px;'>` +
@@ -727,10 +727,10 @@ htmlBody +=
 
                 <footer style='flex: 1; '>
                 <div align="center">
-                  <table style='max-width: 375px; background: #0B3196;color: white;text-align: left;padding: 20px;margin-top: 40px;' border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <table style='max-width: 980px; background: #0B3196;color: white;text-align: left;padding: 20px;margin-top: 40px;' border="0" cellpadding="0" cellspacing="0" width="100%">
                     <tr>
                       <td>
-                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="24%">
+                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="100%">
                               <tr>
                                   <td>
                                     <div style='padding: 0.5rem; min-width: 12.5rem;'>
@@ -744,7 +744,7 @@ htmlBody +=
                                   </td>
                               </tr>                                  
                           </table>
-                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="24%">
+                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="100%">
                               <tr>
                                   <td>
                                     <div style='padding: 0.5rem; min-width: 12.5rem;'>
@@ -757,7 +757,7 @@ htmlBody +=
                                   </td>
                               </tr>                                  
                           </table>
-                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="24%">
+                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="100%">
                               <tr>
                                   <td>
                                     <div style='padding: 0.5rem; min-width: 12.5rem;'>
@@ -770,7 +770,7 @@ htmlBody +=
                                   </td>
                               </tr>                                  
                           </table>
-                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="24%">
+                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="100%">
                               <tr>
                                   <td>
                                     <div style='padding: 0.5rem; min-width: 12.5rem;'>
