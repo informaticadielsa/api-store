@@ -706,7 +706,7 @@ htmlBody +=
                         </table>
                       </div>
                           
-                      <div style="max-width: 375px;" align="center">
+                      <div style="max-width: 100%;" align="center">
                         <p style="font-size: 14px; margin-top: 25px; margin-bottom: 40px; padding: 0px 15px; text-align: justify;">Recuerda atender a la brevedad las cotizaciones incrementa las probabilidades de cerrar una venta.</p>
                         <div styel='width:100%; text-align:center;'>
                            <a href="`+ process.env.STORE_LINK +`/myprofile" style="font-size: 14px; text-decoration:  none; color: #FFFFFF; background-color: #0B3196; padding: 10px 25px;  border-radius:5px ;"> Ir a cotización </a>
@@ -727,92 +727,13 @@ htmlBody +=
 
                 <footer style='flex: 1; '>
                 <div align="center">
-                  <table style='max-width: 980px; background: #0B3196;color: white;text-align: left;padding: 20px;margin-top: 40px;' border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td>
-                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="100%">
-                              <tr>
-                                  <td>
-                                    <div style='padding: 0.5rem; min-width: 12.5rem;'>
-                                      <div class='ft-main-item'></div>                                    
-                                      <h2 class='ft-title' style='color: #FFFFFF; font-size: 16px; font-weight: 500; letter-spacing: 0; line-height: 16px;'>
-                                        ¿Necesita ayuda?
-                                      </h2>
-                                        <p style='color:white; font-size: 14px;'>(81) 8123 9359</p>                                            
-                                        <p style='color:white; font-size: 14px;'><a class='colores' href='mailto:contacto@dielsa.com' style='color:white; font-size: 14px; text-decoration: none;'>contacto@dielsa.com</a></p>                                            
-                                    </div>
-                                  </td>
-                              </tr>                                  
-                          </table>
-                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="100%">
-                              <tr>
-                                  <td>
-                                    <div style='padding: 0.5rem; min-width: 12.5rem;'>
-                                      <div class='ft-main-item'></div>                                    
-                                      <h2 class='ft-title' style='color: #FFFFFF; font-size: 16px; font-weight: 500; letter-spacing: 0; line-height: 16px;'>
-                                        Dielsa Monterrey
-                                      </h2>
-                                      <p class='colores' style='color:white; font-size: 14px;'>Oscar Wilde No. 143 Col. San Jerónimo, <br>Monterrey, N.L. C.P. 64640 Tel. (81) 4739 36 08</p>
-                                    </div>                                    
-                                  </td>
-                              </tr>                                  
-                          </table>
-                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="100%">
-                              <tr>
-                                  <td>
-                                    <div style='padding: 0.5rem; min-width: 12.5rem;'>
-                                      <div class='ft-main-item'></div>                                    
-                                      <h2 class='ft-title' style='color: #FFFFFF; font-size: 16px; font-weight: 500; letter-spacing: 0; line-height: 16px;'>
-                                        Dielsa Ciudad de México
-                                      </h2>
-                                      <p class='colores' style='color:white; font-size: 14px;'>Benito Juárez No. 19 Col. Lazaro Cardenas Estado <br>de México, Naucalpan de Juárez C.P. 53560 Tel. (55) 5353 3474</p>                                            
-                                    </div>                                                                             
-                                  </td>
-                              </tr>                                  
-                          </table>
-                          <table border="0" cellpadding="0" cellspacing="0" align="left" width="100%">
-                              <tr>
-                                  <td>
-                                    <div style='padding: 0.5rem; min-width: 12.5rem;'>
-                                      <div class='ft-main-item'></div>                                                                                
-                                      <div class='social'>
-                                        <a href='https://www.facebook.com/Dielsamsi/' style='text-decoration: none;' target="_blank">
-                                            <img src="` +
-process.env.BACK_LINK +
-`/recursos/Facebook.png" alt='facebook'>
-                                        </a>
-                                        <a href='https://www.linkedin.com/company/dielsa-telecomunicaciones/' style='text-decoration: none;' target="_blank">
-                                            <img src="` +
-process.env.BACK_LINK +
-`/recursos/LinkedIn.png" alt='linkedin'>
-                                        </a>
-                                        <a href='https://www.instagram.com/dielsamsi/?hl=es' style='text-decoration: none;' target="_blank">
-                                            <img src="` +
-process.env.BACK_LINK +
-`/recursos/Instagram.png" alt='instagram'>
-                                        </a>
-                                        <a href='https://www.youtube.com/channel/UCLYgOWzTRXXuJvMIcvB4GLw' style='text-decoration: none;' target="_blank">
-                                            <img src="` +
-process.env.BACK_LINK +
-`/recursos/Youtube.png" alt='youtube'>
-                                        </a>
-                                    </div>                                       
-                                    </div>                                                                             
-                                  </td>
-                              </tr>                                  
-                          </table>
-                      </td>
-                    </tr>
-                    <tr> 
-                      <td>
+    
                         <div style='padding-top: 1rem; min-width: 12.5rem;'>
                           <section class='ft-legal'>
                             <center>&copy; 2022 Dielsa. Todos Los Derechos Reservados.</center>
                           </section>
                         </div>                                
-                      </td>
-                    </tr>
-                  </table>
+            
                 </div>
               </footer>
 
