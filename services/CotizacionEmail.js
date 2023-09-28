@@ -38,6 +38,7 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
       },
     ],
   });
+  console.log('cotizacion:', cotizacion)
   if (!!cotizacion) {
 
     let html = "hola prueba";
