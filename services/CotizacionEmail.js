@@ -63,7 +63,7 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
     let total;
     let descuento;
     let total_con_descuento;
-
+    console.log('cotizacion correo enviar', cotizacion )
     cotizacion.dataValues.producto_cotizaciones.forEach(async function (
       producto,
       index

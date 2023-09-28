@@ -5134,7 +5134,7 @@ export default {
                         "sn_porcentaje_descuento_total"]
                     });
 
-                     console.log('enviar correo')
+                     console.log('enviar correo:'+constSociosNegocio.sn_email_facturacion+' cotizacion :'+constCotizacionesResult.cot_cotizacion_id)
             await cotizacionEmail(constSociosNegocio.sn_email_facturacion,constCotizacionesResult.cot_cotizacion_id);
             //constCotizacionesResult.cot_cotizacion_id
             }else{
@@ -5145,7 +5145,7 @@ export default {
                             up_usuarios_prospectos_id: req.body.up_usuarios_prospectos_id
                         },
                     });
-                    console.log('enviar correo')
+                    console.log('enviar correo'+infoCliente.up_email_facturacion+' cotizacion:'+constCotizacionesResult.cot_cotizacion_id)
 
                 await cotizacionEmail(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id);
             }
