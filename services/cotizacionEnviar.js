@@ -464,11 +464,11 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios) {
                 </style>
               </head>
               <body align="center">
-                <header class="header_logo" style="max-width:375px">
+                <header class="header_logo" style="max-width:100%">
                   <img src='` + process.env.BACK_LINK + `/recursos/logo.png' / style='max-height: 70px; margin-top: 10px; margin: auto'>          
                 </header>
 
-              <section style='background: white; width: 90%; max-width: 375px; margin: 20px auto; text-align: -webkit-center; margin-top: 50px;'>
+              <section style='background: white; width: 90%; max-width: 100%; margin: 20px auto; text-align: -webkit-center; margin-top: 50px;'>
                 <section align="center" id='main-content' style="text-align: -webkit-center;">
                 
                 
