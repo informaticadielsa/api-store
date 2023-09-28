@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 // exports.usuarios_prospectos = function (data) {
 exports.registerNewClientEmail = function (data) {
-  console.log(data)
+  console.log('prueba111:',data)
   // Definimos el transporter
   const transporter = nodemailer.createTransport({
     service: process.env.EMAIL_SERVICE,
