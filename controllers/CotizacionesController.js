@@ -5133,7 +5133,7 @@ export default {
                         }
                     });
                      console.log('enviar correo:'+constSociosNegocioUsuario.snu_correo_electronico+' cotizacion :'+constCotizacionesResult.cot_cotizacion_id)
-            await cotizacionEnviar(constSociosNegocioUsuario.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id);
+            await cotizacionEnviar(constSociosNegocioUsuario.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id, req.body.cot_referencia);
             //constCotizacionesResult.cot_cotizacion_id
             }else{
                
@@ -5145,7 +5145,7 @@ export default {
                     });
                     console.log('enviar correo'+infoCliente.up_email_facturacion+' cotizacion:'+constCotizacionesResult.cot_cotizacion_id)
 
-                await cotizacionEnviar(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id);
+                await cotizacionEnviar(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id,  req.body.cot_referencia);
             }
 
 

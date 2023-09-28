@@ -9,7 +9,7 @@ import date_and_time from "date-and-time";
 
 
 // exports.creadaOrden = async function(email, id_usuario_socio, orden){
-exports.cotizacionEnviar = async function (email,cotizacion_id) {
+exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios) {
   try {
     var metodo_de_pago;
 
@@ -556,10 +556,18 @@ exports.cotizacionEnviar = async function (email,cotizacion_id) {
                   <div class='contenido1'>
                     <p>${mantenerEnCopia}</p>
                   </div>
-                </div>`;
+                </div>
+                
+                <div style='padding-left: 15px; color: #000000; font-size: 16px; letter-spacing: 0; line-height: 0px; text-align: -webkit-left'>
+                <div class='contenido1'>
+                  <p>Comentarios: ${comentarios}</p>
+                </div>
+              </div>
+                
+                `;
 
-                console.log("AQUIIIIIIIIIIII")
-                console.log(htmlBody)
+               
+                
 htmlBody +=
         `<div style='border-bottom: 1px solid #000; padding-right: 15px;'>
           <div style='color: #0B3196; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
