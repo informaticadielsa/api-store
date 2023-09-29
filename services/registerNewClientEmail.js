@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 // exports.usuarios_prospectos = function (data) {
 exports.registerNewClientEmail = function (data) {
-  console.log('prueba111:',data)
+
   // Definimos el transporter
   const transporter = nodemailer.createTransport({
     service: process.env.EMAIL_SERVICE,
@@ -108,7 +108,7 @@ exports.registerNewClientEmail = function (data) {
         <section style='background: white; width: 90%; max-width: 800px; margin: 20px auto; text-align: -webkit-center; margin-top: 50px;'>
             <header>
               <div style='color: #0B3196; font-size: 28px; font-weight: 500; letter-spacing: 0; '>
-                <h1>¡Se ha efectuado un nuevo registro!</h1>                
+                <h1>¡Se ha efectuado un nuevo registro(Prospecto)!</h1>                
               </div>
             </header>
             
@@ -289,7 +289,7 @@ exports.registerNewClientEmail = function (data) {
   const mailOptions = {
     from: "no-responder@dielsa.com",
     to: maillist,
-    subject: "Nuevo cliente potecial",
+    subject: "Nuevo cliente potencial",
     html: htmlBody,
   };
   // Enviamos el email
