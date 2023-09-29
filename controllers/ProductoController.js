@@ -8141,6 +8141,8 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
 
+            // Obtener el stock de los productos por almacen
+            rows = await productosUtils.getStockByStore(rows);
            
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
@@ -10981,7 +10983,8 @@ export default {
             //setteara el precio final y base en USD en un nuevo campo
             rows = await productosUtils.setOnlyChildsUSDChange(rows);
             
-            
+            // Obtener el stock de los productos por almacen
+            rows = await productosUtils.getStockByStore(rows);
               
            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
@@ -11442,6 +11445,9 @@ export default {
 
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
+
+            // Obtener el stock de los productos por almacen
+            rows = await productosUtils.getStockByStore(rows);
             
             if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);

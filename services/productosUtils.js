@@ -366,6 +366,31 @@ module.exports = {
         }
     },
 
+    getStockByStore: async function(rows){
+        try {
+            const newRows= [];
+            for (let index = 0; index < rows.length; index++) {
+
+                const data = await sequelize.query(`
+                select alm.alm_almacen_id, alm.alm_nombre, sp.sp_cantidad from stocks_productos sp
+                join almacenes alm on alm_almacen_id = sp.sp_almacen_id
+                where sp.sp_prod_producto_id = ${rows[index].prod_producto_id}
+                and alm.alm_cmm_estatus_id = 1000036
+                and alm.alm_pickup_stores = 't';`,
+                {
+                    type: sequelize.QueryTypes.SELECT 
+                });
+
+                const newData = { ...rows[index], dataStockByStore: data };
+                newRows.push(newData);
+            }
+            return newRows;
+        } catch (error) {
+            console.error('ha ocurrido un error, ', error);
+            return error;
+        }
+    },
+
     setFiltrarProductsFinImagen: async function(rows){
         try{
             const newRows= [];
