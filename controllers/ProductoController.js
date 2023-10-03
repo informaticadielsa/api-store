@@ -8143,6 +8143,9 @@ export default {
 
             // Obtener el stock de los productos por almacen
             rows = await productosUtils.getStockByStore(rows);
+
+            // Obtener el precio del dollar y se hace la conversión
+            rows = await productosUtils.getConversionUSD(rows);
            
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
@@ -9443,8 +9446,8 @@ export default {
              //rows = await productosUtils.setOnlyChildsUSDChange(rows);
             
 
-
-
+            rows[0].ListaHijos = await productosUtils.getStockByStore2(rows[0].ListaHijos);
+            rows[0].ListaHijos = await productosUtils.getConversionUSD(rows[0].ListaHijos);
 
             res.status(200).send({
                 message: 'Lista de productos',
@@ -9651,6 +9654,10 @@ export default {
            // rows = await productosUtils.setOnlyChildsUSDChange(rows);
 
            //rows = await productosUtils.setFiltrarProductsSinImagen(rows);
+
+           rows[0].ListaHijos = await productosUtils.getStockByStore2(rows[0].ListaHijos);
+
+        // console.log('Este es el contenido del rows ', rows[0].ListaHijos);
 
            const mainConsultaProductos = {
             count: parseInt(constCount[0].count),
@@ -10985,6 +10992,9 @@ export default {
             
             // Obtener el stock de los productos por almacen
             rows = await productosUtils.getStockByStore(rows);
+
+            // Obtener el precio del dollar y se hace la conversión
+            rows = await productosUtils.getConversionUSD(rows);
               
            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
@@ -11448,6 +11458,9 @@ export default {
 
             // Obtener el stock de los productos por almacen
             rows = await productosUtils.getStockByStore(rows);
+
+            // Obtener el precio del dollar y se hace la conversión
+            rows = await productosUtils.getConversionUSD(rows);
             
             if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);

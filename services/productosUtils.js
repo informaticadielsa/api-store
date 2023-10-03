@@ -390,6 +390,50 @@ module.exports = {
             return error;
         }
     },
+    getStockByStore2: async function(rows){
+        try {
+            const newRows= [];
+            for (let index = 0; index < rows.length; index++) {
+
+                const data = await sequelize.query(`
+                select alm.alm_almacen_id, alm.alm_nombre, sp.sp_cantidad from stocks_productos sp
+                join almacenes alm on alm_almacen_id = sp.sp_almacen_id
+                where sp.sp_prod_producto_id = ${rows[index].prod_producto_id}
+                and alm.alm_cmm_estatus_id = 1000036
+                and alm.alm_pickup_stores = 't';`,
+                {
+                    type: sequelize.QueryTypes.SELECT 
+                });
+
+                const newData = { ...rows[index].dataValues, dataStockByStore: data };
+                newRows.push(newData);
+            }
+
+            return newRows;
+        } catch (error) {
+            console.error('ha ocurrido un error, ', error);
+            return error;
+        }
+    },
+    getConversionUSD: async function(rows) {
+        const { cmm_valor: USDValor } = await models.ControlMaestroMultiple.findOne(
+        {
+            where: {
+                cmm_nombre: "TIPO_CAMBIO_USD"
+            },
+            attributes: ["cmm_valor"]
+        });
+
+        const newRows= [];
+        for (let index = 0; index < rows.length; index++) {
+            
+            const priceProductInDollar = rows[index].precioMenosDescuento/USDValor;
+
+            const newData = { ...rows[index], priceProductInDollar };
+            newRows.push(newData);
+        }
+        return newRows;
+    },
 
     setFiltrarProductsFinImagen: async function(rows){
         try{
