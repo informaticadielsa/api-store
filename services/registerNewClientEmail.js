@@ -135,36 +135,36 @@ exports.registerNewClientEmail = function (data) {
               <div class="container">
                   <div class="row">
                       <div class="col-sm"></div>
-                      <div class="col-sm">
-                          <p><strong>Razón social: </strong>` +
-    (data.up_razon_social!=null? data.up_razon_social:'') +
-    `</p>
-                          <p><strong>RFC: </strong>` +
-    (data.up_rfc != null? data.up_rfc :'' )+
-    `</p>
-                          <p><strong>Sitio web: </strong>` +
-    (data.up_datos_b2b.up_sitio_web !=null? data.up_datos_b2b.up_sitio_web :'') +
-    `</p>
-                          <p><strong>Cfdi: </strong>` +
-    (data.up_cfdi != null ? data.up_cfdi :'') +
-    `</p>
-                          <p><strong>Dirección de facturación: </strong>` +
-    (data.up_direccion_facturacion!=null ? data.up_direccion_facturacion :'')+
-    `</p>
-                          <p><strong>Correo de facturación: </strong>` +
-    (data.up_email_facturacion!= null ?  data.up_email_facturacion :'') +
-    `</p>
-                          <p><strong>Forma de pago: </strong>` +
-    (data.up_datos_b2b.up_forma_pago!=null? data.up_datos_b2b.up_forma_pago :'') +
-    `</p>
-                          <p><strong>Medio de pago: </strong>` +
-    (data.up_datos_b2b.up_medio_pago !=null? data.up_datos_b2b.up_medio_pago :'') +
-    `</p>
-                          <p><strong>Banco: </strong>` +
-    (data.up_datos_b2b.up_nombre_banco!=null? data.up_datos_b2b.up_nombre_banco :'') +
-    `</p>
-                          <p><strong>No. cuenta: </strong>` +
-    (data.up_datos_b2b.up_numero_cuenta_banco!=null? data.up_datos_b2b.up_numero_cuenta_banco  :'' )+
+                      <div class="col-sm">`+
+    (data.up_razon_social!=null? `
+    <p><strong>Razón social: </strong>` + data.up_razon_social:'') +
+    
+    (data.up_rfc != null? `</p>
+    <p><strong>RFC: </strong>` +data.up_rfc :'' )+
+   
+    (data.up_datos_b2b.up_sitio_web !=null?  `</p>
+    <p><strong>Sitio web: </strong>` + data.up_datos_b2b.up_sitio_web :'') +
+   
+    (data.up_cfdi != null ?  `</p>
+    <p><strong>Cfdi: </strong>` + data.up_cfdi :'') +
+   
+    (data.up_direccion_facturacion!=null ?  `</p>
+    <p><strong>Dirección de facturación: </strong>` + data.up_direccion_facturacion :'')+
+    
+    (data.up_email_facturacion!= null ? `</p>
+    <p><strong>Correo de facturación: </strong>` + data.up_email_facturacion :'') +
+   
+    (data.up_datos_b2b.up_forma_pago!=null?  `</p>
+    <p><strong>Forma de pago: </strong>` + data.up_datos_b2b.up_forma_pago :'') +
+   
+    (data.up_datos_b2b.up_medio_pago !=null?  `</p>
+    <p><strong>Medio de pago: </strong>` + data.up_datos_b2b.up_medio_pago :'') +
+   
+    (data.up_datos_b2b.up_nombre_banco!=null?  `</p>
+    <p><strong>Banco: </strong>` + data.up_datos_b2b.up_nombre_banco :'') +
+    
+    (data.up_datos_b2b.up_numero_cuenta_banco!=null? `</p>
+    <p><strong>No. cuenta: </strong>` + data.up_datos_b2b.up_numero_cuenta_banco  :'' )+
     `</p>                          
                       </div>
                       <div class="col-sm"></div>
