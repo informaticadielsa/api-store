@@ -143,28 +143,28 @@ exports.registerNewClientEmail = function (data) {
     (data.up_rfc != 'null'? data.up_rfc :'' )+
     `</p>
                           <p><strong>Sitio web: </strong>` +
-    data.up_datos_b2b.up_sitio_web +
+    (data.up_datos_b2b.up_sitio_web !='null' ? data.up_datos_b2b.up_sitio_web :'') +
     `</p>
                           <p><strong>Cfdi: </strong>` +
-    data.up_cfdi +
+    (data.up_cfdi != 'null' ? data.up_cfdi :'') +
     `</p>
                           <p><strong>Dirección de facturación: </strong>` +
-    data.up_direccion_facturacion +
+    (data.up_direccion_facturacion!='null' ? data.up_direccion_facturacion :'')+
     `</p>
                           <p><strong>Correo de facturación: </strong>` +
-    data.up_email_facturacion +
+    (data.up_email_facturacion!= 'null' ?  data.up_email_facturacion :'') +
     `</p>
                           <p><strong>Forma de pago: </strong>` +
-    data.up_datos_b2b.up_forma_pago +
+    (data.up_datos_b2b.up_forma_pago!='null'? data.up_datos_b2b.up_forma_pago :'') +
     `</p>
                           <p><strong>Medio de pago: </strong>` +
-    data.up_datos_b2b.up_medio_pago +
+    (data.up_datos_b2b.up_medio_pago !='null' ? data.up_datos_b2b.up_medio_pago :'') +
     `</p>
                           <p><strong>Banco: </strong>` +
-    data.up_datos_b2b.up_nombre_banco +
+    (data.up_datos_b2b.up_nombre_banco!='null'? data.up_datos_b2b.up_nombre_banco :'') +
     `</p>
                           <p><strong>No. cuenta: </strong>` +
-    data.up_datos_b2b.up_numero_cuenta_banco +
+    (data.up_datos_b2b.up_numero_cuenta_banco!='null'? data.up_datos_b2b.up_numero_cuenta_banco  :'' )+
     `</p>                          
                       </div>
                       <div class="col-sm"></div>
