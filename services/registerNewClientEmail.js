@@ -124,7 +124,7 @@ exports.registerNewClientEmail = function (data) {
                       <div class="col-sm">
                           <p style="text-align: center;">
                               <h4> ` +
-    data.up_nombre_comercial +
+    (data.up_nombre_comercial!= 'null')? data.up_nombre_comercial:'' +
     ` </h4>
                           </p>
                       </div>
@@ -137,10 +137,10 @@ exports.registerNewClientEmail = function (data) {
                       <div class="col-sm"></div>
                       <div class="col-sm">
                           <p><strong>Razón social: </strong>` +
-    data.up_razon_social +
+    (data.up_razon_social!='null')? data.up_razon_social:'' +
     `</p>
                           <p><strong>RFC: </strong>` +
-    data.up_rfc +
+    (data.up_rfc != 'null')? data.up_rfc :'' +
     `</p>
                           <p><strong>Sitio web: </strong>` +
     data.up_datos_b2b.up_sitio_web +
