@@ -9656,6 +9656,7 @@ export default {
            //rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
            rows[0].ListaHijos = await productosUtils.getStockByStore2(rows[0].ListaHijos);
+           rows[0].ListaHijos = await productosUtils.getConversionUSD(rows[0].ListaHijos);
 
         // console.log('Este es el contenido del rows ', rows[0].ListaHijos);
 
