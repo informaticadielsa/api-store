@@ -427,9 +427,34 @@ module.exports = {
         const newRows= [];
         for (let index = 0; index < rows.length; index++) {
             
-            const priceProductInDollar = rows[index].precioMenosDescuento/USDValor;
+            const priceProductInDollar = (rows[index].precioMenosDescuento ? rows[index].precioMenosDescuento:
+            rows[index].prod_precio) / USDValor;
+            const precioMenosDescuentodls = rows[index].precioMenosDescuento / USDValor;
+            const precioFinaldls = rows[index].precioFinal / USDValor;
 
-            const newData = { ...rows[index], priceProductInDollar };
+            const newData = { ...rows[index], priceProductInDollar, precioMenosDescuentodls, precioFinaldls };
+            newRows.push(newData);
+        }
+        return newRows;
+    },
+    getConversionUSD2: async function(rows) {
+        const { cmm_valor: USDValor } = await models.ControlMaestroMultiple.findOne(
+        {
+            where: {
+                cmm_nombre: "TIPO_CAMBIO_USD"
+            },
+            attributes: ["cmm_valor"]
+        });
+
+        const newRows= [];
+        for (let index = 0; index < rows.length; index++) {
+            const priceProductInDollar = rows[index].precioFinal/USDValor;
+
+            const precioMenosDescuentodls = rows[index].precioMenosDescuento/USDValor;
+
+            const precioFinaldls = rows[index].precioFinal / USDValor;
+
+            const newData = { ...rows[index], priceProductInDollar, precioMenosDescuentodls, precioFinaldls };
             newRows.push(newData);
         }
         return newRows;

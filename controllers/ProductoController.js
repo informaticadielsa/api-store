@@ -8143,9 +8143,6 @@ export default {
 
             // Obtener el stock de los productos por almacen
             rows = await productosUtils.getStockByStore(rows);
-
-            // Obtener el precio del dollar y se hace la conversión
-            rows = await productosUtils.getConversionUSD(rows);
            
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
@@ -8211,6 +8208,9 @@ export default {
 
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
+
+            // Obtener el precio del dollar y se hace la conversión
+            rows = await productosUtils.getConversionUSD2(rows);
 
             //Mole
             //rows = await productosUtils.setChildsUSDChange(rows);
