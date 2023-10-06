@@ -968,6 +968,8 @@ export default {
                 }
             });
 
+            req.body.snu_correo_electronico = req.body.snu_correo_electronico ? req.body.snu_correo_electronico : '';
+
             const existe_usuario = await models.SociosNegocioUsuario.findAll({
               where:{
                 snu_correo_electronico: req.body.snu_correo_electronico,
@@ -975,11 +977,11 @@ export default {
               }
             });
 
-            if (existe_usuario.length > 0) {
+            if (existe_usuario.length > 0 && existe_usuario.length) {
               res.status(500).send({
                 message: 'Correo electrónico existente, ingrese otro correo.',
               });
-            } else {
+            }
 
               await SNUpdate.update({
                   snu_cardcode: !!req.body.snu_cardcode ? req.body.snu_cardcode : SNUpdate.dataValues.snu_cardcode,
@@ -1002,7 +1004,6 @@ export default {
                   message: 'Actualización correcta'
               });
               
-            }
             
         }catch(e){
             res.status(500).send({
