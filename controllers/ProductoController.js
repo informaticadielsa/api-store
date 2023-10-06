@@ -9447,7 +9447,7 @@ export default {
             
 
             rows[0].ListaHijos = await productosUtils.getStockByStore2(rows[0].ListaHijos);
-            rows[0].ListaHijos = await productosUtils.getConversionUSD(rows[0].ListaHijos);
+            rows[0].ListaHijos = await productosUtils.getConversionUSD2(rows[0].ListaHijos);
 
             res.status(200).send({
                 message: 'Lista de productos',
