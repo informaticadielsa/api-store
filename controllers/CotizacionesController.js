@@ -5148,7 +5148,8 @@ export default {
                     console.log(infoCliente)
                     console.log('enviar correo'+infoCliente.up_email_facturacion+' cotizacion:'+constCotizacionesResult.cot_cotizacion_id)
 
-               await cotizacionEnviar(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id,  req.body.cot_referencia);
+               await cotizacionEnviar(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id,  req.body.cot_referencia,  req.body.up_usuarios_prospectos_id);
+
             }
 
 

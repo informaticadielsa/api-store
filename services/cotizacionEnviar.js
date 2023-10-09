@@ -9,7 +9,7 @@ import date_and_time from "date-and-time";
 
 
 // exports.creadaOrden = async function(email, id_usuario_socio, orden){
-exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios) {
+exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idProspecto = 0) {
   try {
     var metodo_de_pago;
 
@@ -265,7 +265,7 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios) {
         const constUsuariosProspectosDirecciones =
           await models.UsuariosProspectosDirecciones.findOne({
             where: {
-              upd_direcciones_id: constCotizaciones.cot_direccion_envio_id,
+              upd_up_usuarios_prospectos_id: idProspecto,
             },
           });
 
@@ -299,7 +299,7 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios) {
         // Set direccion de envio
         var constDireccionEnvio = constUsuariosProspectosDirecciones.dataValues;
 
-        console.log(constDireccionEnvio)
+        console.log("direccion",constDireccionEnvio)
 
         direccionEntrega = constDireccionEnvio.upd_direccion;
 
