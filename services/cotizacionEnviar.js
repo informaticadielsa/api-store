@@ -301,7 +301,7 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idP
 
         console.log("direccion",constDireccionEnvio)
 
-        direccionEntrega = constDireccionEnvio.upd_direccion;
+        direccionEntrega = constDireccionEnvio.upd_direccion + constUsuariosProspectosDirecciones.upd_direccion_num_ext;
 
 
         if (constDireccionEnvio.upd_colonia) {
