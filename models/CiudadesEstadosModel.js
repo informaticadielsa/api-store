@@ -8,7 +8,7 @@ const CiudadesEstados = sequelize.define('ciudades_estados', {
         primaryKey: true,
         autoIncrement: true
     },
-    city_ciudad: {
+    city_ciudad: { 
         type: Sequelize.STRING,
         allowNull: false
     },

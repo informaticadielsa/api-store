@@ -308,9 +308,11 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idP
           coloniaEntrega = "Col. " + constDireccionEnvio.upd_colonia;
         }
 
-        if (constDireccionEnvio.upd_ciudad) {
-          ciudadEntrega = constDireccionEnvio.upd_ciudad;
-        }
+        if (constDireccionEnvio.upd_ciudad) { 
+
+          const  listCitys = await models.CiudadesEstados.findOne({where:{city_ciudades_estados_id: constDireccionEnvio.upd_ciudad}})
+          ciudadEntrega = listCitys.city_ciudad+' '+ estadoValorEntrega +' '+ paisValorEntrega;
+        } 
 
         if (constDireccionEnvio.upd_codigo_postal) {
           codigo_postalEntrega = "Cp. " + constDireccionEnvio.upd_codigo_postal;
