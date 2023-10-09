@@ -311,7 +311,7 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idP
         if (constDireccionEnvio.upd_ciudad) { 
 
           const  listCitys = await models.CiudadesEstados.findOne({where:{city_ciudades_estados_id: constDireccionEnvio.upd_ciudad}})
-          ciudadEntrega = listCitys.city_ciudad+' '+ estadoValorEntrega +' '+ paisValorEntrega;
+          ciudadEntrega = listCitys.city_ciudad+', '+ estadoValorEntrega +', '+ paisValorEntrega;
         } 
 
         if (constDireccionEnvio.upd_codigo_postal) {
