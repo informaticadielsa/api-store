@@ -8143,9 +8143,6 @@ export default {
 
             // Obtener el stock de los productos por almacen
             rows = await productosUtils.getStockByStore(rows);
-
-            // Obtener el precio del dollar y se hace la conversión
-            rows = await productosUtils.getConversionUSD(rows);
            
             //Obtener Count de las rows
             const constCount = await sequelize.query(sqlFinalRowsCount,
@@ -8211,6 +8208,9 @@ export default {
 
             //concatenar producto padre ID a cada hijo
             rows = await productosUtils.getChildsFathersIDOnlyChilds(rows);
+
+            // Obtener el precio del dollar y se hace la conversión
+            rows = await productosUtils.getConversionUSD2(rows);
 
             //Mole
             //rows = await productosUtils.setChildsUSDChange(rows);
@@ -9447,7 +9447,7 @@ export default {
             
 
             rows[0].ListaHijos = await productosUtils.getStockByStore2(rows[0].ListaHijos);
-            rows[0].ListaHijos = await productosUtils.getConversionUSD(rows[0].ListaHijos);
+            rows[0].ListaHijos = await productosUtils.getConversionUSD2(rows[0].ListaHijos);
 
             res.status(200).send({
                 message: 'Lista de productos',
@@ -9656,6 +9656,7 @@ export default {
            //rows = await productosUtils.setFiltrarProductsSinImagen(rows);
 
            rows[0].ListaHijos = await productosUtils.getStockByStore2(rows[0].ListaHijos);
+           rows[0].ListaHijos = await productosUtils.getConversionUSD(rows[0].ListaHijos);
 
         // console.log('Este es el contenido del rows ', rows[0].ListaHijos);
 

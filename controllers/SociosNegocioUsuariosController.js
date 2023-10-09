@@ -374,6 +374,19 @@ export default {
 
 
             if(existe_super_usuario.length > 0){
+
+              const existe_usuario = await models.SociosNegocioUsuario.findAll({
+                  where:{
+                    snu_correo_electronico: req.body.snu_correo_electronico,
+                    snu_cmm_estatus_id: 1000048
+                  }
+              });
+
+              if (existe_usuario.length > 0) {
+                res.status(500).send({
+                  message: 'Correo electrónico existente, ingrese otro correo.',
+              });
+              } else {
                 console.log("entro aqui")
                 req.body.snu_menu_roles = !!req.body.snu_usu_usuario_creador_id ?  await String(JSON.stringify(user_b2b)) : !!req.body.snu_snu_usuario_snu_creador_id ? String(JSON.stringify(req.body.snu_menu_roles)) : await String(JSON.stringify(user_b2b));
                 req.body.snu_area = !!req.body.snu_usu_usuario_creador_id ?  'Administrador' : !!req.body.snu_snu_usuario_snu_creador_id ? req.body.snu_area : 'Administrador';
@@ -389,8 +402,23 @@ export default {
                     message: 'Usuario de Socio de Negocio creado con exito',
                     usuario
                 });
+              }
+
             }else if(existe_super_usuario.length <= 0){
-                console.log("entro al 2")
+
+              const existe_usuario = await models.SociosNegocioUsuario.findAll({
+                  where:{
+                    snu_correo_electronico: req.body.snu_correo_electronico,
+                    snu_cmm_estatus_id: 1000048
+                  }
+              });
+              
+              if (existe_usuario.length > 0) {
+                res.status(500).send({
+                  message: 'Correo electrónico existente, ingrese otro correo.',
+              });
+              } else {
+
                 req.body.snu_menu_roles = await String(JSON.stringify(super_user));
                 req.body.snu_super_usuario = true;
                 req.body.snu_area = 'Super Administrador';
@@ -406,6 +434,7 @@ export default {
                     message: 'Usuario de Socio de Negocio creado con exito',
                     usuario
                 });
+              }
             }
         }catch(e){
             res.status(500).send({
@@ -938,27 +967,44 @@ export default {
                     snu_usuario_snu_id : req.body.snu_usuario_snu_id
                 }
             });
-            
-            await SNUpdate.update({
-                snu_cardcode: !!req.body.snu_cardcode ? req.body.snu_cardcode : SNUpdate.dataValues.snu_cardcode,
-                snu_nombre: !!req.body.snu_nombre ? req.body.snu_nombre : SNUpdate.dataValues.snu_nombre,
-                snu_primer_apellido: !!req.body.snu_primer_apellido ? req.body.snu_primer_apellido : SNUpdate.dataValues.snu_primer_apellido,
-                snu_segundo_apellido: !!req.body.snu_segundo_apellido ? req.body.snu_segundo_apellido : SNUpdate.dataValues.snu_segundo_apellido,
-                snu_correo_electronico: !!req.body.snu_correo_electronico ? req.body.snu_correo_electronico : SNUpdate.dataValues.snu_correo_electronico,
-                snu_direccion: !!req.body.snu_direccion ? req.body.snu_direccion : SNUpdate.dataValues.snu_direccion,
-                snu_telefono: !!req.body.snu_telefono ? req.body.snu_telefono : SNUpdate.dataValues.snu_telefono,
-                snu_usuario: !!req.body.snu_usuario ? req.body.snu_usuario : SNUpdate.dataValues.snu_usuario,
-                snu_genero: !!req.body.snu_genero ? req.body.snu_genero : SNUpdate.dataValues.snu_genero,
-                snu_cmm_estatus_id: !!req.body.snu_cmm_estatus_id ? req.body.snu_cmm_estatus_id : SNUpdate.dataValues.snu_cmm_estatus_id,
-                snu_usu_usuario_modificado_id: !!req.body.snu_usu_usuario_modificado_id ? req.body.snu_usu_usuario_modificado_id : SNUpdate.dataValues.snu_usu_usuario_modificado_id,
-                snu_menu_roles: !!req.body.snu_menu_roles ? String(JSON.stringify(req.body.snu_menu_roles)) : SNUpdate.dataValues.snu_menu_roles,
-                snu_area: !!req.body.snu_area ? req.body.snu_area : SNUpdate.dataValues.snu_area,
-                snu_puesto: !!req.body.snu_puesto ? req.body.snu_puesto : SNUpdate.dataValues.snu_puesto,
-                updatedAt: Date()
+
+            req.body.snu_correo_electronico = req.body.snu_correo_electronico ? req.body.snu_correo_electronico : '';
+
+            const existe_usuario = await models.SociosNegocioUsuario.findAll({
+              where:{
+                snu_correo_electronico: req.body.snu_correo_electronico,
+                snu_cmm_estatus_id: 1000048
+              }
             });
-            res.status(200).send({
-                message: 'Actualización correcta'
-            })
+
+            if (existe_usuario.length > 0 && existe_usuario.length) {
+              res.status(500).send({
+                message: 'Correo electrónico existente, ingrese otro correo.',
+              });
+            }
+
+              await SNUpdate.update({
+                  snu_cardcode: !!req.body.snu_cardcode ? req.body.snu_cardcode : SNUpdate.dataValues.snu_cardcode,
+                  snu_nombre: !!req.body.snu_nombre ? req.body.snu_nombre : SNUpdate.dataValues.snu_nombre,
+                  snu_primer_apellido: !!req.body.snu_primer_apellido ? req.body.snu_primer_apellido : SNUpdate.dataValues.snu_primer_apellido,
+                  snu_segundo_apellido: !!req.body.snu_segundo_apellido ? req.body.snu_segundo_apellido : SNUpdate.dataValues.snu_segundo_apellido,
+                  snu_correo_electronico: !!req.body.snu_correo_electronico ? req.body.snu_correo_electronico : SNUpdate.dataValues.snu_correo_electronico,
+                  snu_direccion: !!req.body.snu_direccion ? req.body.snu_direccion : SNUpdate.dataValues.snu_direccion,
+                  snu_telefono: !!req.body.snu_telefono ? req.body.snu_telefono : SNUpdate.dataValues.snu_telefono,
+                  snu_usuario: !!req.body.snu_usuario ? req.body.snu_usuario : SNUpdate.dataValues.snu_usuario,
+                  snu_genero: !!req.body.snu_genero ? req.body.snu_genero : SNUpdate.dataValues.snu_genero,
+                  snu_cmm_estatus_id: !!req.body.snu_cmm_estatus_id ? req.body.snu_cmm_estatus_id : SNUpdate.dataValues.snu_cmm_estatus_id,
+                  snu_usu_usuario_modificado_id: !!req.body.snu_usu_usuario_modificado_id ? req.body.snu_usu_usuario_modificado_id : SNUpdate.dataValues.snu_usu_usuario_modificado_id,
+                  snu_menu_roles: !!req.body.snu_menu_roles ? String(JSON.stringify(req.body.snu_menu_roles)) : SNUpdate.dataValues.snu_menu_roles,
+                  snu_area: !!req.body.snu_area ? req.body.snu_area : SNUpdate.dataValues.snu_area,
+                  snu_puesto: !!req.body.snu_puesto ? req.body.snu_puesto : SNUpdate.dataValues.snu_puesto,
+                  updatedAt: Date()
+              });
+              res.status(200).send({
+                  message: 'Actualización correcta'
+              });
+              
+            
         }catch(e){
             res.status(500).send({
                 message: 'Error al actualizar datos',
