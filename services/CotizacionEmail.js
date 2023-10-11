@@ -25,6 +25,7 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
   });
   // Definimos el email
 
+
   const cotizacion = await models.CotizacionProyecto.findOne({
     where: {
       cot_cotizacion_id: cot_cotizacion_id,
@@ -61,7 +62,7 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
     let total;
     let descuento;
     let total_con_descuento;
-
+   
     cotizacion.dataValues.producto_cotizaciones.forEach(async function (
       producto,
       index
@@ -218,15 +219,12 @@ exports.cotizacionEmail = async function (email, cot_cotizacion_id) {
 
     // Definimos list email test
     var maillist = [
-      "baltazar.ibarra@dielsa.com",
-      "gustavo.arizpe@dielsa.com",
-      "marlen.pena@dielsa.com",
-      "gabriel@puntocommerce.com",
-      "henry@puntocommerce.com",
-      "aymara@puntocommerce.com",
       "informatica@dielsa.com",
-      "oscar.espinosa@daltum.mx"
+      "oscar.espinosa@daltum.mx",
+      email
     ];
+
+    console.log('enviar correo', maillist)
     // Definimos el email
     const mailOptions = {
       from: "no-responder@dielsa.com",

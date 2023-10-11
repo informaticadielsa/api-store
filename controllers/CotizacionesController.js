@@ -7,6 +7,9 @@ import getCheckout from "../services/checkoutAPI";
 import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import CreacionOrdenSAP from "../services/CreacionOrdenSAP";
 const {ordenCreadaEmail} = require('../services/ordenCreadaEmail');
+const { cotizacionEnviar } = require('../services/cotizacionEnviar');
+
+
 const {ordenAbiertaCreadaEmail} = require('../services/ordenAbiertaCreadaEmail');
 import productosUtils from "../services/productosUtils";
 import cotizacionesUtils from "../services/cotizacionesUtils";
@@ -40,7 +43,7 @@ const sumarDias = function(fecha, dias){
     fecha.setDate(fecha.getDate() + dias);
     return fecha;
 }
-const { cotizacionEmail } = require('../services/CotizacionEmail');
+
 
 
 
@@ -522,7 +525,7 @@ export default {
             });
             next(e);
         }
-    },
+    }, 
     V2finalizarCompraCot: async(req, res, next) =>{
         try{
 
@@ -4752,12 +4755,13 @@ export default {
                             
                             const constSociosNegocio = await models.SociosNegocio.findOne(
                             {
-                                where: {
+                                where: { 
                                     sn_socios_negocio_id: req.body.cdc_sn_socio_de_negocio_id
                                 },
                                 attributes:  ["sn_socios_negocio_id", "sn_cardcode", "sn_codigo_direccion_facturacion", "sn_lista_precios", "sn_codigo_grupo",
                                 "sn_porcentaje_descuento_total"]
                             });
+                            
                             
                             //obtener direccion de facturacion
                             const constSociosNegocioDirecciones = await models.SociosNegocioDirecciones.findOne(
@@ -5044,6 +5048,7 @@ export default {
                     });
                 }
 
+                console.log('hj: ', constCotizacionesResult)
                 //Si se inserto correctamente la cotizacion insertara ahora los productos
                 if(constCotizacionesResult != '')
                 {   
@@ -5078,7 +5083,7 @@ export default {
                     }
 
                     //Eliminar carrito pero cuando es ENV que no lo borre para no volver a generarlo de 0
-                    if(process.env.PORT != 5000 && req.body.cot_prospecto == false)
+                    if( req.body.cot_prospecto == false)
                     {
 
                         const constCarritoDeCompraBorrar = await models.CarritoDeCompra.findOne(
@@ -5118,6 +5123,35 @@ export default {
                 }
             //FIN Insertar Cotizacion
             console.log("/////////// FIN PASO 9 ///////////")
+            //Enviar Cotizacion
+            if(req.body.cot_prospecto == false)
+            {
+              
+                    const constSociosNegocioUsuario = await models.SociosNegocioUsuario.findOne({
+                        where: {
+                            snu_sn_socio_de_negocio_id: req.body.cdc_sn_socio_de_negocio_id,
+                            snu_super_usuario: true
+                        }
+                    });
+                     console.log('enviar correo:'+constSociosNegocioUsuario.snu_correo_electronico+' cotizacion :'+constCotizacionesResult.cot_cotizacion_id)
+            await cotizacionEnviar(constSociosNegocioUsuario.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id, req.body.cot_referencia);
+            //constCotizacionesResult.cot_cotizacion_id
+            }else{
+               
+                const infoCliente = await models.UsuariosProspectos.findOne(
+                    {
+                        where: {
+                            up_usuarios_prospectos_id: req.body.up_usuarios_prospectos_id
+                        },
+                    });
+
+                    console.log(infoCliente)
+                    console.log('enviar correo'+infoCliente.up_email_facturacion+' cotizacion:'+constCotizacionesResult.cot_cotizacion_id)
+
+               await cotizacionEnviar(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id,  req.body.cot_referencia,  req.body.up_usuarios_prospectos_id);
+
+            }
+
 
             res.status(200).send({
                 message: 'Creado con exito',

@@ -107,7 +107,7 @@ router.post('/add_prospecto_direccion',  CotizacionesController.createProspectoD
 //Crear cotizacion V3 con cliente id null->prospecto o cliente id registrado
 router.post('/v3_crear_cotizacion', CotizacionesController.V3crearCotizacion);
 
-//Obtener el detalle de una cotizacion sin actualizar nada
+//Obtener el detalle de una cotizacion sin actualizar nada 
 router.get('/cotizacion_detalle/:id', CotizacionesController.getCotizacionesDetalle);
 
 //V3 update cotizacion General
