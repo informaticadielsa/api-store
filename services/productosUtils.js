@@ -427,12 +427,20 @@ module.exports = {
         const newRows= [];
         for (let index = 0; index < rows.length; index++) {
             
-            const priceProductInDollar = (rows[index].precioMenosDescuento ? rows[index].precioMenosDescuento:
-            rows[index].prod_precio) / USDValor;
-            const precioMenosDescuentodls = rows[index].precioMenosDescuento / USDValor;
-            const precioFinaldls = rows[index].precioFinal / USDValor;
+            let priceProductInDollar = (rows[index].precioMenosDescuento.toFixed(2)
+                ? rows[index].precioMenosDescuento
+                : rows[index].prod_precio) / USDValor;
+            priceProductInDollar = priceProductInDollar.toFixed(2);
+            const precioMenosDescuentodls = (rows[index].precioMenosDescuento / USDValor).toFixed(2);
 
-            const newData = { ...rows[index], priceProductInDollar, precioMenosDescuentodls, precioFinaldls };
+            const precioFinaldls = (rows[index].precioFinal / USDValor).toFixed(2);
+            const newData = { ...rows[index],
+                priceProductInDollar,
+                precioMenosDescuentodls,
+                precioFinaldls,
+                precioFinal: rows[index].precioFinal.toFixed(2),
+                precioMenosDescuento: rows[index].precioMenosDescuento.toFixed(2),
+            };
             newRows.push(newData);
         }
         return newRows;
