@@ -2092,7 +2092,8 @@ module.exports = {
                     "codigoImpuesto": ImpuestoFinal,
                     "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual,
                     "fechaEntrega": dateFinal,
-                    "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto
+                    "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
+                    "acuerdoG": null
                 }
 
                 array.push(jsonArray);
@@ -2349,7 +2350,8 @@ module.exports = {
                     "codigoImpuesto": ImpuestoFinal,
                     "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual,
                     "fechaEntrega": dateFinal,
-                    "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto
+                    "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
+                    "acuerdoG": null
                 }
 
 
