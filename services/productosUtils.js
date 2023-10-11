@@ -456,13 +456,19 @@ module.exports = {
 
         const newRows= [];
         for (let index = 0; index < rows.length; index++) {
-            const priceProductInDollar = rows[index].precioFinal/USDValor;
+            const priceProductInDollar = (rows[index].precioFinal/USDValor).toFixed(2);
 
-            const precioMenosDescuentodls = rows[index].precioMenosDescuento/USDValor;
+            const precioMenosDescuentodls = (rows[index].precioMenosDescuento/USDValor).toFixed(2);
 
-            const precioFinaldls = rows[index].precioFinal / USDValor;
+            const precioFinaldls = (rows[index].precioFinal / USDValor).toFixed(2);
 
-            const newData = { ...rows[index], priceProductInDollar, precioMenosDescuentodls, precioFinaldls };
+            const newData = { ...rows[index],
+                priceProductInDollar,
+                precioMenosDescuentodls,
+                precioFinaldls,
+                precioFinal: rows[index].precioFinal.toFixed(2),
+                precioMenosDescuento: rows[index].precioMenosDescuento.toFixed(2),
+            };
             newRows.push(newData);
         }
         return newRows;
