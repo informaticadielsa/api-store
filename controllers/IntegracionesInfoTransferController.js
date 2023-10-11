@@ -3973,7 +3973,8 @@ export default {
                     "codigoAlmacen": almacenAsignadoPerProducto,
                     "precioUnitario": constProductoCompraFinalizada[i].dataValues.pcf_precio,
                     "codigoImpuesto": ImpuestoFinal,
-                    "cantidad": constProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto
+                    "cantidad": constProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
+                    "acuerdoG": null
                 }
 
                 array.push(jsonArray);
