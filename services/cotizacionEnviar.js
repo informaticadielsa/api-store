@@ -89,7 +89,7 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idP
       });
       if(constUsuarioVendedor)
       {
-        vendedorAsignado = constUsuarioVendedor.usu_nombre + " " + constUsuarioVendedor.usu_primer_apellido + " " + (constUsuarioVendedor.usu_segundo_apellido!= null ? constUsuarioVendedor.usu_segundo_apellido :'')
+        vendedorAsignado = constUsuarioVendedor.usu_nombre //+ " " + constUsuarioVendedor.usu_primer_apellido + " " + (constUsuarioVendedor.usu_segundo_apellido!= null ? constUsuarioVendedor.usu_segundo_apellido :'')
         correoVendedorAsignado =  constUsuarioVendedor.usu_correo_electronico
       }
 
