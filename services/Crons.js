@@ -4,6 +4,7 @@ import integrations from "./Integraciones"
 
 //Alternativos
 
+
 //Actualizar el tipo de cambio
 cron.schedule("0 5 * * *", () =>{integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionInfoTransferTipoCambioUSD")});
 cron.schedule("0 9 * * *", () =>{integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionInfoTransferTipoCambioUSD")});
