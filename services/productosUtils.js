@@ -427,19 +427,19 @@ module.exports = {
         const newRows= [];
         for (let index = 0; index < rows.length; index++) {
             
-            let priceProductInDollar = (rows[index].precioMenosDescuento.toFixed(2)
+            let priceProductInDollar = (rows[index].precioMenosDescuento
                 ? rows[index].precioMenosDescuento
                 : rows[index].prod_precio) / USDValor;
-            priceProductInDollar = priceProductInDollar.toFixed(2);
-            const precioMenosDescuentodls = (rows[index].precioMenosDescuento / USDValor).toFixed(2);
+            priceProductInDollar = priceProductInDollar;
+            const precioMenosDescuentodls = (rows[index].precioMenosDescuento / USDValor);
 
-            const precioFinaldls = (rows[index].precioFinal / USDValor).toFixed(2);
+            const precioFinaldls = (rows[index].precioFinal / USDValor);
             const newData = { ...rows[index],
                 priceProductInDollar,
                 precioMenosDescuentodls,
                 precioFinaldls,
-                precioFinal: rows[index].precioFinal.toFixed(2),
-                precioMenosDescuento: rows[index].precioMenosDescuento.toFixed(2),
+                precioFinal: rows[index].precioFinal,
+                precioMenosDescuento: rows[index].precioMenosDescuento,
             };
             newRows.push(newData);
         }
@@ -456,18 +456,18 @@ module.exports = {
 
         const newRows= [];
         for (let index = 0; index < rows.length; index++) {
-            const priceProductInDollar = (rows[index].precioFinal/USDValor).toFixed(2);
+            const priceProductInDollar = (rows[index].precioFinal/USDValor);
 
-            const precioMenosDescuentodls = (rows[index].precioMenosDescuento/USDValor).toFixed(2);
+            const precioMenosDescuentodls = (rows[index].precioMenosDescuento/USDValor);
 
-            const precioFinaldls = (rows[index].precioFinal / USDValor).toFixed(2);
+            const precioFinaldls = (rows[index].precioFinal / USDValor);
 
             const newData = { ...rows[index],
                 priceProductInDollar,
                 precioMenosDescuentodls,
                 precioFinaldls,
-                precioFinal: rows[index].precioFinal.toFixed(2),
-                precioMenosDescuento: rows[index].precioMenosDescuento.toFixed(2),
+                precioFinal: rows[index].precioFinal,
+                precioMenosDescuento: rows[index].precioMenosDescuento,
             };
             newRows.push(newData);
         }
