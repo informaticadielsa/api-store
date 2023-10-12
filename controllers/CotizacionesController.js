@@ -5059,7 +5059,7 @@ export default {
                     {
                         //Crear cotizaciones
                         var porcentajeDescuentoVendedor = req.body.cotp_porcentaje_descuento_vendedor ? req.body.cotp_porcentaje_descuento_vendedor : 0
-
+ 
                         const constCotizacionesProductosInserted = await models.CotizacionesProductos.create({
                             cotp_prod_producto_id: productos[i].dataValues.prod_producto_id,
                             cotp_cotizacion_id: constCotizacionesResult.dataValues.cot_cotizacion_id,
@@ -5134,7 +5134,7 @@ export default {
                         }
                     });
                      console.log('enviar correo:'+constSociosNegocioUsuario.snu_correo_electronico+' cotizacion :'+constCotizacionesResult.cot_cotizacion_id)
-            await cotizacionEnviar(constSociosNegocioUsuario.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id, req.body.cot_referencia);
+            await cotizacionEnviar(constSociosNegocioUsuario.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id, req.body.cot_referencia, 0, constSociosNegocioUsuario.snu_cardcode);
             //constCotizacionesResult.cot_cotizacion_id
             }else{
                

@@ -89,7 +89,7 @@ const SociosNegocio = sequelize.define('sociosnegocio',{
     sn_cmm_tipo_impuesto:{
         type: Sequelize.INTEGER,
         allowNull: false
-    },
+    }, 
     sn_credito_disponible: {
         type: Sequelize.DECIMAL(10,2),
         field: 'sn_credito_disponible',

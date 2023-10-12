@@ -9,7 +9,7 @@ import date_and_time from "date-and-time";
 
 
 // exports.creadaOrden = async function(email, id_usuario_socio, orden){
-exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idProspecto = 0) {
+exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idProspecto = 0, cardcode=null) {
   try {
     var metodo_de_pago;
 
@@ -78,10 +78,13 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idP
     //Si es SN
     if(isProspecto == false)
     {
+      const constSocioNegocioSap = await models.SociosNegocio.findOne({where:{sn_cardcode:cardcode}})
+      
+
       //Obtener vendedor
       const constUsuarioVendedor = await models.Usuario.findOne({
         where: {
-          usu_usuario_id: constCotizaciones.cot_usu_usuario_vendedor_id,
+          usu_codigo_vendedor: constSocioNegocioSap.sn_vendedor_codigo_sap,
         },
       });
       if(constUsuarioVendedor)
