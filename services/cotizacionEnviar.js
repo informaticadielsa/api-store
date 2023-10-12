@@ -31,6 +31,7 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idP
     var cotizacionID = cotizacion_id
     var isProspecto = constCotizaciones.cot_prospecto
     var vendedorAsignado = ''
+    var correoVendedorAsignado = ''
     var NoCotizacion = constCotizaciones.cot_numero_orden
     var fechaCotizacion = constCotizaciones.createdAt
     var Nombre
@@ -86,6 +87,7 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idP
       if(constUsuarioVendedor)
       {
         vendedorAsignado = constUsuarioVendedor.usu_nombre + " " + constUsuarioVendedor.usu_primer_apellido + " " + constUsuarioVendedor.usu_segundo_apellido
+        correoVendedorAsignado =  constUsuarioVendedor.usu_correo_electronico
       }
 
       //Obtener nombre SN
@@ -108,7 +110,8 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idP
     //Si es prospecto
     else
     {
-      vendedorAsignado = ''
+      vendedorAsignado = 'contacto@dielsa.com'
+      correoVendedorAsignado ='contacto@dielsa.com'
 
       //Obtener nombre prospecto
       const constUsuariosProspectos = await models.UsuariosProspectos.findOne({
@@ -312,7 +315,7 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idP
 
           const  listCitys = await models.CiudadesEstados.findOne({where:{city_ciudades_estados_id: constDireccionEnvio.upd_ciudad}})
           ciudadEntrega = listCitys.city_ciudad+', '+ estadoValorEntrega +', '+ paisValorEntrega;
-        } 
+        }  
 
         if (constDireccionEnvio.upd_codigo_postal) {
           codigo_postalEntrega = "Cp. " + constDireccionEnvio.upd_codigo_postal;
@@ -771,14 +774,16 @@ htmlBody +=
            // "alfredo@puntocommerce.com",
             "informatica@dielsa.com",
             "oscar.espinosa@daltum.mx",
-            "luis.sanchez@daltum.mx"
+            "luis.sanchez@daltum.mx",
+            correoVendedorAsignado
            // mantenerEnCopia ? mantenerEnCopia.replace(';','') : ''
         ];
     }
     else
     {
         maillist = [
-            "ov@dielsa.com"
+            //"ov@dielsa.com"
+            correoVendedorAsignado
             //email
         ];
     }

@@ -110,7 +110,7 @@ exports.cotizacionNuevaEmail = async function (cotizacion_id) {
     //Si es prospecto
     else
     {
-      vendedorAsignado = 'Contacto'
+      vendedorAsignado = 'contacto@dielsa.com'
       correoVendedorAsignado ='contacto@dielsa.com'
 
       //Obtener nombre prospecto
@@ -849,7 +849,7 @@ process.env.BACK_LINK +
     else
     {
         maillist = [
-          //  "ov@dielsa.com",
+            "ov@dielsa.com",
             correoVendedorAsignado
         ];
     }
