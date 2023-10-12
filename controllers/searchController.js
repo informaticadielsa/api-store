@@ -6,7 +6,7 @@ const {recoveryEmail} = require('../services/recoveryEmail');
 
 export default {
 
-    searchPrediction: async (req, res, next) => {
+    searchPrediction: async (req, res) => {
         try
         {
             const wordToSearch = req.body.wordToSearch.toUpperCase();
@@ -48,6 +48,9 @@ export default {
                     prod_cmm_estatus_id: 1000016,
                     prod_nombre: {
                         [Sequelize.Op.like]: `${word}%`,
+                    },
+                    prod_prod_producto_padre_sku: {
+                        [Op.ne]: null
                     }
                 },
                 limit: 10,
@@ -78,12 +81,13 @@ export default {
         }
         catch(e)
         {
+            console.log('Error: ', e);
             res.status(500).send(
             {
                 message: 'Error',
                 e
             });
-            next(e);
+            // next(e);
         }
     },
 }

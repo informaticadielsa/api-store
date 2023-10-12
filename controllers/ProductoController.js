@@ -11013,11 +11013,12 @@ export default {
             })
 
         }catch(e){
+            console.log('Error: ', e);
             res.status(500).send({
                 message: 'Error al traer lista productos',
                 e
             });
-            next(e);
+            // next(e);
         }
     },
 
