@@ -31,6 +31,7 @@ exports.cotizacionNuevaEmail = async function (cotizacion_id) {
     var cotizacionID = cotizacion_id
     var isProspecto = constCotizaciones.cot_prospecto
     var vendedorAsignado = ''
+    var correoVendedorAsignado=''
     var NoCotizacion = constCotizaciones.cot_numero_orden
     var fechaCotizacion = constCotizaciones.createdAt
     var Nombre
@@ -86,6 +87,7 @@ exports.cotizacionNuevaEmail = async function (cotizacion_id) {
       if(constUsuarioVendedor)
       {
         vendedorAsignado = constUsuarioVendedor.usu_nombre + " " + constUsuarioVendedor.usu_primer_apellido + " " + constUsuarioVendedor.usu_segundo_apellido
+        correoVendedorAsignado= constUsuarioVendedor.usu_correo_electronico
       }
 
       //Obtener nombre SN
@@ -108,7 +110,8 @@ exports.cotizacionNuevaEmail = async function (cotizacion_id) {
     //Si es prospecto
     else
     {
-      vendedorAsignado = ''
+      vendedorAsignado = 'Contacto'
+      correoVendedorAsignado ='contacto@dielsa.com'
 
       //Obtener nombre prospecto
       const constUsuariosProspectos = await models.UsuariosProspectos.findOne({
@@ -838,13 +841,16 @@ process.env.BACK_LINK +
            // "alfredo@puntocommerce.com",
             "informatica@dielsa.com",
             "oscar.espinosa@daltum.mx",
-            "luis.sanchez@daltum.mx"
+            "luis.sanchez@daltum.mx",
+            correoVendedorAsignado
+
         ];
     }
     else
     {
         maillist = [
-            "ov@dielsa.com",
+          //  "ov@dielsa.com",
+            correoVendedorAsignado
         ];
     }
 
