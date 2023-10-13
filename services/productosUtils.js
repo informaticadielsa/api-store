@@ -2034,6 +2034,7 @@ module.exports = {
             return "No fue posible obtener la mejor promocion por hijos"
         }
     },
+    
     setOnlyChildsUSDChange: async function (rows) {
         try{
             for (var i = 0; i < rows.length; i++) 
