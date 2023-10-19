@@ -58,6 +58,7 @@ import GerentesRoutes from './GerentesRoutes';
 import search from './search';
 
 import sitemapRouter from './SitemapRoutes';
+import ProyectosRoutes from './ProyectosRoutes';
 
 const router = routerx();
 router.use('/v1/sitemap', sitemapRouter);
@@ -121,4 +122,5 @@ router.use('/elasticsearch', ElasticsearchRoutes);
 router.use('/vendedores', VendedoresRoutes);
 router.use('/gerentes', GerentesRoutes);
 router.use('/search', search);
+router.use('/proyectos', ProyectosRoutes);
 export default router;

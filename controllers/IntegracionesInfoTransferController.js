@@ -816,6 +816,127 @@ export default {
         }
     },
 
+    IntegracionInfoTranferProyectos: async(req, res, next) => {
+        try {
+            
+            const options = {
+                'method': 'GET',
+                'url': (process.env.INTEGRATIONS_URL = 'http://35.224.2.75:89' ? 'http://10.128.0.2:90' : process.env.INTEGRATIONS_URL) + '/Service1.svc/proyectos',
+                'headers': {
+                    'Authorization': 'Xswirudy9s873g@id%$sk04mcfnaid'
+                } 
+            };
+            const result = await request(options, function (error, response) 
+            {
+                if (error) throw new Error(error);
+            });
+            const resultJson = JSON.parse(result);
+
+            const dataSocioNegocio = await models.SociosNegocioUsuario.findAll({
+                where: {
+                    snu_cmm_estatus_id: '1000048',
+                },
+                attributes: ["snu_cardcode"]
+            });
+            const socioNegocioCardCode = dataSocioNegocio.map((item) => item.dataValues.snu_cardcode);
+
+            for (let index = 0; index < resultJson.proyectos.length; index++) {
+                const element = resultJson.proyectos[index];
+                const evaluacion = socioNegocioCardCode.includes(element.codigoCliente);
+
+                if(evaluacion) {
+                    const proyectos = await models.Proyectos.findOne({
+                        where: {
+                            idProyecto: element.id,
+                        },
+                    });
+
+                    if(proyectos) {
+                        await proyectos.update({
+                            CodigoEjecutivo: element.CodigoEjecutivo,
+                            NombreEjecutivo: element.NombreEjecutivo,
+                            codigoCliente: element.codigoCliente,
+                            estatus: element.estatus,
+                            fechaInicio: element.fechaInicio,
+                            fechaVencimiento: element.fechaVencimiento,
+                            idProyecto: element.id,
+                            moneda: element.moneda,
+                            nombreCliente: element.nombreCliente,
+                            nombreProyecto: element.nombreProyecto,
+                            recordatorio: element.recordatorio,
+                            referenciaFabrica: element.referenciaFabrica,
+                            renovacion: element.renovacion,
+                            unidadesRecordatorio: element.unidadesRecordatorio,
+                            updatedAt: Date(),
+                        });
+
+                        for (let e = 0; e < element.lineas.length; e++) {
+                            const data = element.lineas[e];
+
+                            const lineasProyecto = await models.LineasProyectos.findOne({
+                                idProyecto: proyectos.dataValues.id,
+                                codigoArticulo: data.codigoArticulo,
+                            });
+
+                            await lineasProyecto.update({
+                                cantidadAcumulada: data.cantidadAcumulada,
+                                importeAcumulado: data.importeAcumulado,
+                                nombreArticulo: data.nombreArticulo,
+                                precio: data.precio
+                            });
+                        }
+
+                    } else {
+                        const proyectoId = await models.Proyectos.create({
+                            CodigoEjecutivo: element.CodigoEjecutivo,
+                            NombreEjecutivo: element.NombreEjecutivo,
+                            codigoCliente: element.codigoCliente,
+                            estatus: element.estatus,
+                            fechaInicio: element.fechaInicio,
+                            fechaVencimiento: element.fechaVencimiento,
+                            idProyecto: element.id,
+                            moneda: element.moneda,
+                            nombreCliente: element.nombreCliente,
+                            nombreProyecto: element.nombreProyecto,
+                            recordatorio: element.recordatorio,
+                            referenciaFabrica: element.referenciaFabrica,
+                            renovacion: element.renovacion,
+                            unidadesRecordatorio: element.unidadesRecordatorio,
+                            eliminado: 0,
+                            updatedAt: Date(),
+                            createdAt: Date(),
+                        });
+
+                        for (let e = 0; e < element.lineas.length; e++) {
+                            const data = element.lineas[e];
+
+                            await models.LineasProyectos.create({
+                                idProyecto: proyectoId.dataValues.id,
+                                cantidadAcumulada: data.cantidadAcumulada,
+                                codigoArticulo: data.codigoArticulo,
+                                importeAcumulado: data.importeAcumulado,
+                                nombreArticulo: data.nombreArticulo,
+                                precio: data.precio
+                            });
+                            console.log('data -> ', data);
+                        }
+                    }
+                }
+            }
+
+            res.status(200).send(
+            {
+                message: 'Integracion de proyectos se realizo correctamente.',
+            });
+        } catch (error) {
+            console.error('Error en IntegracionInfoTranferProyectos, ----> ', error);
+            res.status(500).send({
+                message: 'Error en la petición',
+                e
+            });
+            next(e);
+        }
+    },
 
     //Transfiere la informacion de la tabla raw listas de precios grupos (descentos SN por grupos) a la tabla socios de negocios descuentos
     IntegracionInfoTransferSociosNegociosDescuentos: async(req, res, next) =>{

@@ -27,6 +27,8 @@ router.post('/IntegracionInfoTransferSociosNegociosDireccionesOnlyOne', Integrac
 router.get('/IntegracionInfoTransferSociosNegociosDescuentos', IntegracionesInfoTransferController.IntegracionInfoTransferSociosNegociosDescuentos);
 
 
+//Integracion de los proyecto
+router.get('/IntegracionInfoTranferProyectos', IntegracionesInfoTransferController.IntegracionInfoTranferProyectos);
 
 
 //Socios Negocios asignarles vendedor

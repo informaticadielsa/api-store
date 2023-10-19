@@ -123,6 +123,9 @@ import UsuariosProspectos from './UsuariosProspectosModel';
 import UsuariosProspectosDirecciones from './UsuariosProspectosDireccionesModel';
 
 import Correos from './CorreosModel';
+
+import Proyectos from './ProyectosModel';
+import LineasProyectos from './LineasProyectosModel';
 export default {
     Usuario,
     ControlMaestroMultiple,
@@ -233,5 +236,7 @@ export default {
     UsuariosProspectos,
     Correos,
     UsuariosProspectosDirecciones,
-    ConektaPagosDevoluciones
+    ConektaPagosDevoluciones,
+    Proyectos,
+    LineasProyectos
 }
