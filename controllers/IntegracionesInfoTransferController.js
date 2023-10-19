@@ -2546,7 +2546,7 @@ export default {
             //Settear hijos con las 3 listas de precios
                 //Buscara solo elementos que tengan un precio mayor a 0 y listara su ID de producto
                 var queryAllproductosId = `
-                    select 
+                    select  
                         pl_prod_producto_id 
                     from
                         productos_lista_de_precio pldp 
@@ -2600,7 +2600,7 @@ export default {
                     var is_stock_inactive  = false;
                     var tipo_precio_base = '';
                     var tipo_cambio = '';
-
+ 
                     //Si el [1] es stock inactivo
                     if(constqueryGetAllPrecios[1].listp_nombre == "Stock Inactivo" && constqueryGetAllPrecios[1].pl_precio_producto > 0)
                     {

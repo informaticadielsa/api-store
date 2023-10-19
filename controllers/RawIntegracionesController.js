@@ -446,7 +446,7 @@ export default {
                         'Authorization': 'Xswirudy9s873g@id%$sk04mcfnaid'
                     }
                 };
-
+ 
                 var resultCantidadArticulos = await request(options, function (error, response) 
                 {
                     if (error) throw new Error(error);

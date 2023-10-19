@@ -132,27 +132,27 @@ const super_user = [
       ],
     },
     {
-      menu: "Mis cotizaciones y proyectos",
+      menu: "Mis cotizaciones",
       key: "cotizaciones",
       key_id: 5,
       permisos: [
         {
-          titulo: "Historial de cotizaciones y proyectos",
+          titulo: "Historial de cotizaciones",
           key: "view",
           permiso: true,
         },
         {
-          titulo: "Modificación de cotizaciones de cotizaciones y proyectos",
+          titulo: "Modificación de cotizaciones de cotizaciones ",
           key: "edit",
           permiso: true,
         },
         {
-          titulo: "Crear cotizaciones y proyectos",
+          titulo: "Crear cotizaciones",
           key: "create",
           permiso: true,
         },
         {
-          titulo: "Eliminar cotizaciones y proyectos",
+          titulo: "Eliminar cotizaciones",
           key: "delete",
           permiso: true,
         },
@@ -171,6 +171,32 @@ const super_user = [
         {
           titulo: "Actualizar mi lista de favoritos",
           key: "edit",
+          permiso: true,
+        },
+      ],
+    },{
+      menu: "Mis proyectos",
+      key: "proyectos",
+      key_id: 7,
+      permisos: [
+        {
+          titulo: "Historial de proyectos",
+          key: "view",
+          permiso: true,
+        },
+        {
+          titulo: "Modificación de proyectos",
+          key: "edit",
+          permiso: true,
+        },
+        {
+          titulo: "Crear proyectos",
+          key: "create",
+          permiso: true,
+        },
+        {
+          titulo: "Eliminar proyectos",
+          key: "delete",
           permiso: true,
         },
       ],
