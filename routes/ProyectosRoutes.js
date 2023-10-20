@@ -4,13 +4,13 @@ import ProyectosController from '../controllers/ProyectosController';
 
 const router = routerx();
 
-router.get('/listaproyectos', // auth.verifyToken,
+router.post('/listaproyectos', // auth.verifyToken,
     ProyectosController.getAllProyectos);
 
-router.get('/listaproyectossocionegocio', // auth.verifyToken,
+router.post('/listaproyectossocionegocio', // auth.verifyToken,
     ProyectosController.getListProyectos);
 
-router.get('/listaproductosproyecto', // auth.verifyToken,
+router.post('/listaproductosproyecto', // auth.verifyToken,
     ProyectosController.getListProductosProyecto);
 
 export default router;
