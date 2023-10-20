@@ -34,7 +34,7 @@ const LineasProyectos = sequelize.define('LineasProyectos', {
     tableName: 'lineas_proyectos'
 });
 
-LineasProyectos.belongsTo(Proyectos,{
+LineasProyectos.belongsTo(Proyectos, {
     foreignKey: 'idProyecto'
 });
 

@@ -1,4 +1,5 @@
 import {  Sequelize } from 'sequelize';
+import ProyectoEjecucion from './ProyectoEjecucionModel';
 const sequelize = new Sequelize(process.env.POSTGRESQL);
 
 const Proyectos = sequelize.define('Proyectos', {
@@ -63,10 +64,17 @@ const Proyectos = sequelize.define('Proyectos', {
         type: Sequelize.DATE,
         allowNull: false,
     },
+    idProyectoEjecucion: {
+        type: Sequelize.INTEGER,
+    }
 },
 {
     //Options
     tableName: 'proyectos'
+});
+
+Proyectos.belongsTo(ProyectoEjecucion, {
+    foreignKey: 'idProyectoEjecucion'
 });
 
 export default Proyectos;

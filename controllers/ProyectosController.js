@@ -6,7 +6,29 @@ const sequelize = new Sequelize(process.env.POSTGRESQL);
 
 export default {
 
-    getListProyectos: async (req, res, next) =>{
+    getAllProyectos: async (req, res, next) => {
+        try {
+            const dataProyecto = await models.Proyectos.findAll({
+                attributes: {
+                    exclude: ['eliminado', 'updatedAt', 'createdAt']
+                }
+            });
+
+            res.status(200).send({
+                message: 'Lista de Proyectos',
+                proyectos: dataProyecto,
+            });
+
+        } catch (error) {
+            console.error('Error en la funcion getAllProyectos ---> ', e);
+            res.status(500).send({
+                message: 'Error en la petición',
+                e
+            });
+            next(e);
+        }
+    },
+    getListProyectos: async (req, res, next) => {
         try{
             let dataProyecto = await models.Proyectos.findAll({
                 where: {
@@ -40,6 +62,68 @@ export default {
             
         }catch(e){
             console.error('Error en la funcion getListProyectos ---> ', e);
+            res.status(500).send({
+                message: 'Error en la petición',
+                e
+            });
+            next(e);
+        }
+    },
+    getListProductosProyecto: async (req, res, next) => {
+        try {
+            const dataProyecto = await models.Proyectos.findOne({
+                where: {
+                    codigoCliente: req.body.cardcodeSocioNegocio,
+                    idProyecto: req.body.idProyecto,
+                },
+                attributes: {
+                    exclude: ['eliminado', 'updatedAt', 'createdAt']
+                }
+            });
+
+            const dataLineasProyecto = await models.LineasProyectos.findAll({
+                where: {
+                    idProyecto: dataProyecto.dataValues.id
+                },
+            });
+
+            res.status(200).send({
+                message: 'Lista de productos de proyecto',
+                ListaProductosProyecto: dataLineasProyecto
+            });
+        } catch (error) {
+            console.error('Error en la funcion getListProductosProyecto ---> ', e);
+            res.status(500).send({
+                message: 'Error en la petición',
+                e
+            });
+            next(e);
+        }
+    },
+    getListProductosProyecto: async (req, res, next) => {
+        try {
+            const dataProyecto = await models.Proyectos.findOne({
+                where: {
+                    codigoCliente: req.body.cardcodeSocioNegocio,
+                    idProyecto: req.body.idProyecto,
+                },
+                attributes: {
+                    exclude: ['eliminado', 'updatedAt', 'createdAt']
+                }
+            });
+
+            const dataLineasProyecto = await models.LineasProyectos.findAll({
+                where: {
+                    idProyecto: dataProyecto.dataValues.id
+                },
+            });
+
+            res.status(200).send({
+                message: 'Lista de productos de proyecto',
+                ListaProductosProyecto: dataLineasProyecto
+            });
+        } catch (error) {
+            console.error('Error en la funcion getListProductosProyecto ---> ', e);
             res.status(500).send({
                 message: 'Error en la petición',
                 e
