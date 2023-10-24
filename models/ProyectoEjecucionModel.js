@@ -15,12 +15,6 @@ const ProyectoEjecucion = sequelize.define('ProyectoEjecucion', {
     tipoEjecucion: {
         type: Sequelize.INTEGER
     },
-    ejecutado: {
-        type: Sequelize.INTEGER,
-    },
-    fechaEjecucion: {
-        type: Sequelize.DATE
-    },
     createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

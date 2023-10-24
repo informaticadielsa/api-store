@@ -10,7 +10,7 @@ export default {
         try {
             const dataProyecto = await models.Proyectos.findAll({
                 attributes: {
-                    exclude: ['eliminado', 'updatedAt', 'createdAt']
+                    exclude: ['activo', 'updatedAt', 'createdAt']
                 }
             });
 
@@ -20,12 +20,12 @@ export default {
             });
 
         } catch (error) {
-            console.error('Error en la funcion getAllProyectos ---> ', e);
+            console.error('Error en la funcion getAllProyectos ---> ', error);
             res.status(500).send({
                 message: 'Error en la petición',
-                e
+                error
             });
-            next(e);
+            next(error);
         }
     },
     getListProyectos: async (req, res, next) => {
@@ -35,7 +35,7 @@ export default {
                     codigoCliente: req.body.cardcodeSocioNegocio
                 },
                 attributes: {
-                    exclude: ['eliminado', 'updatedAt', 'createdAt']
+                    exclude: ['activo', 'updatedAt', 'createdAt']
                 }
             });
 
@@ -77,7 +77,7 @@ export default {
                     idProyecto: req.body.idProyecto,
                 },
                 attributes: {
-                    exclude: ['eliminado', 'updatedAt', 'createdAt']
+                    exclude: ['activo', 'updatedAt', 'createdAt']
                 }
             });
 
@@ -92,12 +92,12 @@ export default {
                 ListaProductosProyecto: dataLineasProyecto
             });
         } catch (error) {
-            console.error('Error en la funcion getListProductosProyecto ---> ', e);
+            console.error('Error en la funcion getListProductosProyecto ---> ', error);
             res.status(500).send({
                 message: 'Error en la petición',
-                e
+                error
             });
-            next(e);
+            next(error);
         }
     },
     getListProductosProyecto: async (req, res, next) => {
@@ -108,7 +108,7 @@ export default {
                     idProyecto: req.body.idProyecto,
                 },
                 attributes: {
-                    exclude: ['eliminado', 'updatedAt', 'createdAt']
+                    exclude: ['activo', 'updatedAt', 'createdAt']
                 }
             });
 
@@ -123,12 +123,29 @@ export default {
                 ListaProductosProyecto: dataLineasProyecto
             });
         } catch (error) {
-            console.error('Error en la funcion getListProductosProyecto ---> ', e);
+            console.error('Error en la funcion getListProductosProyecto ---> ', error);
             res.status(500).send({
                 message: 'Error en la petición',
-                e
+                error
             });
-            next(e);
+            next(error);
+        }
+    },
+    newProyecto: async (req, res, next) => {
+        try {
+            
+            console.log(req.body.cardcodeSocioNegocio);
+
+            res.status(200).send({
+                message: 'Proyecto creado correctamente'
+            });
+        } catch (error) {
+            console.error('Error en la funcion newProyecto ---> ', error);
+            res.status(500).send({
+                message: 'Error en la petición',
+                error
+            });
+            next(error);
         }
     }
 
