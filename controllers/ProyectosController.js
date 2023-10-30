@@ -1,5 +1,6 @@
 import models from '../models';
 import statusControles from '../mapeos/mapeoControlesMaestrosMultiples';
+import proyectoEmail from './SolicitudCreacionProyectoEmail';
 const { Op } = require("sequelize");
 import {  Sequelize } from 'sequelize';
 const sequelize = new Sequelize(process.env.POSTGRESQL);
@@ -133,8 +134,25 @@ export default {
     },
     newProyecto: async (req, res, next) => {
         try {
-            
-            console.log(req.body.cardcodeSocioNegocio);
+            const dataSocioNegocio = await models.SociosNegocioUsuario.findOne({
+                where: {
+                    snu_cardcode: req.body.cardcodeSocioNegocio
+                }
+            })
+            console.log('req ', req.body);
+            await models.ProyectoSolicitudes.create({
+                id: null,
+                contacto: req.body.contacto,
+                telefono: req.body.telefono,
+                correo: req.body.correo,
+                usuarioFinal: req.body.usuario_final,
+                ciudad: req.body.ciudad,
+                updatedAt: Date(),
+                createdAt: Date(),
+                cardcode: req.body.cardcodeSocioNegocio
+            });
+
+            await proyectoEmail.solicitudCreacionProyectoEmail(null, dataSocioNegocio, req.body);
 
             res.status(200).send({
                 message: 'Proyecto creado correctamente'
@@ -147,6 +165,34 @@ export default {
             });
             next(error);
         }
-    }
+    },
+    getPriceProductProyecto: async (req, res, next) => {
+        try {
+            console.log('req -> ', req.body);
+            const data = await sequelize.query(`
+                SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
+                INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
+                INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
+                WHERE sn.sn_socios_negocio_id = '${req.body.socio_de_negocio_id}'
+                AND lpro."codigoArticulo" = '${req.body.prod_sku}'
+                AND pro.estatus = 'Aprobado'`,
+            {
+                type: sequelize.QueryTypes.SELECT 
+            });
+
+            const newData = data[0];
+            res.status(200).send({
+                message: 'Precio del producto en proyecto',
+                data: newData
+            });
+        } catch (error) {
+            console.error('Error en la funcion getPriceProductProyecto ---> ', error);
+            res.status(500).send({
+                message: 'Error en la petición',
+                error
+            });
+            next(error);
+        }
+    },
 
 }

@@ -1,5 +1,4 @@
 import {  Sequelize } from 'sequelize';
-import ProyectoEjecucion from './ProyectoEjecucionModel';
 const sequelize = new Sequelize(process.env.POSTGRESQL);
 
 const Proyectos = sequelize.define('Proyectos', {

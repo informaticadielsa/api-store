@@ -1,19 +1,30 @@
 import {  Sequelize } from 'sequelize';
-import TipoEjecucion from './TipoEjecucionModel';
 const sequelize = new Sequelize(process.env.POSTGRESQL);
 
-const ProyectoEjecucion = sequelize.define('ProyectoEjecucion', {
+const ProyectoSolicitudes = sequelize.define('ProyectoSolicitudes', {
     id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
     },
-    estructuraEjecucion: {
+    contacto: {
         type: Sequelize.STRING
     },
-    tipoEjecucion: {
-        type: Sequelize.INTEGER
+    telefono: {
+        type: Sequelize.STRING
+    },
+    correo: {
+        type: Sequelize.STRING
+    },
+    usuarioFinal: {
+        type: Sequelize.STRING
+    },
+    usuarioFinal: {
+        type: Sequelize.STRING
+    },
+    ciudad: {
+        type: Sequelize.STRING
     },
     createdAt: {
         type: Sequelize.DATE,
@@ -24,14 +35,13 @@ const ProyectoEjecucion = sequelize.define('ProyectoEjecucion', {
         type: Sequelize.DATE,
         allowNull: false,
     },
+    cardcode: {
+        type: Sequelize.STRING
+    }
 },
 {
     //Options
-    tableName: 'proyecto_ejecucion'
+    tableName: 'proyecto_solicitudes'
 });
 
-ProyectoEjecucion.belongsTo(TipoEjecucion, {
-    foreignKey: 'tipoEjecucion'
-});
-
-export default ProyectoEjecucion;
+export default ProyectoSolicitudes;

@@ -921,6 +921,7 @@ module.exports = {
             constCarritoDeCompra.dataValues.TotalFinal = parseFloat(constCarritoDeCompra.dataValues.precioFinalTotalMasImpuestos) + constCarritoDeCompra.dataValues.costoEnvioMasImpuesto
             constCarritoDeCompra.dataValues.TotalFinal = parseFloat(constCarritoDeCompra.dataValues.TotalFinal.toFixed(2))
 
+            // await productosUtils.getPriceByProjectProduct(constProductoCarritoDeCompra, cdc_sn_socio_de_negocio_id);
 
             constCarritoDeCompra.dataValues.productos = constProductoCarritoDeCompra
 
