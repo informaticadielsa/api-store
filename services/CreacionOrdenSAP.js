@@ -153,7 +153,7 @@ module.exports = {
 
                                 if(status.status == true)
                                 {
-                                    var lineas = await this.validarLineas(constCompraFinalizada, constProductoCompraFinalizada, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre)
+                                    var lineas = await this.validarLineas(constCompraFinalizada,constProductoCompraFinalizada, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre, constSociosNegocio.sn_socios_negocio_id)
                                     console.log(222222)
                                     console.log(lineas)
 
@@ -204,7 +204,7 @@ module.exports = {
                                         const bodyUpdate2 = {
                                             "cf_sap_json_creacion" :  dataCreateOrder
                                         };
-                                        await constCompraFinalizada.update(bodyUpdate2);
+                                        await  constCompraFinalizada.update(bodyUpdate2);
 
 
                                             console.log("Integrar 100000000000000")
@@ -553,7 +553,7 @@ module.exports = {
                                     //Buscara los productos que no son USD para mandarlos a SAP
                                     if(constProductoCompraFinalizadaNoUSD.length > 0 || isRecoleccion == false)
                                     {
-                                        var lineas = await this.validarLineas(constCompraFinalizada, constProductoCompraFinalizadaNoUSD, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre)
+                                        var lineas = await this.validarLineas(constCompraFinalizada, constProductoCompraFinalizadaNoUSD, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre, constSociosNegocio.sn_socios_negocio_id)
 
                                         if(isRecoleccion == false)
                                         {
@@ -644,7 +644,7 @@ module.exports = {
                                     //Mandara los productos en precio USD a SAP
                                     if(constProductoCompraFinalizadaUSD.length > 0)
                                     {
-                                        var lineas = await this.validarLineasDivididaUSD(constCompraFinalizada, constProductoCompraFinalizadaUSD, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre)
+                                        var lineas = await this.validarLineasDivididaUSD(constCompraFinalizada, constProductoCompraFinalizadaUSD, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre, constSociosNegocio.sn_socios_negocio_id)
 
                                         // if(isRecoleccion == false && CostoEnvioEnUSDBool == true)
                                         // {
@@ -1153,7 +1153,7 @@ module.exports = {
 
                                 if(status.status == true)
                                 {
-                                    var lineas = await this.validarLineas(constPreCompraFinalizada, constPreProductoCompraFinalizada)
+                                    var lineas = await this.validarLineas(constPreCompraFinalizada, constPreProductoCompraFinalizada, null,null,sn_socios_negocio_id)
 
                                     if(lineas.status == true)
                                     {
@@ -1887,7 +1887,7 @@ module.exports = {
             return status
         }
     },
-    validarLineas: async function (constPreCompraFinalizada, constPreProductoCompraFinalizada, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre) {
+    validarLineas: async function (constPreCompraFinalizada, constPreProductoCompraFinalizada, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre, sn_socios_negocio_id) {
         try{
             var array = []
 
@@ -2083,17 +2083,29 @@ module.exports = {
                         updatedAt: Date()
                     });
                 }
-
+                
+                const data = await sequelize.query(`
+                SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
+                INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
+                INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
+                WHERE sn.sn_socios_negocio_id = '${sn_socios_negocio_id}'
+                AND lpro."codigoArticulo" = '${constProducto.dataValues.prod_sku}'
+                AND pro.estatus = 'Aprobado'`,
+            {
+                type: sequelize.QueryTypes.SELECT 
+            });
+             
+                 const newProductProyect =data[0];
                 //Variable para Lineas
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": precioBase,
+                    "precioUnitario": newProductProyect ? Number(newProductProyect.precio) : precioBase,
                     "codigoImpuesto": ImpuestoFinal,
                     "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
-                    "acuerdoG": null
+                    "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
 
                 array.push(jsonArray);
@@ -2115,7 +2127,7 @@ module.exports = {
             return status
         }
     },
-    validarLineasDivididaUSD: async function (constPreCompraFinalizada, constPreProductoCompraFinalizada, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre) {
+    validarLineasDivididaUSD: async function (constPreCompraFinalizada, constPreProductoCompraFinalizada, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre, sn_socios_negocio_id) {
         try{
             var array = []
 
@@ -2340,20 +2352,30 @@ module.exports = {
                     });
                 }
 
+                const data = await sequelize.query(`
+                SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
+                INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
+                INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
+                WHERE sn.sn_socios_negocio_id = '${sn_socios_negocio_id}'
+                AND lpro."codigoArticulo" = '${constProducto.dataValues.prod_sku}'
+                AND pro.estatus = 'Aprobado'`,
+            {
+                type: sequelize.QueryTypes.SELECT 
+            });
 
 
+                const newProductProyect =data[0];
                 //Variable para Lineas
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": precioBase,
+                    "precioUnitario": newProductProyect ? Number(newProductProyect.precio) : precioBase,
                     "codigoImpuesto": ImpuestoFinal,
                     "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
-                    "acuerdoG": null
+                    "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
-
 
 
 

@@ -153,9 +153,10 @@ export default {
             });
 
             const newData = data[0];
+          
             res.status(200).send({
                 message: 'Precio del producto en proyecto',
-                data: newData
+                data: newData ? 'hola:'+newData.precio : ' no existe'
             });
         } catch (error) {
             console.error('Error en la funcion getPriceProductProyecto ---> ', error);
