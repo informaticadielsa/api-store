@@ -4096,22 +4096,25 @@ export default {
                 SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
                 INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
                 INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
-                WHERE sn.sn_socios_negocio_id = '${req.body.socio_de_negocio_id}'
-                AND lpro."codigoArticulo" = '${req.body.prod_sku}'
+                WHERE sn.sn_socios_negocio_id = '${constSociosNegocio.sn_socios_negocio_id}'
+                AND lpro."codigoArticulo" = '${constProducto.dataValues.prod_sku}'
                 AND pro.estatus = 'Aprobado'`,
             {
                 type: sequelize.QueryTypes.SELECT 
             });
-            
+            const newProductProyect =data[0];
+                  //Variable para Lineas 
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": almacenAsignadoPerProducto,
-                    "precioUnitario": constProductoCompraFinalizada[i].dataValues.pcf_precio,
+                    "precioUnitario":newProductProyect ? Number(newProductProyect.precio): constProductoCompraFinalizada[i].dataValues.pcf_precio,
                     "codigoImpuesto": ImpuestoFinal,
                     "cantidad": constProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
-                    "acuerdoG": null
+                    "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
- 
+               
+          
+             
                 array.push(jsonArray);
             }
 
