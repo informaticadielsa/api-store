@@ -184,7 +184,7 @@ export default {
           
             res.status(200).send({
                 message: newData ? 'Precio del producto en proyecto' : 'No existe ningun proyecto con este producto, activo.',
-                data: newData ? parseInt(newData.idProyecto): null
+                data: newData ? newData: null
             });
         } catch (error) {
             console.error('Error en la funcion getPriceProductProyecto ---> ', error);
