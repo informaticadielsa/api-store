@@ -204,7 +204,7 @@ module.exports = {
                                         const bodyUpdate2 = {
                                             "cf_sap_json_creacion" :  dataCreateOrder
                                         };
-                                        await constCompraFinalizada.update(bodyUpdate2);
+                                        await  constCompraFinalizada.update(bodyUpdate2);
 
 
                                             console.log("Integrar 100000000000000")

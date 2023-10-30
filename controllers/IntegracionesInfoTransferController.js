@@ -4077,7 +4077,7 @@ export default {
 
 
 
-            //Obtener Lineas
+            //Obtener Lineas /Productos poner el acuerdo
             for (var i = 0; i < constProductoCompraFinalizada.length; i++) 
             {
                 //Busca el SKU de los productos que se mandara
@@ -4097,7 +4097,7 @@ export default {
                     "cantidad": constProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": null
                 }
-
+ 
                 array.push(jsonArray);
             }
 
