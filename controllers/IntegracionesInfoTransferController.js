@@ -866,6 +866,7 @@ export default {
                             recordatorio: element.recordatorio,
                             referenciaFabrica: element.referenciaFabrica,
                             renovacion: element.renovacion,
+                            total: element.total,
                             unidadesRecordatorio: element.unidadesRecordatorio,
                             updatedAt: Date(),
                         });
@@ -901,8 +902,9 @@ export default {
                             recordatorio: element.recordatorio,
                             referenciaFabrica: element.referenciaFabrica,
                             renovacion: element.renovacion,
+                            total: element.total,
                             unidadesRecordatorio: element.unidadesRecordatorio,
-                            eliminado: 0,
+                            activo: 1,
                             updatedAt: Date(),
                             createdAt: Date(),
                         });
@@ -932,9 +934,9 @@ export default {
             console.error('Error en IntegracionInfoTranferProyectos, ----> ', error);
             res.status(500).send({
                 message: 'Error en la petición',
-                e
+                error
             });
-            next(e);
+            next(error);
         }
     },
 

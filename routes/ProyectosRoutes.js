@@ -13,4 +13,10 @@ router.post('/listaproyectossocionegocio', // auth.verifyToken,
 router.post('/listaproductosproyecto', // auth.verifyToken,
     ProyectosController.getListProductosProyecto);
 
+router.post('/nuevoproyecto', // auth.verifyToken,
+    ProyectosController.newProyecto);
+
+router.post('/obtenerprecioproductoproyecto', // auth.verifyToken,
+    ProyectosController.getPriceProductProyecto);
+
 export default router;

@@ -1034,7 +1034,6 @@ export default{
 
             checkoutJson.dataValues.productos = await getCheckout.removerLineasCantidadCeroDeStockInactivo(checkoutJson.dataValues.productos);
             // checkoutJson.dataValues.productos = await productosUtils.getConversionUSD2(checkoutJson.dataValues.productos);
-            console.log('checkoutJson.dataValues.productos --> ', checkoutJson.dataValues.productos)
             res.status(200).send({
                 message: 'Checkout Obtenido',
                 cdc_carrito_de_compra_id: checkoutJson
