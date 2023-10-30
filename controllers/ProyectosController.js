@@ -81,43 +81,15 @@ export default {
                     exclude: ['activo', 'updatedAt', 'createdAt']
                 }
             });
-
-            const dataLineasProyecto = await models.LineasProyectos.findAll({
-                where: {
-                    idProyecto: dataProyecto.dataValues.id
-                },
-            });
-
-            res.status(200).send({
-                message: 'Lista de productos de proyecto',
-                ListaProductosProyecto: dataLineasProyecto
-            });
-        } catch (error) {
-            console.error('Error en la funcion getListProductosProyecto ---> ', error);
-            res.status(500).send({
-                message: 'Error en la petición',
-                error
-            });
-            next(error);
-        }
-    },
-    getListProductosProyecto: async (req, res, next) => {
-        try {
-            const dataProyecto = await models.Proyectos.findOne({
-                where: {
-                    codigoCliente: req.body.cardcodeSocioNegocio,
-                    idProyecto: req.body.idProyecto,
-                },
-                attributes: {
-                    exclude: ['activo', 'updatedAt', 'createdAt']
-                }
-            });
-
-            const dataLineasProyecto = await models.LineasProyectos.findAll({
-                where: {
-                    idProyecto: dataProyecto.dataValues.id
-                },
-            });
+            console.log('dataProyecto ', dataProyecto)
+            let dataLineasProyecto = [];
+            if(dataProyecto){
+                dataLineasProyecto = await models.LineasProyectos.findAll({
+                    where: {
+                        idProyecto: dataProyecto.dataValues.id
+                    },
+                });
+            } 
 
             res.status(200).send({
                 message: 'Lista de productos de proyecto',
