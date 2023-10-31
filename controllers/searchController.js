@@ -46,9 +46,18 @@ export default {
                 attributes: ['prod_nombre'],
                 where: {
                     prod_cmm_estatus_id: 1000016,
-                    prod_nombre: {
-                        [Sequelize.Op.like]: `${word}%`,
-                    },
+                    [Op.or]: [
+                        {
+                            prod_nombre: {
+                                [Sequelize.Op.like]: `${word}%`,
+                            },
+                        },
+                        {
+                            prod_nombre: {
+                                [Sequelize.Op.like]: `%${word}%`,
+                            },
+                        },
+                    ],
                     prod_prod_producto_padre_sku: {
                         [Op.ne]: null
                     }

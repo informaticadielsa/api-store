@@ -10669,7 +10669,8 @@ export default {
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
-                                    p1.prod_nombre like '`+searchCondition+`%'
+                                    p1.prod_nombre like '`+searchCondition+`%' 
+                                    or p1.prod_nombre like '%`+searchCondition+`%'
                                     and prod_cmm_estatus_id = 1000016 
                                     and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true

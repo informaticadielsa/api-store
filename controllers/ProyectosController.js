@@ -84,16 +84,21 @@ export default {
             console.log('dataProyecto ', dataProyecto)
             let dataLineasProyecto = [];
             if(dataProyecto){
-                dataLineasProyecto = await models.LineasProyectos.findAll({
-                    where: {
-                        idProyecto: dataProyecto.dataValues.id
-                    },
+                dataLineasProyecto = await sequelize.query(`
+                    SELECT lpro.*, pro.prod_nombre_extranjero, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM lineas_proyectos AS lpro
+                    LEFT JOIN productos AS pro ON pro."prod_sku" = lpro."codigoArticulo"
+                    LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
+                    WHERE lpro."idProyecto" = ${dataProyecto.dataValues.id};`,
+                {
+                    type: sequelize.QueryTypes.SELECT 
                 });
+
             } 
 
             res.status(200).send({
                 message: 'Lista de productos de proyecto',
-                ListaProductosProyecto: dataLineasProyecto
+                ListaProductosProyecto: dataLineasProyecto,
+                ProyectoInfo: dataProyecto
             });
         } catch (error) {
             console.error('Error en la funcion getListProductosProyecto ---> ', error);
@@ -140,14 +145,14 @@ export default {
     },
     getPriceProductProyecto: async (req, res, next) => {
         try {
-            console.log('req -> ', req.body);
+            
             const data = await sequelize.query(`
                 SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
                 INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
                 INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
                 WHERE sn.sn_socios_negocio_id = '${req.body.socio_de_negocio_id}'
                 AND lpro."codigoArticulo" = '${req.body.prod_sku}'
-                AND pro.estatus = 'Aprobado'`,
+                AND pro.estatus = 'Autorizado' AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
             {
                 type: sequelize.QueryTypes.SELECT 
             });

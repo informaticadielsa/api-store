@@ -816,7 +816,7 @@ export default {
         }
     },
 
-    IntegracionInfoTranferProyectos: async(req, res, next) => {
+    IntegracionInfoTransferProyectos: async(req, res, next) => {
         try {
             
             const options = {
