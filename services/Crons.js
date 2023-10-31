@@ -10,7 +10,7 @@ cron.schedule("0 5 * * *", () =>{integrations.ExecuteEndpoint("/api/integracione
 cron.schedule("0 9 * * *", () =>{integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionInfoTransferTipoCambioUSD")});
 
 // Agregar y actualizar los proyectos
-//cron.schedule("0 23 * * *", () =>{integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionInfoTransferProyectos/")});
+cron.schedule("0 23 * * *", () =>{integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionInfoTransferProyectos/")});
 
 //CORRER GENERADOR DE TOTAL PRODUCTOS VENDIDOS PARA LA TABLA PRODUCTOS 1 O 2 VECES AL DIA
 cron.schedule("0 5 * * *", () =>{integrations.ExecuteEndpoint("/api/productos/cargarProductosMasVendidos")});
