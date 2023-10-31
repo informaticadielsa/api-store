@@ -28,7 +28,7 @@ router.get('/IntegracionInfoTransferSociosNegociosDescuentos', IntegracionesInfo
 
 
 //Integracion de los proyecto
-router.get('/IntegracionInfoTranferProyectos', IntegracionesInfoTransferController.IntegracionInfoTranferProyectos);
+router.get('/IntegracionInfoTransferProyectos', IntegracionesInfoTransferController.IntegracionInfoTransferProyectos);
 
 
 //Socios Negocios asignarles vendedor
