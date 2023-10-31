@@ -124,7 +124,7 @@ export default {
                 cardcode: req.body.cardcodeSocioNegocio
             });
 
-            await proyectoEmail.solicitudCreacionProyectoEmail(null, dataSocioNegocio, req.body);
+            await proyectoEmail.solicitudCreacionProyectoEmail(null, dataSocioNegocio, req.body, req.body.cardcodeSocioNegocio);
 
             res.status(200).send({
                 message: 'Proyecto creado correctamente'
