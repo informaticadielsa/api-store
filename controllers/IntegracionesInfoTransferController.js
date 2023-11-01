@@ -862,7 +862,7 @@ export default {
                             idProyecto: element.id,
                             moneda: element.moneda,
                             nombreCliente: element.nombreCliente,
-                            nombreProyecto: element.nombreProyecto,
+                            nombreProyecto: 'XXXXX',
                             recordatorio: element.recordatorio,
                             referenciaFabrica: element.referenciaFabrica,
                             renovacion: element.renovacion,
@@ -880,7 +880,7 @@ export default {
                             });
 
                             await lineasProyecto.update({
-                                cantidadAcumulada: data.cantidadAcumulada,
+                                cantidadAcumulada: 2,
                                 importeAcumulado: data.importeAcumulado,
                                 nombreArticulo: data.nombreArticulo,
                                 precio: data.precio
