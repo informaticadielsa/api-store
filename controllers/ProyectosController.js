@@ -88,7 +88,7 @@ export default {
                     SELECT  lpro.*, pro.prod_nombre_extranjero, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM lineas_proyectos AS lpro
                     LEFT JOIN productos AS pro ON pro."prod_sku" = lpro."codigoArticulo"
                     LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
-                    WHERE lpro."idProyecto" = ${dataProyecto.dataValues.id};
+                    WHERE lpro."idProyecto" = ${dataProyecto.dataValues.id}
                     limit 1
                     `,
                 {
