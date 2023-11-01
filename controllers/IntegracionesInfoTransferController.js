@@ -875,7 +875,7 @@ export default {
                             const data = element.lineas[e];
 
                             const lineasProyecto = await models.LineasProyectos.findOne({
-                                idProyecto: proyectos ? element.id : 0,
+                                idProyecto: proyectos.dataValues.id,
                                 codigoArticulo: data.codigoArticulo,
                             });
 
@@ -928,6 +928,7 @@ export default {
 
             res.status(200).send(
             {
+                proyectos,
                 message: 'Integracion de proyectos se realizo correctamente.',
             });
         } catch (error) {
