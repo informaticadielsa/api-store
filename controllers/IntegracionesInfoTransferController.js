@@ -880,7 +880,7 @@ export default {
                             });
 
                             await lineasProyecto.update({
-                                cantidadAcumulada: data.cantidadAcumulada,
+                                cantidadAcumulada: parseInt(data.cantidadAcumulada),
                                 importeAcumulado: data.importeAcumulado,
                                 nombreArticulo: data.nombreArticulo,
                                 precio: data.precio
@@ -914,7 +914,7 @@ export default {
 
                             await models.LineasProyectos.create({
                                 idProyecto: proyectoId.dataValues.id,
-                                cantidadAcumulada: data.cantidadAcumulada,
+                                cantidadAcumulada: parseInt(data.cantidadAcumulada),
                                 codigoArticulo: data.codigoArticulo,
                                 importeAcumulado: data.importeAcumulado,
                                 nombreArticulo: data.nombreArticulo,
