@@ -839,18 +839,18 @@ export default {
                 attributes: ["snu_cardcode"]
             });
             const socioNegocioCardCode = dataSocioNegocio.map((item) => item.dataValues.snu_cardcode);
-
+            let arrayProyects= []
             for (let index = 0; index < resultJson.proyectos.length; index++) {
                 const element = resultJson.proyectos[index];
                 const evaluacion = socioNegocioCardCode.includes(element.codigoCliente);
-
+                
                 if(evaluacion) {
                     const proyectos = await models.Proyectos.findOne({
                         where: {
                             idProyecto: element.id,
                         },
                     });
-
+                    arrayProyects.push(proyectos)
                     if(proyectos) {
                         await proyectos.update({
                             CodigoEjecutivo: element.CodigoEjecutivo,
@@ -928,7 +928,7 @@ export default {
 
             res.status(200).send(
             {
-                proyectos,
+                arrayProyects,
                 message: 'Integracion de proyectos se realizo correctamente.',
             });
         } catch (error) {
