@@ -839,7 +839,7 @@ export default {
                 attributes: ["snu_cardcode"]
             });
             const socioNegocioCardCode = dataSocioNegocio.map((item) => item.dataValues.snu_cardcode);
-            let arrayProyects= []
+          
             for (let index = 0; index < resultJson.proyectos.length; index++) {
                 const element = resultJson.proyectos[index];
                 const evaluacion = socioNegocioCardCode.includes(element.codigoCliente);
@@ -850,9 +850,9 @@ export default {
                             idProyecto: element.id,
                         },
                     });
-                    arrayProyects.push(proyectos)
+                   
                     if(proyectos) {
-                        const idProyec = proyectos.dataValues.id;
+                        const  proyectID = proyectos.dataValues.id
                         await proyectos.update({
                             CodigoEjecutivo: element.CodigoEjecutivo,
                             NombreEjecutivo: element.NombreEjecutivo,
@@ -863,7 +863,7 @@ export default {
                             idProyecto: element.id,
                             moneda: element.moneda,
                             nombreCliente: element.nombreCliente,
-                            nombreProyecto: 'XXXXX',
+                            nombreProyecto: element.nombreProyecto,
                             recordatorio: element.recordatorio,
                             referenciaFabrica: element.referenciaFabrica,
                             renovacion: element.renovacion,
@@ -875,14 +875,13 @@ export default {
                         for (let e = 0; e < element.lineas.length; e++) {
                             const data = element.lineas[e];
 
-                            const lineasProyecto = await models.LineasProyectos.findOne({
-                                where:{
-                                idProyecto: idProyec,
+                            const lineasProyecto = await models.LineasProyectos.findOne({where:{
+                                idProyecto: proyectID,
                                 codigoArticulo: data.codigoArticulo}
                             });
 
                             await lineasProyecto.update({
-                                cantidadAcumulada: 2,
+                                cantidadAcumulada: data.cantidadAcumulada,
                                 importeAcumulado: data.importeAcumulado,
                                 nombreArticulo: data.nombreArticulo,
                                 precio: data.precio
@@ -930,7 +929,7 @@ export default {
 
             res.status(200).send(
             {
-                arrayProyects,
+              
                 message: 'Integracion de proyectos se realizo correctamente.',
             });
         } catch (error) {
