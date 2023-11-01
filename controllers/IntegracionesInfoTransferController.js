@@ -852,6 +852,7 @@ export default {
                     });
                     arrayProyects.push(proyectos)
                     if(proyectos) {
+                        const idProyec = proyectos.dataValues.id;
                         await proyectos.update({
                             CodigoEjecutivo: element.CodigoEjecutivo,
                             NombreEjecutivo: element.NombreEjecutivo,
@@ -875,8 +876,9 @@ export default {
                             const data = element.lineas[e];
 
                             const lineasProyecto = await models.LineasProyectos.findOne({
-                                idProyecto: proyectos.dataValues.id,
-                                codigoArticulo: data.codigoArticulo,
+                                where:{
+                                idProyecto: idProyec,
+                                codigoArticulo: data.codigoArticulo}
                             });
 
                             await lineasProyecto.update({
