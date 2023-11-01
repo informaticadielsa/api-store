@@ -875,12 +875,12 @@ export default {
                             const data = element.lineas[e];
 
                             const lineasProyecto = await models.LineasProyectos.findOne({
-                                idProyecto: proyectos.dataValues.id,
+                                idProyecto: proyectos ? element.id : 0,
                                 codigoArticulo: data.codigoArticulo,
                             });
 
                             await lineasProyecto.update({
-                                cantidadAcumulada: parseInt(data.cantidadAcumulada),
+                                cantidadAcumulada: data.cantidadAcumulada,
                                 importeAcumulado: data.importeAcumulado,
                                 nombreArticulo: data.nombreArticulo,
                                 precio: data.precio
@@ -914,7 +914,7 @@ export default {
 
                             await models.LineasProyectos.create({
                                 idProyecto: proyectoId.dataValues.id,
-                                cantidadAcumulada: parseInt(data.cantidadAcumulada),
+                                cantidadAcumulada: data.cantidadAcumulada,
                                 codigoArticulo: data.codigoArticulo,
                                 importeAcumulado: data.importeAcumulado,
                                 nombreArticulo: data.nombreArticulo,
