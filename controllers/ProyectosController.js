@@ -154,7 +154,7 @@ export default {
                 INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
                 WHERE sn.sn_socios_negocio_id = '${req.body.socio_de_negocio_id}'
                 AND lpro."codigoArticulo" = '${req.body.prod_sku}'
-                AND pro.estatus = 'Autorizado' AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
             {
                 type: sequelize.QueryTypes.SELECT 
             });

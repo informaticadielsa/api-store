@@ -2090,7 +2090,7 @@ module.exports = {
                 INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
                 WHERE sn.sn_socios_negocio_id = '${sn_socios_negocio_id}'
                 AND lpro."codigoArticulo" = '${constProducto.dataValues.prod_sku}'
-                AND pro.estatus = 'Autorizado' AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
             {
                 type: sequelize.QueryTypes.SELECT 
             });
@@ -2358,7 +2358,7 @@ module.exports = {
                 INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
                 WHERE sn.sn_socios_negocio_id = '${sn_socios_negocio_id}'
                 AND lpro."codigoArticulo" = '${constProducto.dataValues.prod_sku}'
-                AND pro.estatus = 'Autorizado' AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
             {
                 type: sequelize.QueryTypes.SELECT 
             });
