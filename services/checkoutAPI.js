@@ -921,8 +921,6 @@ module.exports = {
             constCarritoDeCompra.dataValues.TotalFinal = parseFloat(constCarritoDeCompra.dataValues.precioFinalTotalMasImpuestos) + constCarritoDeCompra.dataValues.costoEnvioMasImpuesto
             constCarritoDeCompra.dataValues.TotalFinal = parseFloat(constCarritoDeCompra.dataValues.TotalFinal.toFixed(2))
 
-            // await productosUtils.getPriceByProjectProduct(constProductoCarritoDeCompra, cdc_sn_socio_de_negocio_id);
-
             constCarritoDeCompra.dataValues.productos = constProductoCarritoDeCompra
 
 
@@ -933,8 +931,16 @@ module.exports = {
 
 
 
+            const { cmm_valor: USDValor } = await models.ControlMaestroMultiple.findOne(
+            {
+                where: {
+                    cmm_nombre: "TIPO_CAMBIO_USD"
+                },
+                attributes: ["cmm_valor"]
+            });
 
-
+            const seen = {};
+            const duplicates = [];
 
 
             //Agregar valores finales en USD de productos
@@ -975,10 +981,41 @@ module.exports = {
                 {
                     constCarritoDeCompra.dataValues.productos[y].dataValues.precioFinal_USD = 0
                 }
+
+                const dataProduct = await sequelize.query(`
+                    SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
+                    INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
+                    INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
+                    WHERE sn.sn_socios_negocio_id = '${cdc_sn_socio_de_negocio_id}'
+                    AND lpro."codigoArticulo" = '${constCarritoDeCompra.dataValues.productos[y].dataValues.prod_sku}'
+                    AND pro.estatus = 'Aprobado' AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                {
+                    type: sequelize.QueryTypes.SELECT 
+                });
+                
+                if(dataProduct[0]) {
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProducNoAcuerdo = dataProduct[0].idProyecto;
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice = dataProduct[0].moneda === 'MXN' 
+                        ? Number(dataProduct[0].precio)
+                        : Number(dataProduct[0].precio) * USDValor;
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD = dataProduct[0].moneda === 'USD' 
+                    ? Number(dataProduct[0].precio)
+                    : Number(dataProduct[0].precio) / USDValor;
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductCoinBase = dataProduct[0].moneda;
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProduct = true;
+                } else {
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProducNoAcuerdo = null;
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice = 0;
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductCoin = null;
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProduct = false;
+                }
+
+                if (seen[constCarritoDeCompra.dataValues.productos[y].dataValues.pcdc_prod_producto_id]) {
+                    duplicates.push(constCarritoDeCompra.dataValues.productos[y].dataValues);
+                } else {
+                    seen[constCarritoDeCompra.dataValues.productos[y].dataValues.pcdc_prod_producto_id] = true;
+                }
             }
-
-
-
 
             //Retorna el id del carrito segun el id del SN
 

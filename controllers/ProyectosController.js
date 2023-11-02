@@ -145,6 +145,13 @@ export default {
     },
     getPriceProductProyecto: async (req, res, next) => {
         try {
+            const { cmm_valor: USDValor } = await models.ControlMaestroMultiple.findOne(
+            {
+                where: {
+                    cmm_nombre: "TIPO_CAMBIO_USD"
+                },
+                attributes: ["cmm_valor"]
+            });
             
             const data = await sequelize.query(`
                 SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
@@ -157,7 +164,19 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
 
-            const newData = data[0];
+            let newData = null;
+            if(data) {
+                newData = {
+                    ...data[0],
+                    precio: data[0].moneda === 'MXN'
+                        ? Number(data[0].precio)
+                        : Number(data[0].precio)  * USDValor,
+                    precioUSD: data[0].moneda === 'USD' 
+                        ? Number(data[0].precio)
+                        : Number(data[0].precio) / USDValor,
+    
+                };
+            }
           
             res.status(200).send({
                 message: newData ? 'Precio del producto en proyecto' : 'No existe ningun proyecto con este producto, activo.',
