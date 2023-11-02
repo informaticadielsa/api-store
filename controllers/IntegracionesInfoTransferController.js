@@ -839,19 +839,20 @@ export default {
                 attributes: ["snu_cardcode"]
             });
             const socioNegocioCardCode = dataSocioNegocio.map((item) => item.dataValues.snu_cardcode);
-
+          
             for (let index = 0; index < resultJson.proyectos.length; index++) {
                 const element = resultJson.proyectos[index];
                 const evaluacion = socioNegocioCardCode.includes(element.codigoCliente);
-
+                
                 if(evaluacion) {
                     const proyectos = await models.Proyectos.findOne({
                         where: {
                             idProyecto: element.id,
                         },
                     });
-
+                   
                     if(proyectos) {
+                        const  proyectID = proyectos.dataValues.id
                         await proyectos.update({
                             CodigoEjecutivo: element.CodigoEjecutivo,
                             NombreEjecutivo: element.NombreEjecutivo,
@@ -874,9 +875,9 @@ export default {
                         for (let e = 0; e < element.lineas.length; e++) {
                             const data = element.lineas[e];
 
-                            const lineasProyecto = await models.LineasProyectos.findOne({
-                                idProyecto: proyectos.dataValues.id,
-                                codigoArticulo: data.codigoArticulo,
+                            const lineasProyecto = await models.LineasProyectos.findOne({where:{
+                                idProyecto: proyectID,
+                                codigoArticulo: data.codigoArticulo}
                             });
 
                             await lineasProyecto.update({
@@ -928,6 +929,7 @@ export default {
 
             res.status(200).send(
             {
+              
                 message: 'Integracion de proyectos se realizo correctamente.',
             });
         } catch (error) {
@@ -4098,7 +4100,7 @@ export default {
                 INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
                 WHERE sn.sn_socios_negocio_id = '${constSociosNegocio.sn_socios_negocio_id}'
                 AND lpro."codigoArticulo" = '${constProducto.dataValues.prod_sku}'
-                AND pro.estatus = 'Aprobado'`,
+                AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
             {
                 type: sequelize.QueryTypes.SELECT 
             });

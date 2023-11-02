@@ -5,7 +5,7 @@ import { Sequelize } from "sequelize";
 const sequelize = new Sequelize(process.env.POSTGRESQL);
 import date_and_time from "date-and-time";
 
-exports.solicitudCreacionProyectoEmail = async (mail, dataSocioNegocio, dataReceived) => {
+exports.solicitudCreacionProyectoEmail = async (mail, dataSocioNegocio, dataReceived, cardcode) => {
   try {
     var htmlBody =
       `
@@ -206,16 +206,36 @@ exports.solicitudCreacionProyectoEmail = async (mail, dataSocioNegocio, dataRece
       </html>
     `;
 
+    const constSocioNegocioSap = await models.SociosNegocio.findOne({where:{sn_cardcode:cardcode}})
+      
+
+
+    const constUsuarioVendedor = await models.Usuario.findOne({
+      where: {
+        usu_codigo_vendedor: constSocioNegocioSap.sn_vendedor_codigo_sap,
+      },
+    });
+
+    let vendedorAsignado =''
+    let correoVendedorAsignado=''
+    if(constUsuarioVendedor)
+    {
+      vendedorAsignado = constUsuarioVendedor.usu_nombre //+ " " + constUsuarioVendedor.usu_primer_apellido + " " + (constUsuarioVendedor.usu_segundo_apellido!= null ? constUsuarioVendedor.usu_segundo_apellido :'')
+      correoVendedorAsignado =  constUsuarioVendedor.usu_correo_electronico
+    }
+
+
     var maillist;
     if (process.env.EMAIL_ENV == "development") {
       maillist = [
         "informatica@dielsa.com",
         "oscar.espinosa@daltum.mx",
         "luis.sanchez@daltum.mx",
-        mail === null ? "" : mail
+        mail === null ? "" : mail,
+        correoVendedorAsignado != '' ? correoVendedorAsignado : ""
       ];
     } else {
-      maillist = ["ov@dielsa.com", mail === null ? "" : mail];
+      maillist = ["ov@dielsa.com", correoVendedorAsignado != '' ? correoVendedorAsignado : "", mail === null ? "" : mail];
     }
 
     const mailOptions = {

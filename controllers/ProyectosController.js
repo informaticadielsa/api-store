@@ -85,10 +85,12 @@ export default {
             let dataLineasProyecto = [];
             if(dataProyecto){
                 dataLineasProyecto = await sequelize.query(`
-                    SELECT lpro.*, pro.prod_nombre_extranjero, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM lineas_proyectos AS lpro
+                    SELECT distinct on (pro.prod_nombre_extranjero) pro.prod_nombre_extranjero, lpro.*, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM lineas_proyectos AS lpro
                     LEFT JOIN productos AS pro ON pro."prod_sku" = lpro."codigoArticulo"
                     LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
-                    WHERE lpro."idProyecto" = ${dataProyecto.dataValues.id};`,
+                    WHERE lpro."idProyecto" = ${dataProyecto.dataValues.id}
+                    
+                    `,
                 {
                     type: sequelize.QueryTypes.SELECT 
                 });
@@ -129,7 +131,7 @@ export default {
                 cardcode: req.body.cardcodeSocioNegocio
             });
 
-            await proyectoEmail.solicitudCreacionProyectoEmail(null, dataSocioNegocio, req.body);
+            await proyectoEmail.solicitudCreacionProyectoEmail(null, dataSocioNegocio, req.body, req.body.cardcodeSocioNegocio);
 
             res.status(200).send({
                 message: 'Proyecto creado correctamente'
@@ -159,7 +161,7 @@ export default {
                 INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
                 WHERE sn.sn_socios_negocio_id = '${req.body.socio_de_negocio_id}'
                 AND lpro."codigoArticulo" = '${req.body.prod_sku}'
-                AND pro.estatus = 'Autorizado' AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
             {
                 type: sequelize.QueryTypes.SELECT 
             });
