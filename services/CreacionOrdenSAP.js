@@ -1153,7 +1153,7 @@ module.exports = {
 
                                 if(status.status == true)
                                 {
-                                    var lineas = await this.validarLineas(constPreCompraFinalizada, constPreProductoCompraFinalizada, null,null,sn_socios_negocio_id)
+                                    var lineas = await this.validarLineas(constPreCompraFinalizada, constPreProductoCompraFinalizada, null,null,constSociosNegocio.sn_socios_negocio_id)
 
                                     if(lineas.status == true)
                                     {
