@@ -167,10 +167,10 @@ export default {
             });
 
             let newData = null;
-            if(data) {
+            if(data[0]) {
                 newData = {
                     ...data[0],
-                    precio: data[0].moneda === 'MXN'
+                    precio: data[0].moneda === 'MXP'
                         ? Number(data[0].precio)
                         : Number(data[0].precio)  * USDValor,
                     precioUSD: data[0].moneda === 'USD' 
