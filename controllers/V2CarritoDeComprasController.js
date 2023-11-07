@@ -1079,7 +1079,7 @@ export default{
             });
 
             var checkoutJson = await getCheckout.getCheckoutAPI(req.body.cdc_sn_socio_de_negocio_id);
-
+            console.log('checkoutJson ', checkoutJson);
             //obtener tipo impuesto cmm
             const constControlMaestroMultiple = await models.ControlMaestroMultiple.findOne(
             {
@@ -1186,7 +1186,7 @@ export default{
                         {
                             //Obtener Lineas para insertar en la tabla productos compra finalizada y para sap
                             var lineasTemporales = await getCheckout.getLineasProductosComprasFinalizadas(checkoutJson, constPreCompraFinalizada.dataValues.cf_compra_finalizada_id);
-                            console.log('Aquiiiiiiii lineasTemporales -----> ', lineasTemporales);
+                            
                             //Insertar cada producto en la tabla de productos compras finalizadas
                             for (var i = 0; i < lineasTemporales.length; i++) 
                             {
@@ -1291,7 +1291,7 @@ export default{
                     type: sequelize.QueryTypes.SELECT 
                 });
 
-
+            console.log('Error en prevalidar ', e);
             res.status(500).send({
                 message: 'Error',
                 e
@@ -1554,9 +1554,9 @@ export default{
     getPreOrdenDividida: async(req, res, next) =>{
         try{
             let checkoutJson = await getCheckout.getCheckoutAPI2(req.body.cdc_sn_socio_de_negocio_id);
-            console.log('conteo de checkoutJson ', checkoutJson.dataValues.productos.length);
+            // console.log('conteo de checkoutJson ', checkoutJson.dataValues.productos.length);
             let lineasTemporales = await getCheckout.getLineasProductosComprasFinalizadas(checkoutJson, 1);
-            console.log('conteo de lineasTemporales ', lineasTemporales.length, lineasTemporales);
+            // console.log('conteo de lineasTemporales ', lineasTemporales.length, lineasTemporales);
             // checkoutJson.dataValues.productos = checkoutJson.dataValues.productos.filter((item) => {
             //     // console.log('filtro # ', i, ' data: ', item);
             //     return item.prod_precio > 0 && item.producto.prod_volumen > 0 && item.producto.prod_peso > 0;
