@@ -490,7 +490,7 @@ module.exports = {
                     INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
                     WHERE sn.sn_socios_negocio_id = '${cdc_sn_socio_de_negocio_id}'
                     AND lpro."codigoArticulo" = '${constProductoCarritoDeCompra[j].dataValues.producto.dataValues.prod_sku}'
-                    AND pro.estatus = 'Aprobado' AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                    AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
                 {
                     type: sequelize.QueryTypes.SELECT 
                 });
@@ -623,7 +623,7 @@ module.exports = {
                         if(precioProdProyect < constProductoCarritoDeCompra[j].dataValues.precioFinal
                             && constProductoCarritoDeCompra[j].dataValues.precioFinal !== 0) {
                                 asignarPromocionBool = false;
-                            }
+                        }
                     }
                     //Calculara el total de descuentos por promocion
                     totalDescuentoTemporal = totalDescuentoTemporal + cantidadPromocion
@@ -1033,7 +1033,7 @@ module.exports = {
                     INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
                     WHERE sn.sn_socios_negocio_id = '${cdc_sn_socio_de_negocio_id}'
                     AND lpro."codigoArticulo" = '${constCarritoDeCompra.dataValues.productos[y].dataValues.prod_sku}'
-                    AND pro.estatus = 'Aprobado' AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                    AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
                 {
                     type: sequelize.QueryTypes.SELECT 
                 });
@@ -4296,7 +4296,7 @@ module.exports = {
         if(data[0]) {
             newData = {
                 ...data[0],
-                precio: data[0].moneda === 'MXN'
+                precio: data[0].moneda === 'MXP'
                     ? Number(data[0].precio)
                     : Number(data[0].precio)  * USDValor,
                 precioUSD: data[0].moneda === 'USD' 
