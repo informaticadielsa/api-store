@@ -818,12 +818,12 @@ module.exports = {
 
 
                     //Precio total sin promociones
-                    precioTotal = precioTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioTotal = precioTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)+10000
 
 
                     //Precio total con promociones calculado por producto
 
-                    precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)+10000
 
 
 
@@ -847,17 +847,17 @@ module.exports = {
                     constProductoCarritoDeCompra[j].dataValues.totalDescuento = 0
 
                     //Precio total sin promociones
-                    precioTotal = precioTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioTotal = precioTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad) + 10000;
 
                     //Precio total con promociones calculado por producto
                     // precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
-                    precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)+10000;
                 }
 
 
                 // V5?
-                var tempPrecioBase = constProductoCarritoDeCompra[j].dataValues.prod_precio +10000
-                var tempPrecioFinal = constProductoCarritoDeCompra[j].dataValues.precioFinal +10000
+                var tempPrecioBase = constProductoCarritoDeCompra[j].dataValues.prod_precio 
+                var tempPrecioFinal = constProductoCarritoDeCompra[j].dataValues.precioFinal 
 
                 var porcentajeDescuentoTemporal = 100-((tempPrecioFinal*100)/tempPrecioBase)
 
