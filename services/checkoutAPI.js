@@ -479,11 +479,22 @@ module.exports = {
 
 
 
-
+            // const seenNew = {};
 
             //Calcular totales por producto
             for (var j = 0; j < constProductoCarritoDeCompra.length; j++) 
             {
+                const dataProduct = await sequelize.query(`
+                    SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
+                    INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
+                    INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
+                    WHERE sn.sn_socios_negocio_id = '${cdc_sn_socio_de_negocio_id}'
+                    AND lpro."codigoArticulo" = '${constProductoCarritoDeCompra[j].dataValues.producto.dataValues.prod_sku}'
+                    AND pro.estatus = 'Aprobado' AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                {
+                    type: sequelize.QueryTypes.SELECT 
+                });
+
                 //Precio Base
                 var precioBase = constProductoCarritoDeCompra[j].dataValues.precioBaseFinal
                 var precioTemporal = constProductoCarritoDeCompra[j].dataValues.precioBaseFinal
@@ -604,9 +615,19 @@ module.exports = {
                     constProductoCarritoDeCompra[j].dataValues.precioDespuesDePromocion = precioTemporal.toFixed(2)
                     constProductoCarritoDeCompra[j].dataValues.cantidadDescuentoPromocion = cantidadPromocion
 
+                    let asignarPromocionBool = true;
+                    if(dataProduct[0]) {
+                        const precioProdProyect = dataProduct[0].moneda === 'MXP' 
+                            ? Number(dataProduct[0].precio)
+                            : Number(dataProduct[0].precio) * USDValor
+                        if(precioProdProyect < constProductoCarritoDeCompra[j].dataValues.precioFinal
+                            && constProductoCarritoDeCompra[j].dataValues.precioFinal !== 0) {
+                                asignarPromocionBool = false;
+                            }
+                    }
                     //Calculara el total de descuentos por promocion
                     totalDescuentoTemporal = totalDescuentoTemporal + cantidadPromocion
-                    totalDescuentosPromociones = totalDescuentosPromociones + (cantidadPromocion * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    totalDescuentosPromociones = totalDescuentosPromociones + (asignarPromocionBool ? 0 : (cantidadPromocion * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad))
 
 
 
@@ -816,14 +837,26 @@ module.exports = {
 
                     constProductoCarritoDeCompra[j].dataValues.totalDescuento = parseFloat(totalDescuentoTemporal)
 
+                    let totalAsignado = constProductoCarritoDeCompra[j].dataValues.precioFinal
+                    if(dataProduct[0]) {
+                        const precioProdProyect = dataProduct[0].moneda === 'MXP' 
+                            ? Number(dataProduct[0].precio)
+                            : Number(dataProduct[0].precio) * USDValor
+                        if(precioProdProyect < constProductoCarritoDeCompra[j].dataValues.precioFinal
+                            && constProductoCarritoDeCompra[j].dataValues.precioFinal !== 0) {
+                            totalAsignado = dataProduct[0].moneda === 'MXP' 
+                            ? Number(dataProduct[0].precio)
+                            : Number(dataProduct[0].precio) * USDValor
+                        }
+                    }
 
                     //Precio total sin promociones
-                    precioTotal = precioTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioTotal = precioTotal + (totalAsignado * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
 
 
                     //Precio total con promociones calculado por producto
 
-                    precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioFinalTotal = precioFinalTotal + (totalAsignado * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
 
 
 
@@ -846,12 +879,24 @@ module.exports = {
                     constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = parseFloat(constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto.toFixed(2))
                     constProductoCarritoDeCompra[j].dataValues.totalDescuento = 0
 
+                    let totalAsignado = constProductoCarritoDeCompra[j].dataValues.precioFinal
+                    if(dataProduct[0]) {
+                        const precioProdProyect = dataProduct[0].moneda === 'MXP' 
+                            ? Number(dataProduct[0].precio)
+                            : Number(dataProduct[0].precio) * USDValor
+                        if(precioProdProyect < constProductoCarritoDeCompra[j].dataValues.precioFinal
+                            && constProductoCarritoDeCompra[j].dataValues.precioFinal !== 0) {
+                            totalAsignado = dataProduct[0].moneda === 'MXP' 
+                            ? Number(dataProduct[0].precio)
+                            : Number(dataProduct[0].precio) * USDValor;
+                        }
+                    }
                     //Precio total sin promociones
-                    precioTotal = precioTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioTotal = precioTotal + (totalAsignado * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
 
                     //Precio total con promociones calculado por producto
                     // precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
-                    precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioFinalTotal = precioFinalTotal + (totalAsignado * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
                 }
 
 
@@ -891,9 +936,9 @@ module.exports = {
             constCarritoDeCompra.dataValues.precioFinalTotal = precioFinalTotal.toFixed(2)
 
 
-            constCarritoDeCompra.dataValues.TotalImpuesto = precioFinalTotal * (tipoImpuesto / 100)
+            constCarritoDeCompra.dataValues.TotalImpuesto = (precioFinalTotal - (totalDescuentosCupones+totalDescuentosPromociones)).toFixed(2) * (tipoImpuesto / 100)
             constCarritoDeCompra.dataValues.TotalImpuestoProductos = (constCarritoDeCompra.dataValues.TotalImpuesto).toFixed(2)
-            constCarritoDeCompra.dataValues.precioFinalTotalMasImpuestos = (precioFinalTotal * (1 + (tipoImpuesto / 100))).toFixed(2)
+            constCarritoDeCompra.dataValues.precioFinalTotalMasImpuestos = ((precioFinalTotal - (totalDescuentosCupones+totalDescuentosPromociones)).toFixed(2) * (1 + (tipoImpuesto / 100))).toFixed(2)
 
 
 
@@ -995,7 +1040,7 @@ module.exports = {
                 
                 if(dataProduct[0]) {
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProducNoAcuerdo = dataProduct[0].idProyecto;
-                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice = dataProduct[0].moneda === 'MXN' 
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice = dataProduct[0].moneda === 'MXP' 
                         ? Number(dataProduct[0].precio)
                         : Number(dataProduct[0].precio) * USDValor;
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD = dataProduct[0].moneda === 'USD' 
