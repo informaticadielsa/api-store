@@ -6,7 +6,7 @@ const Proyectos = sequelize.define('Proyectos', {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true, 
     },
     CodigoEjecutivo: {
         type: Sequelize.INTEGER
