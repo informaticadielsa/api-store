@@ -901,8 +901,8 @@ module.exports = {
 
 
                 // V5?
-                var tempPrecioBase = constProductoCarritoDeCompra[j].dataValues.prod_precio
-                var tempPrecioFinal = constProductoCarritoDeCompra[j].dataValues.precioFinal
+                var tempPrecioBase = constProductoCarritoDeCompra[j].dataValues.prod_precio 
+                var tempPrecioFinal = constProductoCarritoDeCompra[j].dataValues.precioFinal 
 
                 var porcentajeDescuentoTemporal = 100-((tempPrecioFinal*100)/tempPrecioBase)
 
