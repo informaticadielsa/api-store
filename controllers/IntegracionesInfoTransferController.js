@@ -4105,11 +4105,22 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
             const newProductProyect =data[0];
+            const constTipoCambio = await models.ControlMaestroMultiple.findOne(
+                {
+                    where: {
+                        cmm_nombre: "TIPO_CAMBIO_USD"
+                    },
+                    attributes: ["cmm_valor"]
+                })
+                var USDValor = constTipoCambio.cmm_valor
+
+                 let newprecio = precioBase
+                if (newProductProyect.moneda="USD"){ newprecio = Number(constProductoCompraFinalizada[i].dataValues.pcf_precio / USDValor)}
                   //Variable para Lineas 
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": almacenAsignadoPerProducto,
-                    "precioUnitario":constProductoCompraFinalizada[i].dataValues.pcf_precio,
+                    "precioUnitario":newprecio,
                     "codigoImpuesto": ImpuestoFinal,
                     "cantidad": constProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null

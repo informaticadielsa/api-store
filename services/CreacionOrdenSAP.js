@@ -550,6 +550,8 @@ module.exports = {
                                     //Variable que servira para mandar el costo de envio en USD en caso de que no tenga productos en MXN una orden
                                     // var CostoEnvioEnUSDBool = true
 
+
+
                                     //Buscara los productos que no son USD para mandarlos a SAP
                                     if(constProductoCompraFinalizadaNoUSD.length > 0 || isRecoleccion == false)
                                     {
@@ -2096,11 +2098,25 @@ module.exports = {
             });
              
                  const newProductProyect =data[0];
+
+
+
+                 const constTipoCambio = await models.ControlMaestroMultiple.findOne(
+                    {
+                        where: {
+                            cmm_nombre: "TIPO_CAMBIO_USD"
+                        },
+                        attributes: ["cmm_valor"]
+                    })
+                    var USDValor = constTipoCambio.cmm_valor
+
+                     let newprecio = precioBase
+                    if (newProductProyect.moneda="USD"){ newprecio = Number(precioBase / USDValor)}
                 //Variable para Lineas
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": precioBase,
+                    "precioUnitario": newprecio,
                     "codigoImpuesto": ImpuestoFinal,
                     "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual,
                     "fechaEntrega": dateFinal,
@@ -2365,11 +2381,23 @@ module.exports = {
 
 
                 const newProductProyect =data[0];
+
+                const constTipoCambio = await models.ControlMaestroMultiple.findOne(
+                    {
+                        where: {
+                            cmm_nombre: "TIPO_CAMBIO_USD"
+                        },
+                        attributes: ["cmm_valor"]
+                    })
+                    var USDValor = constTipoCambio.cmm_valor
+
+                     let newprecio = precioBase
+                    if (newProductProyect.moneda="USD"){ newprecio = Number(precioBase / USDValor)}
                 //Variable para Lineas
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": precioBase,
+                    "precioUnitario": newprecio,
                     "codigoImpuesto": ImpuestoFinal,
                     "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual,
                     "fechaEntrega": dateFinal,
