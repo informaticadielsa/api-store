@@ -621,7 +621,7 @@ module.exports = {
                             ? Number(dataProduct[0].precio)
                             : Number(dataProduct[0].precio) * USDValor
                         if(precioProdProyect < constProductoCarritoDeCompra[j].dataValues.precioFinal
-                            && constProductoCarritoDeCompra[j].dataValues.precioFinal !== 0) {
+                            && constProductoCarritoDeCompra[j].dataValues.precioFinal != 0) {
                                 asignarPromocionBool = false;
                         }
                     }
@@ -843,7 +843,7 @@ module.exports = {
                             ? Number(dataProduct[0].precio)
                             : Number(dataProduct[0].precio) * USDValor
                         if(precioProdProyect < constProductoCarritoDeCompra[j].dataValues.precioFinal
-                            && constProductoCarritoDeCompra[j].dataValues.precioFinal !== 0) {
+                            && constProductoCarritoDeCompra[j].dataValues.precioFinal != 0) {
                             totalAsignado = dataProduct[0].moneda === 'MXP' 
                             ? Number(dataProduct[0].precio)
                             : Number(dataProduct[0].precio) * USDValor
@@ -885,7 +885,7 @@ module.exports = {
                             ? Number(dataProduct[0].precio)
                             : Number(dataProduct[0].precio) * USDValor
                         if(precioProdProyect < constProductoCarritoDeCompra[j].dataValues.precioFinal
-                            && constProductoCarritoDeCompra[j].dataValues.precioFinal !== 0) {
+                            && constProductoCarritoDeCompra[j].dataValues.precioFinal != 0) {
                             totalAsignado = dataProduct[0].moneda === 'MXP' 
                             ? Number(dataProduct[0].precio)
                             : Number(dataProduct[0].precio) * USDValor;
@@ -4372,7 +4372,8 @@ module.exports = {
                         {
     
                             //Variable que saca el total subtotal (cantidad x precio base)
-                            precioTotalTemp = (totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
+                            precioTotalTemp = (totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal 
+                            && checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal != 0)
                                 ? projectProduct.precio 
                                 : checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal))/USDValor
                             precioTotal_usd += precioTotalTemp
@@ -4382,7 +4383,8 @@ module.exports = {
                                 ? 0
                                 : (totalCantidadProducto * checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor)
     
-                            let precioTotalTemp1 = totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
+                            let precioTotalTemp1 = totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
+                            && checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal != 0)
                                 ? projectProduct.precio 
                                 : checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal);
                             precioTotal += precioTotalTemp1;
@@ -4392,22 +4394,26 @@ module.exports = {
                         }
                         else
                         {
-                            let precioTotalTemp1 = (totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
+                            let precioTotalTemp1 = (totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
+                            && checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal != 0)
                             ? projectProduct.precio 
                             : checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal))/USDValor;
                             precioTotal_usd += precioTotalTemp1;
-                            totalDescuentos_usd += (totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
+                            totalDescuentos_usd += (totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
+                            && checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal != 0)
                                 ? 0
                                 : checkoutJson.dataValues.productos[i].dataValues.totalDescuento))/USDValor;
     
                             //Variable que saca el total subtotal (cantidad x precio base)
-                            precioTotalTemp = totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
+                            precioTotalTemp = totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
+                            && checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal != 0)
                             ? projectProduct.precio 
                             : checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
                             precioTotal += precioTotalTemp
     
                             //Calculara el total de descuentos
-                            totalDescuentos += totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
+                            totalDescuentos += totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
+                            && checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal != 0)
                                 ? 0
                                 : checkoutJson.dataValues.productos[i].dataValues.totalDescuento)
                         }
@@ -4419,19 +4425,22 @@ module.exports = {
                         precioTotal_usd += (totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
                         ? projectProduct.precio 
                         : checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal))/USDValor;
-                        totalDescuentos_usd += (totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
+                        totalDescuentos_usd += (totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
+                        && checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal != 0)
                             ? 0
                             : checkoutJson.dataValues.productos[i].dataValues.totalDescuento)/USDValor);
     
                         //Variable que saca el total subtotal (cantidad x precio base)
-                        precioTotalTemp = totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
+                        precioTotalTemp = totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
+                        && checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal != 0)
                         ? projectProduct.precio 
                         : checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
                         precioTotal += precioTotalTemp
     
     
                         //Calculara el total de descuentos
-                        totalDescuentos += totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal)
+                        totalDescuentos += totalCantidadProducto * ((projectProduct && projectProduct.precio < checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal
+                        && checkoutJson.dataValues.productos[i].dataValues.precioBaseFinal != 0)
                             ? 0
                             : checkoutJson.dataValues.productos[i].dataValues.totalDescuento)
                     }
