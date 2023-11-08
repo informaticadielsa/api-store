@@ -2110,8 +2110,7 @@ module.exports = {
                     })
                     var USDValor = constTipoCambio.cmm_valor
 
-                     let newprecio = precioBase
-                    if (newProductProyect.moneda="USD"){ newprecio = Number(precioBase / USDValor)}
+                    let newprecio = newProductProyect ? (newProductProyect.moneda="USD"?Number(precioBase / USDValor):precioBase ): precioBase
                 //Variable para Lineas
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
@@ -2391,8 +2390,8 @@ module.exports = {
                     })
                     var USDValor = constTipoCambio.cmm_valor
 
-                     let newprecio = precioBase
-                    if (newProductProyect.moneda="USD"){ newprecio = Number(precioBase / USDValor)}
+                     let newprecio = newProductProyect ? (newProductProyect.moneda="USD"?Number(precioBase / USDValor):precioBase ): precioBase
+                     
                 //Variable para Lineas
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,

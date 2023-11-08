@@ -4114,8 +4114,8 @@ export default {
                 })
                 var USDValor = constTipoCambio.cmm_valor
 
-                 let newprecio = precioBase
-                if (newProductProyect.moneda="USD"){ newprecio = Number(constProductoCompraFinalizada[i].dataValues.pcf_precio / USDValor)}
+                
+                let newprecio = newProductProyect ? (newProductProyect.moneda="USD"?Number(constProductoCompraFinalizada[i].dataValues.pcf_precio / USDValor):precioBase ): precioBase
                   //Variable para Lineas 
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
