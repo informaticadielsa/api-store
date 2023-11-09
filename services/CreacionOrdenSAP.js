@@ -2107,7 +2107,7 @@ module.exports = {
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": newProductProyect ? (newProductProyect.moneda="USD"? newProductProyect.precioUSD:precioBase ): precioBase,
+                    "precioUnitario": newProductProyect ? (newProductProyect.moneda=="USD"? newProductProyect.precioUSD:precioBase ): precioBase,
                     "codigoImpuesto": ImpuestoFinal,
                     "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual,
                     "fechaEntrega": dateFinal,
@@ -2381,7 +2381,7 @@ module.exports = {
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": newProductProyect ? (newProductProyect.moneda="USD"?newProductProyect.precioUSD:precioBase ): precioBase,
+                    "precioUnitario": newProductProyect ? (newProductProyect.moneda=="USD"?newProductProyect.precioUSD:precioBase ): precioBase,
                     "codigoImpuesto": ImpuestoFinal,
                     "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual,
                     "fechaEntrega": dateFinal,
