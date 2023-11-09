@@ -2109,7 +2109,6 @@ module.exports = {
                         attributes: ["cmm_valor"]
                     })
                     var USDValor = constTipoCambio.cmm_valor
-
                     let newprecio = newProductProyect ? (newProductProyect.moneda="USD"?Number(precioBase / USDValor):precioBase ): precioBase
                 //Variable para Lineas
                 var jsonArray = {
