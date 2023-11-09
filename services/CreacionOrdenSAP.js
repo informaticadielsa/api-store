@@ -2103,8 +2103,11 @@ module.exports = {
 
 
 
-                 let newPrices =newProductProyect?.moneda=="USD"?newProductProyect.precioUSD:precioBase
-                    
+                 
+                 var newPrices=precioBase;
+                 if(newProductProyect) {newPrices= newProductProyect.moneda=="USD"? newProductProyect.precioUSD :precioBase}else{
+                     newPrices= precioBase
+                 }
                 //Variable para Lineas
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
@@ -2377,8 +2380,10 @@ module.exports = {
                 const newProductProyect =data[0];
 
            
-
-                let newPrices =newProductProyect?.moneda=="USD"?newProductProyect.precioUSD:precioBase
+                var newPrices=precioBase;
+                if(newProductProyect) {newPrices= newProductProyect.moneda=="USD"? newProductProyect.precioUSD :precioBase}else{
+                    newPrices= precioBase
+                }
                      
                 //Variable para Lineas
                 var jsonArray = {
