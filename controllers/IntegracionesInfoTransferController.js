@@ -4108,12 +4108,12 @@ export default {
             const newProductProyect =data[0];
           
                 
-              
+            let newPrices =newProductProyect?.moneda=="USD"?newProductProyect.precioUSD: constProductoCompraFinalizada[i].dataValues.pcf_precio
                   //Variable para Lineas 
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": almacenAsignadoPerProducto,
-                    "precioUnitario":newProductProyect ? (newProductProyect.moneda=="USD"?newProductProyect.precioUSD:precioBase ): precioBase,
+                    "precioUnitario":newPrices,
                     "codigoImpuesto": ImpuestoFinal,
                     "cantidad": constProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
