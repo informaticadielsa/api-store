@@ -11,6 +11,7 @@ const {ordenFallidaToSapEmail} = require('../services/ordenFallidaToSapEmail');
 
 const {lineasTransitoEmail} = require('../services/lineasTransitoEmail');
 const {lineasEntregaEmail} = require('../services/lineasEntregaEmail');
+const {testEmail} = require('../services/testEmail');
 
 //Integrar SN a SNU y mandar usuarios correo contraseña nueva
 import bcrypt from 'bcryptjs';
@@ -4118,7 +4119,7 @@ export default {
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
                
-          
+               testEmail('ricardo.ramos@daltum.mx', jsonArray)
              
                 array.push(jsonArray);
             }
