@@ -1511,9 +1511,40 @@ export default{
             {
                 //Obtener Lineas para insertar en la tabla productos compra finalizada y para sap
                 var lineasTemporales = await getCheckout.getLineasProductosComprasFinalizadas(checkoutJson, constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+                var isProject = false
+                for(var i=0; i<constProductoCarritoDeCompra.length; i++){
+
+                    const constProducto = await models.Producto.findOne(
+                        {
+                            where: {
+                                prod_producto_id: constProductoCarritoDeCompra[i].pcdc_prod_producto_id
+                            }
+                        });
+                    
+
+
+                    const data = await sequelize.query(`
+                    SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
+                    INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
+                    INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
+                    WHERE sn.sn_socios_negocio_id = '${req.body.cdc_sn_socio_de_negocio_id}'
+                    AND lpro."codigoArticulo" = '${constProducto.dataValues.prod_sku}'
+                    AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                {
+                    type: sequelize.QueryTypes.SELECT 
+                });
+                 
+                     const newProductProyect =data[0];
+
+                     if(newProductProyect){
+                        isProject = newProductProyect.moneda=="USD" ? true : false
+                     }
+                }
+                 
+               
 
                 //Pago con credito dielsa
-                if(constCarritoDeCompra.cdc_forma_pago_codigo == 99)
+                if(constCarritoDeCompra.cdc_forma_pago_codigo == 99 || isProject)
                 {
                     //Regresa un array de la orden dividida en MXN y USD
                     var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales);

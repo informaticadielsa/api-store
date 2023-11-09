@@ -4141,7 +4141,7 @@ export default {
                 "fechaVencimiento": fechaTotal,
                 "fechaReferencia": fechaTotal,
                 "referencia": constCompraFinalizada.dataValues.cf_compra_numero_orden,
-                "moneda": "USD",
+                "moneda": "MXP",
                 "fletera": codigoFleteraSap,
                 "direccionEntrega": direccionEntrega,
                 "direccionFactura": direccionFacturacion,
