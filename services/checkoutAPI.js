@@ -837,14 +837,26 @@ module.exports = {
 
                     constProductoCarritoDeCompra[j].dataValues.totalDescuento = parseFloat(totalDescuentoTemporal)
 
+                    let totalAsignado = constProductoCarritoDeCompra[j].dataValues.precioFinal
+                    if(dataProduct[0]) {
+                        const precioProdProyect = dataProduct[0].moneda === 'MXP' 
+                            ? Number(dataProduct[0].precio)
+                            : Number(dataProduct[0].precio) * USDValor
+                        if(precioProdProyect < constProductoCarritoDeCompra[j].dataValues.precioFinal
+                            && constProductoCarritoDeCompra[j].dataValues.precioFinal != 0) {
+                            totalAsignado = dataProduct[0].moneda === 'MXP' 
+                            ? Number(dataProduct[0].precio)
+                            : Number(dataProduct[0].precio) * USDValor
+                        }
+                    }
 
                     //Precio total sin promociones
-                    precioTotal = precioTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioTotal = precioTotal + (totalAsignado * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
 
 
                     //Precio total con promociones calculado por producto
 
-                    precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioFinalTotal = precioFinalTotal + (totalAsignado * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
 
 
 
@@ -880,11 +892,11 @@ module.exports = {
                         }
                     }
                     //Precio total sin promociones
-                    precioTotal = precioTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad) 
+                    precioTotal = precioTotal + (totalAsignado * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
 
                     //Precio total con promociones calculado por producto
                     // precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioBaseFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
-                    precioFinalTotal = precioFinalTotal + (constProductoCarritoDeCompra[j].dataValues.precioFinal * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
+                    precioFinalTotal = precioFinalTotal + (totalAsignado * constProductoCarritoDeCompra[j].dataValues.pcdc_producto_cantidad)
                 }
 
 
