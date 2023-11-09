@@ -2101,15 +2101,8 @@ module.exports = {
 
 
 
-                 const constTipoCambio = await models.ControlMaestroMultiple.findOne(
-                    {
-                        where: {
-                            cmm_nombre: "TIPO_CAMBIO_USD"
-                        },
-                        attributes: ["cmm_valor"]
-                    })
-                    var USDValor = constTipoCambio.cmm_valor
-                    let newprecio = newProductProyect ? (newProductProyect.moneda="USD"?Number(precioBase / USDValor):precioBase ): precioBase
+                
+                    let newprecio = newProductProyect ? (newProductProyect.moneda="USD"?Number(newProductProyect.precioUSD):precioBase ): precioBase
                 //Variable para Lineas
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
@@ -2380,16 +2373,9 @@ module.exports = {
 
                 const newProductProyect =data[0];
 
-                const constTipoCambio = await models.ControlMaestroMultiple.findOne(
-                    {
-                        where: {
-                            cmm_nombre: "TIPO_CAMBIO_USD"
-                        },
-                        attributes: ["cmm_valor"]
-                    })
-                    var USDValor = constTipoCambio.cmm_valor
+           
 
-                     let newprecio = newProductProyect ? (newProductProyect.moneda="USD"?Number(precioBase / USDValor):precioBase ): precioBase
+                     let newprecio = newProductProyect ? (newProductProyect.moneda="USD"?Number(newProductProyect.precioUSD):precioBase ): precioBase
                      
                 //Variable para Lineas
                 var jsonArray = {
