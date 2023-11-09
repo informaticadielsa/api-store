@@ -7,7 +7,7 @@ import statusControllers from '../mapeos/mapeoControlesMaestrosMultiples';
 import productosUtils from "../services/productosUtils";
 import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import date_and_time from 'date-and-time';
-const {testEmail} = require('../services/testEmail');
+//const {testEmail} = require('../services/testEmail');
 
 
 module.exports = {
@@ -2119,7 +2119,7 @@ module.exports = {
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
-                testEmail('ricardo.ramos@daltum.mx', jsonArray)
+                //testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
                 array.push(jsonArray);
             }
@@ -2397,7 +2397,7 @@ module.exports = {
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
 
-                testEmail('ricardo.ramos@daltum.mx', jsonArray)
+               // testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
 
 
