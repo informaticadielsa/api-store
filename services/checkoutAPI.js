@@ -7,7 +7,7 @@ import statusControllers from '../mapeos/mapeoControlesMaestrosMultiples';
 import productosUtils from "../services/productosUtils";
 import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import Producto from '../models/ProductoModel';
-
+import {pruebaTester} from './pruebaTester'
 
 module.exports = {
     getCheckoutAPI: async function (cdc_sn_socio_de_negocio_id) {
@@ -1121,6 +1121,7 @@ module.exports = {
 
             constProductoCarritoDeCompra = constProductoCarritoDeCompra.filter((item) =>
                 item.dataValues.producto.prod_peso > 0 && item.dataValues.producto.prod_volumen > 0 && item.dataValues.producto.prod_precio);
+                pruebaTester(constProductoCarritoDeCompra)
             //Buscar si tiene productos que sean Stock inactivo o Hasta agotar existencia con backorder
             var prodCarritoLenght = constProductoCarritoDeCompra.length
             for (var z = 0; z < prodCarritoLenght; z++) 

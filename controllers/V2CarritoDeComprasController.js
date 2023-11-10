@@ -57,7 +57,7 @@ export default{
             var getCart = await getCheckout.getCartAPI(req.body.cdc_sn_socio_de_negocio_id);
  
             //Retornara el id del nuevo carrito
-            res.status(200).send({
+            res.status(200).send({ 
                 message: 'Carrito Obtenido Con Exito',
                 cdc_carrito_de_compra_id: getCart
             })
