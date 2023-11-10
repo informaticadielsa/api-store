@@ -4108,11 +4108,28 @@ export default {
             const newProductProyect =data[0];
           
                 
-         
-            var newPrices=constProductoCompraFinalizada[i].dataValues.pcf_precio;
-            if(newProductProyect) {newPrices= newProductProyect.moneda=="USD"? newProductProyect.precioUSD :constProductoCompraFinalizada[i].dataValues.pcf_precio}else{
-                newPrices= constProductoCompraFinalizada[i].dataValues.pcf_precio
-            }
+            const constTipoCambio = await models.ControlMaestroMultiple.findOne(
+                {
+                    where: {
+                        cmm_nombre: "TIPO_CAMBIO_USD"
+                    },
+                    attributes: ["cmm_valor"]
+                })
+                var USDValor = constTipoCambio.cmm_valor
+             
+             var newPrices=constProductoCompraFinalizada[i].dataValues.pcf_precio;
+             if(newProductProyect) {
+                if(newProductProyect.moneda=="USD"){
+                newPrices= newProductProyect.precio
+               }else if(newProductProyect.moneda=="MXP"){
+                newPrices =Number(newProductProyect.precio*USDValor)
+               }else{
+                newPrices=constProductoCompraFinalizada[i].dataValues.pcf_precio
+               }
+            }else{
+                 newPrices= constProductoCompraFinalizada[i].dataValues.pcf_precio
+             }
+           
                   //Variable para Lineas 
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,

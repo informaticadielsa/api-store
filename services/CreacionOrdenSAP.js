@@ -2102,10 +2102,25 @@ module.exports = {
                  const newProductProyect =data[0];
 
 
-
+                 const constTipoCambio = await models.ControlMaestroMultiple.findOne(
+                    {
+                        where: {
+                            cmm_nombre: "TIPO_CAMBIO_USD"
+                        },
+                        attributes: ["cmm_valor"]
+                    })
+                    var USDValor = constTipoCambio.cmm_valor
                  
                  var newPrices=precioBase;
-                 if(newProductProyect) {newPrices= newProductProyect.moneda=="USD"? newProductProyect.precioUSD :precioBase}else{
+                 if(newProductProyect) {
+                    if(newProductProyect.moneda=="USD"){
+                    newPrices=  newProductProyect.precio
+                   }else if(newProductProyect.moneda=="MXP"){
+                    newPrices =Number(newProductProyect.precio*USDValor)
+                   }else{
+                    newPrices=precioBase
+                   }
+                }else{
                      newPrices= precioBase
                  }
                 //Variable para Lineas
@@ -2379,11 +2394,28 @@ module.exports = {
 
                 const newProductProyect =data[0];
 
-           
-                var newPrices=precioBase;
-                if(newProductProyect) {newPrices= newProductProyect.moneda=="USD"? newProductProyect.precioUSD :precioBase}else{
-                    newPrices= precioBase
-                }
+                const constTipoCambio = await models.ControlMaestroMultiple.findOne(
+                    {
+                        where: {
+                            cmm_nombre: "TIPO_CAMBIO_USD"
+                        },
+                        attributes: ["cmm_valor"]
+                    })
+                    var USDValor = constTipoCambio.cmm_valor
+                 
+                 var newPrices=precioBase;
+                 if(newProductProyect) {
+                    if(newProductProyect.moneda=="USD"){
+                    newPrices=  newProductProyect.precio
+                   }else if(newProductProyect.moneda=="MXP"){
+                    newPrices =Number(newProductProyect.precio*USDValor)
+                   }else{
+                    newPrices=precioBase
+                   }
+                }else{
+                     newPrices= precioBase
+                 }
+            
                      
                 //Variable para Lineas
                 var jsonArray = {
