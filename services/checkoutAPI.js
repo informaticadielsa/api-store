@@ -1140,8 +1140,8 @@ module.exports = {
                 pruebaTester(cadena+ ' : ' + constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
                newProductsProyects.push(constProductoCarritoDeCompra[s])
            }
-            constProductoCarritoDeCompra = newProductsProyects;
-            constProductoCarritoDeCompra = constProductoCarritoDeCompra.filter((item) =>
+            //constProductoCarritoDeCompra = newProductsProyects;
+            constProductoCarritoDeCompra = newProductsProyects.filter((item) =>
                 item.dataValues.producto.prod_peso > 0 && item.dataValues.producto.prod_volumen > 0 && item.dataValues.producto.prod_precio);
               
 
