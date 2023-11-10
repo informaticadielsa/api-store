@@ -3673,9 +3673,9 @@ module.exports = {
                                             pcf_cantidad_producto: cantidadDisponible,
                                             pcf_descuento_producto: null,
                                             pcf_precio: (productos[i].dataValues.projectProduct 
-                                                && productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal) 
+                                                && (productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal || productos[i].dataValues.precioFinal===0) 
                                                 ? productos[i].dataValues.projectProductPrice 
-                                                : productos[i].dataValues.precioFinal,
+                                                : productos[i].dataValues.precioFinal),
                                             pcf_prod_producto_id_regalo: null,
                                             pcf_cantidad_producto_regalo: null,
                                             pcf_descuento_promocion: productos[i].dataValues.totalDescuento,
@@ -3726,9 +3726,9 @@ module.exports = {
                                             pcf_cantidad_producto: inventarioFaltante,
                                             pcf_descuento_producto: null,
                                             pcf_precio: (productos[i].dataValues.projectProduct 
-                                                && productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal) 
+                                                && (productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal ||  productos[i].dataValues.precioFinal===0) 
                                                 ? productos[i].dataValues.projectProductPrice 
-                                                : productos[i].dataValues.precioFinal,
+                                                : productos[i].dataValues.precioFinal),
                                             pcf_prod_producto_id_regalo: null,
                                             pcf_cantidad_producto_regalo: null,
                                             pcf_descuento_promocion: productos[i].dataValues.totalDescuento,
@@ -3758,9 +3758,9 @@ module.exports = {
                                             pcf_cantidad_producto: cantidadDisponible,
                                             pcf_descuento_producto: null,
                                             pcf_precio: (productos[i].dataValues.projectProduct 
-                                                && productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal) 
+                                                && (productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal || productos[i].dataValues.precioFinal===0 ) 
                                                 ? productos[i].dataValues.projectProductPrice 
-                                                : productos[i].dataValues.precioFinal,
+                                                : productos[i].dataValues.precioFinal),
                                             pcf_prod_producto_id_regalo: null,
                                             pcf_cantidad_producto_regalo: null,
                                             pcf_descuento_promocion: productos[i].dataValues.totalDescuento,
@@ -3818,9 +3818,9 @@ module.exports = {
                                     pcf_cantidad_producto: inventarioFaltante,
                                     pcf_descuento_producto: null,
                                     pcf_precio: (productos[i].dataValues.projectProduct 
-                                        && productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal) 
+                                        && (productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal || productos[i].dataValues.precioFinal===0) 
                                         ? productos[i].dataValues.projectProductPrice 
-                                        : productos[i].dataValues.precioFinal,
+                                        : productos[i].dataValues.precioFinal),
                                     pcf_prod_producto_id_regalo: null,
                                     pcf_cantidad_producto_regalo: null,
                                     pcf_descuento_promocion: productos[i].dataValues.totalDescuento,
@@ -3844,9 +3844,9 @@ module.exports = {
                                     pcf_cantidad_producto: inventarioFaltante,
                                     pcf_descuento_producto: null,
                                     pcf_precio: (productos[i].dataValues.projectProduct 
-                                        && productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal) 
+                                        && (productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal || productos[i].dataValues.precioFinal ===0) 
                                         ? productos[i].dataValues.projectProductPrice 
-                                        : productos[i].dataValues.precioFinal,
+                                        : productos[i].dataValues.precioFinal),
                                     pcf_prod_producto_id_regalo: null,
                                     pcf_cantidad_producto_regalo: null,
                                     pcf_descuento_promocion: productos[i].dataValues.totalDescuento,
@@ -3978,9 +3978,9 @@ module.exports = {
                                             pcf_cantidad_producto: inventarioFaltante,
                                             pcf_descuento_producto: null,
                                             pcf_precio: (productos[i].dataValues.projectProduct 
-                                                && productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal) 
+                                                && (productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal || productos[i].dataValues.precioFinal===0) 
                                                 ? productos[i].dataValues.projectProductPrice 
-                                                : productos[i].dataValues.precioFinal,
+                                                : productos[i].dataValues.precioFinal),
                                             pcf_prod_producto_id_regalo: null,
                                             pcf_cantidad_producto_regalo: null,
                                             pcf_descuento_promocion: productos[i].dataValues.totalDescuento,
@@ -4010,9 +4010,9 @@ module.exports = {
                                             pcf_cantidad_producto: cantidadDisponible,
                                             pcf_descuento_producto: null,
                                             pcf_precio: (productos[i].dataValues.projectProduct 
-                                                && productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal) 
+                                                && (productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal || productos[i].dataValues.precioFinal===0) 
                                                 ? productos[i].dataValues.projectProductPrice 
-                                                : productos[i].dataValues.precioFinal,
+                                                : productos[i].dataValues.precioFinal),
                                             pcf_prod_producto_id_regalo: null,
                                             pcf_cantidad_producto_regalo: null,
                                             pcf_descuento_promocion: productos[i].dataValues.totalDescuento,
@@ -4063,9 +4063,9 @@ module.exports = {
                                             pcf_cantidad_producto: inventarioFaltante,
                                             pcf_descuento_producto: null,
                                             pcf_precio: (productos[i].dataValues.projectProduct 
-                                                && productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal) 
+                                                && (productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal || productos[i].dataValues.precioFinal===0) 
                                                 ? productos[i].dataValues.projectProductPrice 
-                                                : productos[i].dataValues.precioFinal,
+                                                : productos[i].dataValues.precioFinal),
                                             pcf_prod_producto_id_regalo: null,
                                             pcf_cantidad_producto_regalo: null,
                                             pcf_descuento_promocion: productos[i].dataValues.totalDescuento,
@@ -4096,9 +4096,9 @@ module.exports = {
                                             pcf_cantidad_producto: cantidadDisponible,
                                             pcf_descuento_producto: null,
                                             pcf_precio: (productos[i].dataValues.projectProduct 
-                                                && productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal) 
+                                                && (productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal || productos[i].dataValues.precioFinal===0) 
                                                 ? productos[i].dataValues.projectProductPrice 
-                                                : productos[i].dataValues.precioFinal,
+                                                : productos[i].dataValues.precioFinal),
                                             pcf_prod_producto_id_regalo: null,
                                             pcf_cantidad_producto_regalo: null,
                                             pcf_descuento_promocion: productos[i].dataValues.totalDescuento,
@@ -4151,9 +4151,9 @@ module.exports = {
                                 pcf_cantidad_producto: inventarioFaltante,
                                 pcf_descuento_producto: null,
                                 pcf_precio: (productos[i].dataValues.projectProduct 
-                                    && productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal) 
+                                    && (productos[i].dataValues.projectProductPrice < productos[i].dataValues.precioFinal || productos[i].dataValues.precioFinal===0) 
                                     ? productos[i].dataValues.projectProductPrice 
-                                    : productos[i].dataValues.precioFinal,
+                                    : productos[i].dataValues.precioFinal),
                                 pcf_prod_producto_id_regalo: null,
                                 pcf_cantidad_producto_regalo: null,
                                 pcf_descuento_promocion: productos[i].dataValues.totalDescuento,
