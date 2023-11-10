@@ -1128,14 +1128,14 @@ module.exports = {
                 item.dataValues.producto.prod_peso > 0 && item.dataValues.producto.prod_volumen > 0 && item.dataValues.producto.prod_precio);
               
 
-                constProductoCarritoDeCompra,map((item)=> {
-                    let cadena = String(item.dataValues.producto.pcdc_carrito_de_compra_id)
-                    pruebaTester(cadena)
-                })
+              
             //Buscar si tiene productos que sean Stock inactivo o Hasta agotar existencia con backorder
             var prodCarritoLenght = constProductoCarritoDeCompra.length
             for (var z = 0; z < prodCarritoLenght; z++) 
             {
+                //Ver que estamos filtrando
+                let cardK = String(constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id)
+                    pruebaTester(cardK)
                 //Consultar tabla productos stock general por producto
                 const constTieneStockGeneral = await models.Producto.findOne(
                 {
