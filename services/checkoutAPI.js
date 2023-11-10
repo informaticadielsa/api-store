@@ -1123,7 +1123,7 @@ module.exports = {
                 let cadena = String(item.dataValues.pcdc_prod_producto_id)
 
 
-                pruebaTester(cadena+ ' : ' + item.dataValues.producto.prod_precio + ' sku:' + item.dataValues.producto.sku)
+                pruebaTester(cadena+ ' : ' + item.dataValues.producto.prod_precio + ' sku:' + item.dataValues.producto.prod_sku)
                
             })
 
