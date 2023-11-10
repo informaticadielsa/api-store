@@ -1542,7 +1542,7 @@ export default{
                 }
                  
                
-
+ 
                 //Pago con credito dielsa
                 if(constCarritoDeCompra.cdc_forma_pago_codigo == 99 || isProject)
                 {
