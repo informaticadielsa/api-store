@@ -1129,7 +1129,7 @@ module.exports = {
               
 
                 constProductoCarritoDeCompra,map((item)=> {
-                    let cadena = String(item.dataValues.producto.prod_precio)
+                    let cadena = String(item.dataValues.producto.pcdc_carrito_de_compra_id)
                     pruebaTester(cadena)
                 })
             //Buscar si tiene productos que sean Stock inactivo o Hasta agotar existencia con backorder
