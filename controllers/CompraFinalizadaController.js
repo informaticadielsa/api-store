@@ -1404,7 +1404,7 @@ export default{
                     'pcdc_mejor_descuento', 'pcdc_almacen_surtido', 'pcdc_no_disponible_para_compra', 'pcdc_back_order', 'pcdc_validado']
                 }
             })
-
+            
 
 
             //informacion Vendedor
