@@ -1127,6 +1127,11 @@ module.exports = {
             constProductoCarritoDeCompra = constProductoCarritoDeCompra.filter((item) =>
                 item.dataValues.producto.prod_peso > 0 && item.dataValues.producto.prod_volumen > 0 && item.dataValues.producto.prod_precio);
               
+
+                constProductoCarritoDeCompra,map((item)=> {
+                    let cadena = String(item.dataValues.producto.prod_precio)
+                    pruebaTester(cadena)
+                })
             //Buscar si tiene productos que sean Stock inactivo o Hasta agotar existencia con backorder
             var prodCarritoLenght = constProductoCarritoDeCompra.length
             for (var z = 0; z < prodCarritoLenght; z++) 
