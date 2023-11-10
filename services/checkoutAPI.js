@@ -1121,7 +1121,8 @@ module.exports = {
 
             constProductoCarritoDeCompra.map((item)=>{
                 let cadena = String(item.dataValues.pcdc_prod_producto_id)
-                pruebaTester(cadena)
+                pruebaTester(cadena+ ' : ' + item.dataValues.producto.prod_precio)
+               
             })
 
             constProductoCarritoDeCompra = constProductoCarritoDeCompra.filter((item) =>
@@ -1135,7 +1136,8 @@ module.exports = {
             {
                 //Ver que estamos filtrando
                 let cardK = String(constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id)
-                    pruebaTester(cardK)
+                    pruebaTester(cardK +' : ' + constProductoCarritoDeCompra[z].dataValues.producto.prod_precio)
+                   
                 //Consultar tabla productos stock general por producto
                 const constTieneStockGeneral = await models.Producto.findOne(
                 {
