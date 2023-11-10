@@ -1120,7 +1120,8 @@ module.exports = {
             });
 
             constProductoCarritoDeCompra.map((item)=>{
-                pruebaTester(item.dataValues.producto.prod_precio)
+                let cadena = String(tem.dataValues.producto.prod_precio)
+                pruebaTester(cadena)
             })
 
             constProductoCarritoDeCompra = constProductoCarritoDeCompra.filter((item) =>

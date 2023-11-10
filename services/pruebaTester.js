@@ -1,15 +1,14 @@
 
 const nodemailer = require("nodemailer");
-import models from "../models";
-const { Op } = require("sequelize");
+
 import { Sequelize } from "sequelize";
 const sequelize = new Sequelize(process.env.POSTGRESQL);
-import date_and_time from "date-and-time";
+
 
 
 
 // exports.creadaOrden = async function(email, id_usuario_socio, orden){
-exports.pruebaTester = async function (cadena) {
+exports.pruebaTester = async function (cadena ) {
   try {
    
     //-----------------------------------------------------------------
