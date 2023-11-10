@@ -1127,7 +1127,7 @@ module.exports = {
                 INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
                 INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
                 WHERE sn.sn_socios_negocio_id = '${cdc_sn_socio_de_negocio_id}'
-                AND lpro."codigoArticulo" = '${item.dataValues.producto.prod_sku}'
+                AND lpro."codigoArticulo" = '${constProductoCarritoDeCompra[s].dataValues.producto.prod_sku}'
                 AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
             {
                 type: sequelize.QueryTypes.SELECT 
