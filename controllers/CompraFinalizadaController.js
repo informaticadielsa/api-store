@@ -1404,7 +1404,7 @@ export default{
                     'pcdc_mejor_descuento', 'pcdc_almacen_surtido', 'pcdc_no_disponible_para_compra', 'pcdc_back_order', 'pcdc_validado']
                 }
             })
-
+            
 
 
             //informacion Vendedor
@@ -1542,7 +1542,7 @@ export default{
                 }
                  
                
- 
+
                 //Pago con credito dielsa
                 if(constCarritoDeCompra.cdc_forma_pago_codigo == 99 || isProject)
                 {
