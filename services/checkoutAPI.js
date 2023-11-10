@@ -1120,10 +1120,9 @@ module.exports = {
             });
             
             let newProductsProyects = []
-            constProductoCarritoDeCompra.map((item)=>{
-                let cadena = String(item.dataValues.pcdc_prod_producto_id)
-
-                const data = sequelize.query(`
+           
+          for (var s=0; s<constProductoCarritoDeCompra.length; s++){
+                const data = await sequelize.query(`
                 SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
                 INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
                 INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
@@ -1136,11 +1135,11 @@ module.exports = {
              
                  const newProductProyect =data[0];
 
-                 item.dataValues.producto.prod_precio = (newProductProyect && (newProductProyect.precio < item.dataValues.producto.prod_precio || item.dataValues.producto.prod_precio ===0)? newProductProyect.precio : item.dataValues.producto.prod_precio )
+                 constProductoCarritoDeCompra[s].dataValues.producto.prod_precio = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? newProductProyect.precio : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio )
 
-                pruebaTester(cadena+ ' : ' + item.dataValues.producto.prod_precio + ' sku:' + item.dataValues.producto.prod_sku)
-               newProductsProyects.push(item)
-            })
+                pruebaTester(cadena+ ' : ' + constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
+               newProductsProyects.push(constProductoCarritoDeCompra[s])
+           }
             constProductoCarritoDeCompra = newProductsProyects;
             constProductoCarritoDeCompra = constProductoCarritoDeCompra.filter((item) =>
                 item.dataValues.producto.prod_peso > 0 && item.dataValues.producto.prod_volumen > 0 && item.dataValues.producto.prod_precio);
