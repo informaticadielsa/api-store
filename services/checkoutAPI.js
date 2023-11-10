@@ -1160,7 +1160,7 @@ module.exports = {
 
                  constProductoCarritoDeCompra[s].dataValues.producto.prod_precio = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio )
 
-                pruebaTester( constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
+                //pruebaTester( constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
                newProductsProyects.push(constProductoCarritoDeCompra[s])
            }
             //constProductoCarritoDeCompra = newProductsProyects;
@@ -1175,7 +1175,7 @@ module.exports = {
             {
                 //Ver que estamos filtrando
                 let cardK = String(constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id)
-                   pruebaTester(cardK +' : ' + constProductoCarritoDeCompra[z].dataValues.producto.prod_precio)
+                 //  pruebaTester(cardK +' : ' + constProductoCarritoDeCompra[z].dataValues.producto.prod_precio)
                    
                 //Consultar tabla productos stock general por producto
                 const constTieneStockGeneral = await models.Producto.findOne(

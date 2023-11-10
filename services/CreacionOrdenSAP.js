@@ -8,6 +8,7 @@ import productosUtils from "../services/productosUtils";
 import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import date_and_time from 'date-and-time';
 //const {testEmail} = require('../services/testEmail');
+import {pruebaTester} from './pruebaTester'
 
 
 module.exports = {
@@ -222,7 +223,7 @@ module.exports = {
                                                 },
                                                 body: JSON.stringify(dataCreateOrder)
                                             };
-
+                                            pruebaTester(JSON.stringify(dataCreateOrder))
                                             var result = await request(options, function (error, response) 
                                             {
                                                 //if (error) throw new Error(error);
@@ -780,7 +781,7 @@ module.exports = {
                                                 },
                                                 body: JSON.stringify(dataCreateOrderMXN)
                                             };
-
+                                            pruebaTester(JSON.stringify(dataCreateOrderMXN))
                                             var result = await request(options, function (error, response) 
                                             {
                                                 //if (error) throw new Error(error);
@@ -887,7 +888,7 @@ module.exports = {
                                                 },
                                                 body: JSON.stringify(dataCreateOrderUSD)
                                             };
-
+                                            pruebaTester(JSON.stringify(dataCreateOrderUSD))
                                             var result = await request(options, function (error, response) 
                                             {
                                                 // if (error) throw new Error(error);
