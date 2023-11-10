@@ -2130,7 +2130,7 @@ module.exports = {
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
                     "precioUnitario": Number(newPrices),
                     "codigoImpuesto": ImpuestoFinal,
-                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
+                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
@@ -2424,7 +2424,7 @@ module.exports = {
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
                     "precioUnitario": Number(newPrices),
                     "codigoImpuesto": ImpuestoFinal,
-                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual!= null? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
+                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual!= null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
