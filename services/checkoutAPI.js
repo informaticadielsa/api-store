@@ -1124,7 +1124,7 @@ module.exports = {
 
                
           for (var s=0; s<constProductoCarritoDeCompra.length; s++){
-            pruebaTester( constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
+           // pruebaTester( constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
                 const data = await sequelize.query(`
                 SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
                 INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
@@ -1155,7 +1155,7 @@ module.exports = {
             {
                 //Ver que estamos filtrando
                 let cardK = String(constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id)
-                   // pruebaTester(cardK +' : ' + constProductoCarritoDeCompra[z].dataValues.producto.prod_precio)
+                   pruebaTester(cardK +' : ' + constProductoCarritoDeCompra[z].dataValues.producto.prod_precio)
                    
                 //Consultar tabla productos stock general por producto
                 const constTieneStockGeneral = await models.Producto.findOne(
