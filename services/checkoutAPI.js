@@ -1121,7 +1121,9 @@ module.exports = {
 
             constProductoCarritoDeCompra.map((item)=>{
                 let cadena = String(item.dataValues.pcdc_prod_producto_id)
-                pruebaTester(cadena+ ' : ' + item.dataValues.producto.prod_precio)
+
+
+                pruebaTester(cadena+ ' : ' + item.dataValues.producto.prod_precio + ' sku:' + item.dataValues.producto.sku)
                
             })
 
