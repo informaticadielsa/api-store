@@ -2115,9 +2115,11 @@ module.exports = {
                  var newPrices=precioBase;
                  if(newProductProyect) {
                     if(newProductProyect.moneda=="USD"){
-                    newPrices=  newProductProyect.precio
+                    newPrices= (precioBase  === newProductProyect.precio ?  newProductProyect.precio : precioBase)
                    }else if(newProductProyect.moneda=="MXP"){
-                    newPrices =Number(newProductProyect.precio*USDValor)
+
+                    let newPric = Number(newProductProyect.precio*USDValor)
+                    newPrices = (precioBase === newPric? newPric : precioBase)
                    }else{
                     newPrices=precioBase
                    }
@@ -2407,9 +2409,11 @@ module.exports = {
                  var newPrices=precioBase;
                  if(newProductProyect) {
                     if(newProductProyect.moneda=="USD"){
-                    newPrices=  newProductProyect.precio
+                    newPrices= (precioBase  === newProductProyect.precio ?  newProductProyect.precio : precioBase)
                    }else if(newProductProyect.moneda=="MXP"){
-                    newPrices =Number(newProductProyect.precio*USDValor)
+
+                    let newPric = Number(newProductProyect.precio*USDValor)
+                    newPrices = (precioBase === newPric? newPric : precioBase)
                    }else{
                     newPrices=precioBase
                    }
