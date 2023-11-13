@@ -11,6 +11,7 @@ const {ordenFallidaToSapEmail} = require('../services/ordenFallidaToSapEmail');
 
 const {lineasTransitoEmail} = require('../services/lineasTransitoEmail');
 const {lineasEntregaEmail} = require('../services/lineasEntregaEmail');
+//const {testEmail} = require('../services/testEmail');
 
 //Integrar SN a SNU y mandar usuarios correo contraseña nueva
 import bcrypt from 'bcryptjs';
@@ -4105,17 +4106,45 @@ export default {
                 type: sequelize.QueryTypes.SELECT 
             });
             const newProductProyect =data[0];
+          
+                
+            const constTipoCambio = await models.ControlMaestroMultiple.findOne(
+                {
+                    where: {
+                        cmm_nombre: "TIPO_CAMBIO_USD"
+                    },
+                    attributes: ["cmm_valor"]
+                })
+                var USDValor = constTipoCambio.cmm_valor
+             
+             var newPrices=constProductoCompraFinalizada[i].dataValues.pcf_precio;
+             if(newProductProyect) {
+                if(newProductProyect.moneda=="USD"){
+                newPrices= newProductProyect.precio
+               }else if(newProductProyect.moneda=="MXP"){
+                newPrices =Number(newProductProyect.precio*USDValor)
+               }else{
+                newPrices=constProductoCompraFinalizada[i].dataValues.pcf_precio
+               }
+            }else{
+                 newPrices= constProductoCompraFinalizada[i].dataValues.pcf_precio
+             }
+           
                   //Variable para Lineas 
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": almacenAsignadoPerProducto,
+<<<<<<< HEAD
                     "precioUnitario": constProductoCompraFinalizada[i].dataValues.pcf_precio,
+=======
+                    "precioUnitario":newPrices,
+>>>>>>> QA
                     "codigoImpuesto": ImpuestoFinal,
                     "cantidad": constProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
                
-          
+               //testEmail('ricardo.ramos@daltum.mx', jsonArray)
              
                 array.push(jsonArray);
             }

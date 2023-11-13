@@ -1404,7 +1404,7 @@ export default{
                     'pcdc_mejor_descuento', 'pcdc_almacen_surtido', 'pcdc_no_disponible_para_compra', 'pcdc_back_order', 'pcdc_validado']
                 }
             })
-
+            
 
 
             //informacion Vendedor
@@ -1481,7 +1481,7 @@ export default{
                 cf_direccion_envio_id: constCarritoDeCompra.cdc_direccion_envio_id,
                 cf_cmm_tipo_impuesto: constControlMaestroMultiple.cmm_control_id, 
                 cf_alm_almacen_recoleccion: constCarritoDeCompra.cdc_alm_almacen_recoleccion,
-                cf_total_compra: checkoutJson.dataValues.TotalFinal,
+                cf_total_compra: resumenDividido[1].TotalFinal,
                 cf_estatus_orden: 1000185,
                 cf_fletera_id: constCarritoDeCompra.cdc_fletera_id,
                 cf_sap_metodos_pago_codigo: /*!!req.body.cdc_forma_pago_codigo ? req.body.cdc_forma_pago_codigo : null,*/ "PUE", //pago unico
@@ -1490,11 +1490,11 @@ export default{
                 cf_descripcion_sap: null,
                 cf_referencia: constCarritoDeCompra.cdc_referencia, 
                 cf_promcup_promociones_cupones_id: constCarritoDeCompra.cdc_promcup_promociones_cupones_id,
-                cf_orden_subtotal: checkoutJson.dataValues.precioTotal,
-                cf_orden_descuento: checkoutJson.dataValues.totalDescuentos,
-                cf_orden_subtotal_aplicado: checkoutJson.dataValues.precioFinalTotal,
-                cf_orden_gastos_envio: parseFloat(checkoutJson.dataValues.cdc_costo_envio.toFixed(2)),
-                cf_order_iva: checkoutJson.dataValues.TotalImpuesto,
+                cf_orden_subtotal: resumenDividido[1].precioTotal,
+                cf_orden_descuento: resumenDividido[1].totalDescuentos,
+                cf_orden_subtotal_aplicado: resumenDividido[1].precioFinalTotal,
+                cf_orden_gastos_envio: parseFloat(resumenDividido[1].cdc_costo_envio.toFixed(2)),
+                cf_order_iva: resumenDividido[1].TotalImpuesto,
                 cf_cfdi: constCarritoDeCompra.cdc_cfdi,
                 cf_estatus_orden_usd: 1000185,
                 cf_resume_mxn: resumenDividido[1],
@@ -1511,9 +1511,40 @@ export default{
             {
                 //Obtener Lineas para insertar en la tabla productos compra finalizada y para sap
                 var lineasTemporales = await getCheckout.getLineasProductosComprasFinalizadas(checkoutJson, constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+                var isProject = false
+                for(var i=0; i<constProductoCarritoDeCompra.length; i++){
+
+                    const constProducto = await models.Producto.findOne(
+                        {
+                            where: {
+                                prod_producto_id: constProductoCarritoDeCompra[i].pcdc_prod_producto_id
+                            }
+                        });
+                    
+
+
+                    const data = await sequelize.query(`
+                    SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
+                    INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
+                    INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
+                    WHERE sn.sn_socios_negocio_id = '${req.body.cdc_sn_socio_de_negocio_id}'
+                    AND lpro."codigoArticulo" = '${constProducto.dataValues.prod_sku}'
+                    AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                {
+                    type: sequelize.QueryTypes.SELECT 
+                });
+                 
+                     const newProductProyect =data[0];
+
+                     if(newProductProyect){
+                        isProject = newProductProyect.moneda=="USD" ? true : false
+                     }
+                }
+                 
+               
 
                 //Pago con credito dielsa
-                if(constCarritoDeCompra.cdc_forma_pago_codigo == 99)
+                if(constCarritoDeCompra.cdc_forma_pago_codigo == 99 || isProject)
                 {
                     //Regresa un array de la orden dividida en MXN y USD
                     var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales);

@@ -7,6 +7,9 @@ import statusControllers from '../mapeos/mapeoControlesMaestrosMultiples';
 import productosUtils from "../services/productosUtils";
 import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import date_and_time from 'date-and-time';
+//const {testEmail} = require('../services/testEmail');
+import {pruebaTester} from './pruebaTester'
+
 
 module.exports = {
     CreacionOrdenSAP: async function (cdc_sn_socio_de_negocio_id, cf_compra_finalizada_id, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre) {
@@ -220,7 +223,7 @@ module.exports = {
                                                 },
                                                 body: JSON.stringify(dataCreateOrder)
                                             };
-
+                                            pruebaTester(JSON.stringify(dataCreateOrder))
                                             var result = await request(options, function (error, response) 
                                             {
                                                 //if (error) throw new Error(error);
@@ -550,6 +553,8 @@ module.exports = {
                                     //Variable que servira para mandar el costo de envio en USD en caso de que no tenga productos en MXN una orden
                                     // var CostoEnvioEnUSDBool = true
 
+
+
                                     //Buscara los productos que no son USD para mandarlos a SAP
                                     if(constProductoCompraFinalizadaNoUSD.length > 0 || isRecoleccion == false)
                                     {
@@ -776,7 +781,7 @@ module.exports = {
                                                 },
                                                 body: JSON.stringify(dataCreateOrderMXN)
                                             };
-
+                                            pruebaTester(JSON.stringify(dataCreateOrderMXN))
                                             var result = await request(options, function (error, response) 
                                             {
                                                 //if (error) throw new Error(error);
@@ -883,7 +888,7 @@ module.exports = {
                                                 },
                                                 body: JSON.stringify(dataCreateOrderUSD)
                                             };
-
+                                            pruebaTester(JSON.stringify(dataCreateOrderUSD))
                                             var result = await request(options, function (error, response) 
                                             {
                                                 // if (error) throw new Error(error);
@@ -2096,17 +2101,41 @@ module.exports = {
             });
              
                  const newProductProyect =data[0];
+
+
+                 const constTipoCambio = await models.ControlMaestroMultiple.findOne(
+                    {
+                        where: {
+                            cmm_nombre: "TIPO_CAMBIO_USD"
+                        },
+                        attributes: ["cmm_valor"]
+                    })
+                    var USDValor = constTipoCambio.cmm_valor
+                 
+                 var newPrices=precioBase;
+                 if(newProductProyect) {
+                    if(newProductProyect.moneda=="USD"){
+                    newPrices=  newProductProyect.precio
+                   }else if(newProductProyect.moneda=="MXP"){
+                    newPrices =Number(newProductProyect.precio*USDValor)
+                   }else{
+                    newPrices=precioBase
+                   }
+                }else{
+                     newPrices= precioBase
+                 }
                 //Variable para Lineas
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": precioBase,
+                    "precioUnitario": newProductProyect ? Number(newProductProyect.precio) : precioBase,
                     "codigoImpuesto": ImpuestoFinal,
-                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual,
+                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
+                //testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
                 array.push(jsonArray);
             }
@@ -2365,18 +2394,43 @@ module.exports = {
 
 
                 const newProductProyect =data[0];
+
+                const constTipoCambio = await models.ControlMaestroMultiple.findOne(
+                    {
+                        where: {
+                            cmm_nombre: "TIPO_CAMBIO_USD"
+                        },
+                        attributes: ["cmm_valor"]
+                    })
+                    var USDValor = constTipoCambio.cmm_valor
+                 
+                 var newPrices=precioBase;
+                 if(newProductProyect) {
+                    if(newProductProyect.moneda=="USD"){
+                    newPrices=  newProductProyect.precio
+                   }else if(newProductProyect.moneda=="MXP"){
+                    newPrices =Number(newProductProyect.precio*USDValor)
+                   }else{
+                    newPrices=precioBase
+                   }
+                }else{
+                     newPrices= precioBase
+                 }
+            
+                     
                 //Variable para Lineas
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": precioBase,
+                    "precioUnitario": newProductProyect ? Number(newProductProyect.precio) : precioBase,
                     "codigoImpuesto": ImpuestoFinal,
-                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual,
+                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual!= null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
 
+               // testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
 
 
