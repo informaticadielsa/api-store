@@ -7,7 +7,6 @@ import statusControllers from '../mapeos/mapeoControlesMaestrosMultiples';
 import productosUtils from "../services/productosUtils";
 import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import Producto from '../models/ProductoModel';
-import {pruebaTester} from './pruebaTester'
 
 module.exports = {
     getCheckoutAPI: async function (cdc_sn_socio_de_negocio_id) {
