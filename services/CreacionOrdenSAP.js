@@ -2137,7 +2137,7 @@ module.exports = {
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
-
+                pruebaTester(JSON.stringify(jsonArray))
                 var jsonArray2= {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
