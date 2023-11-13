@@ -1543,9 +1543,90 @@ export default{
                  
                
 
-                //Pago con credito dielsa
-                if(constCarritoDeCompra.cdc_forma_pago_codigo == 99 || isProject)
+                //Pago con credito dielsa 
+                if(constCarritoDeCompra.cdc_forma_pago_codigo == 99)
                 {
+                    //Regresa un array de la orden dividida en MXN y USD
+                    var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales);
+                    var ordenDivididaBool = false
+                    var ordenNoTieneMXN = false
+
+                    //la orden puede estar dividida en dos
+                    for (var j = 0; j < ordernDividida.length; j++) 
+                    {
+                        
+
+                        if(ordernDividida[j].principal.length > 0)
+                        {
+                            // Ordenar order por producto id (posible solucion a aveces hace lo que quiere para las lineas sap)
+                            var principalTemp = sortJSON(ordernDividida[j].principal, 'pcf_prod_producto_id', 'asc');
+                            ordernDividida[j].principal = principalTemp
+
+                            //Insertar cada producto en la tabla de productos compras finalizadas
+                            for (var i = 0; i < ordernDividida[j].principal.length; i++) 
+                            {
+                                console.log(ordernDividida[j].principal[i])
+                                ordernDividida[j].principal[i].pcf_order_dividida_sap = false
+                                ordernDividida[j].principal[i].pcf_numero_orden_usd_sap = null
+                                await models.ProductoCompraFinalizada.create(ordernDividida[j].principal[i]);
+                            }
+                            ordenNoTieneMXN = true
+                        }
+                        else if(ordernDividida[j].secundario.length > 0)
+                        {
+                            // Ordenar order por producto id (posible solucion a aveces hace lo que quiere para las lineas sap)
+                            var principalTemp = sortJSON(ordernDividida[j].secundario, 'pcf_prod_producto_id', 'asc');
+                            ordernDividida[j].secundario = principalTemp
+
+                            //Insertar cada producto en la tabla de productos compras finalizadas
+                            for (var i = 0; i < ordernDividida[j].secundario.length; i++) 
+                            {
+                                console.log(ordernDividida[j].secundario[i])
+                                ordernDividida[j].secundario[i].pcf_order_dividida_sap = true
+                                ordernDividida[j].secundario[i].pcf_precio = parseFloat((ordernDividida[j].secundario[i].pcf_precio / USDValor).toFixed(2))
+                                ordernDividida[j].secundario[i].pcf_descuento_promocion = parseFloat((ordernDividida[j].secundario[i].pcf_descuento_promocion / USDValor).toFixed(2))
+                                ordernDividida[j].secundario[i].pcf_numero_orden_usd_sap = constCarritoDeCompra.cdc_numero_orden + '-01'
+                                await models.ProductoCompraFinalizada.create(ordernDividida[j].secundario[i]);
+                            }
+                            ordenDivididaBool = true
+                        }
+                    }
+
+                    // Obtener status ordenes null
+                        if(ordenNoTieneMXN == false && constCarritoDeCompra.cdc_cmm_tipo_envio_id == 17)
+                        {
+                            //Como no vendran productos en MXN y el tipo envio es recoleccion no tendra status orden MXN
+                            const bodyUpdate = {
+                                "cf_estatus_orden": null
+                            }
+                            await constCompraFinalizada.update(bodyUpdate);
+                        }
+
+                        //Si tiene productos en USD dara valor a la parte de que tambien es orden en USD
+                        if(ordenDivididaBool == true)
+                        {
+                            await constCompraFinalizada.update({
+                                cf_orden_dividida_sap : constCarritoDeCompra.cdc_numero_orden + '-01',
+                                updatedAt: Date()
+                            });
+                        }
+                        else
+                        {
+                            //Como no vendran productos en USD pondre en null el status
+                            const bodyUpdate = {
+                                "cf_estatus_orden_usd": null
+                            }
+                            await constCompraFinalizada.update(bodyUpdate);
+                        }
+                    //
+
+                    //Crear Num lineas para sap a la tabla productos compra finalizada
+                    // var lineaNum = await CreacionOrdenSAP.CreaLineasNumSAP(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+
+                    var jsonSAP = await CreacionOrdenSAP.CreacionOrdenSAPDivididaUSD(req.body.cdc_sn_socio_de_negocio_id, constCompraFinalizada.dataValues.cf_compra_finalizada_id, checkoutJson.dataValues.cdc_politica_envio_surtir_un_solo_almacen, checkoutJson.dataValues.cdc_politica_envio_nombre);
+                }else if (isProject){
+
+                    //Cuando venga de un proyecto
                     //Regresa un array de la orden dividida en MXN y USD
                     var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales);
                     var ordenDivididaBool = false

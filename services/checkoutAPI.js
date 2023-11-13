@@ -4239,7 +4239,7 @@ module.exports = {
 
                 const constProductoListaPrecio = await models.ProductoListaPrecio.findOne(
                 {
-                    where: {
+                    where: { 
                         pl_prod_producto_id: sqlResult[0].prod_producto_id,
                         pl_listp_lista_de_precio_id: sqlResult[0].listp_lista_de_precio_id
                     }
