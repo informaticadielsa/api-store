@@ -2111,7 +2111,7 @@ module.exports = {
                         attributes: ["cmm_valor"]
                     })
                     var USDValor = constTipoCambio.cmm_valor
-                 pruebaTester(JSON.stringify(constPreProductoCompraFinalizada[i]))
+                // pruebaTester(JSON.stringify(constPreProductoCompraFinalizada[i]))
                  var newPrices=precioBase;
                  if(newProductProyect) {
                     if(newProductProyect.moneda=="USD"){
@@ -2137,6 +2137,19 @@ module.exports = {
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
+
+                var jsonArray2= {
+                    "codigoArticulo": constProducto.dataValues.prod_sku,
+                    "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
+                    "precioUnitario":   precioBase,
+                    "codigoImpuesto": ImpuestoFinal,
+                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
+                    "fechaEntrega": dateFinal,
+                    "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
+                    "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
+                }
+
+                pruebaTester(JSON.stringify(jsonArray2))
                 //testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
                 array.push(jsonArray);
@@ -2394,7 +2407,7 @@ module.exports = {
                 type: sequelize.QueryTypes.SELECT 
             });
 
-            pruebaTester(JSON.stringify(constPreProductoCompraFinalizada[i]))
+            //pruebaTester(JSON.stringify(constPreProductoCompraFinalizada[i]))
                 const newProductProyect =data[0];
 
                 const constTipoCambio = await models.ControlMaestroMultiple.findOne(
@@ -2420,7 +2433,7 @@ module.exports = {
                 }else{
                      newPrices= precioBase
                  }
-            
+                 
                      
                 //Variable para Lineas
                 var jsonArray = {
@@ -2434,6 +2447,19 @@ module.exports = {
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
 
+                pruebaTester(JSON.stringify(jsonArray))
+
+                var jsonArray2 = {
+                    "codigoArticulo": constProducto.dataValues.prod_sku,
+                    "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
+                    "precioUnitario": precioBase,
+                    "codigoImpuesto": ImpuestoFinal,
+                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual!= null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
+                    "fechaEntrega": dateFinal,
+                    "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
+                    "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
+                }
+                pruebaTester(JSON.stringify(jsonArray2))
                // testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
 
