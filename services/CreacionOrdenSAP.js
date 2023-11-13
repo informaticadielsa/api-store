@@ -2137,19 +2137,8 @@ module.exports = {
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
-                pruebaTester(JSON.stringify(jsonArray))
-                var jsonArray2= {
-                    "codigoArticulo": constProducto.dataValues.prod_sku,
-                    "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario":   precioBase,
-                    "codigoImpuesto": ImpuestoFinal,
-                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
-                    "fechaEntrega": dateFinal,
-                    "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
-                    "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
-                }
+                pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
 
-                pruebaTester(JSON.stringify(jsonArray2))
                 //testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
                 array.push(jsonArray);
@@ -2447,19 +2436,8 @@ module.exports = {
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
 
-                pruebaTester(JSON.stringify(jsonArray))
+                pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
 
-                var jsonArray2 = {
-                    "codigoArticulo": constProducto.dataValues.prod_sku,
-                    "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": precioBase,
-                    "codigoImpuesto": ImpuestoFinal,
-                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual!= null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
-                    "fechaEntrega": dateFinal,
-                    "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
-                    "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
-                }
-                pruebaTester(JSON.stringify(jsonArray2))
                // testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
 
