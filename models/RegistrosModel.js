@@ -16,7 +16,7 @@ const Proyectos = sequelize.define('Proyectos', {
     },
     codigoCliente: {
         type: Sequelize.STRING,
-    },
+    }, 
     estatus: {
         type: Sequelize.STRING
     },
