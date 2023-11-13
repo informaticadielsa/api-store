@@ -2111,7 +2111,7 @@ module.exports = {
                         attributes: ["cmm_valor"]
                     })
                     var USDValor = constTipoCambio.cmm_valor
-                 
+                 pruebaTester(JSON.stringify(constPreProductoCompraFinalizada[i]))
                  var newPrices=precioBase;
                  if(newProductProyect) {
                     if(newProductProyect.moneda=="USD"){
@@ -2128,7 +2128,7 @@ module.exports = {
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": precioBase,
+                    "precioUnitario":   Number(newPrices),
                     "codigoImpuesto": ImpuestoFinal,
                     "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
                     "fechaEntrega": dateFinal,
@@ -2392,7 +2392,7 @@ module.exports = {
                 type: sequelize.QueryTypes.SELECT 
             });
 
-
+            pruebaTester(JSON.stringify(constPreProductoCompraFinalizada[i]))
                 const newProductProyect =data[0];
 
                 const constTipoCambio = await models.ControlMaestroMultiple.findOne(
@@ -2422,7 +2422,7 @@ module.exports = {
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": Number(precioBase),
+                    "precioUnitario": Number(newPrices),
                     "codigoImpuesto": ImpuestoFinal,
                     "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual!= null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
                     "fechaEntrega": dateFinal,
