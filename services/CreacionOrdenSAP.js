@@ -787,7 +787,7 @@ module.exports = {
                                             {
                                                 //if (error) throw new Error(error);
                                             });
-
+                                            pruebaTester(JSON.stringify(result))
                                             var resultJson = JSON.parse(result);
 
                                             if(resultJson)
