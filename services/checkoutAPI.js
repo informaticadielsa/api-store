@@ -4207,7 +4207,7 @@ module.exports = {
             return "No fue posible regresar las lineas de productos para dividir la orden en almacenes"
         }
     },
-    validarLineasIfDividirOrdenUSDExchage: async function (lineas) {
+    validarLineasIfDividirOrdenUSDExchage: async function (lineas, lineasProducts = null) {
         try{
             //Variable que se regresara al final
             var validarReturn = false
@@ -4244,8 +4244,38 @@ module.exports = {
                         pl_listp_lista_de_precio_id: sqlResult[0].listp_lista_de_precio_id
                     }
                 })
+                if(lineasProducts!= null){
 
-                if(constProductoListaPrecio.pl_tipo_moneda == 'USD')
+                    if (constProductoListaPrecio.pl_tipo_moneda ==="USD" && 
+                     lineasProducts.moneda ==="USD"
+                    ){ 
+                        if (lineasProducts.precio <  constProductoListaPrecio.pl_precio_usd ||  constProductoListaPrecio.pl_precio_usd ===0){
+                            constProductoListaPrecio.pl_precio_usd = lineasProducts.precio;
+                            constProductoListaPrecio.pl_tipo_moneda ="USD"
+                        }else{
+                            constProductoListaPrecio.pl_precio_usd =  constProductoListaPrecio.pl_precio_usd
+                            constProductoListaPrecio.pl_tipo_moneda="USD"
+                        }
+                    }else if(constProductoListaPrecio.pl_tipo_moneda === null && 
+                    lineasProducts.moneda ==="USD"){
+                        constProductoListaPrecio.pl_precio_usd = lineasProducts.precio;
+                        constProductoListaPrecio.pl_tipo_moneda="USD"
+                    }else{
+                        if (lineasProducts.precio <  constProductoListaPrecio.pl_precio_producto ||  constProductoListaPrecio.pl_precio_producto ===0){
+                            constProductoListaPrecio.pl_precio_producto = lineasProducts.precio;
+                            constProductoListaPrecio.pl_tipo_moneda="MXN"
+                        }else{
+                            constProductoListaPrecio.pl_precio_producto =  constProductoListaPrecio.pl_precio_producto
+                            constProductoListaPrecio.pl_tipo_moneda="MXN"
+                        }
+                    }
+
+                //constProductoListaPrecio.pl_tipo_moneda ==  () ?   lineasProducts.moneda
+                //constProductoListaPrecio.pl_precio_usd == lineas.precio
+
+                }
+
+                if(constProductoListaPrecio.pl_tipo_moneda == 'USD' )
                 {
                     lineasArraySecundaria.push(lineas[i])
                 }
@@ -4253,7 +4283,7 @@ module.exports = {
                 {
                     lineasArrayPrincipal.push(lineas[i])
                 }
-            }
+            } 
 
             // console.log(lineasArrayPrincipal)
             // console.log(lineasArraySecundaria)

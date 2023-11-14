@@ -1512,6 +1512,7 @@ export default{
                 //Obtener Lineas para insertar en la tabla productos compra finalizada y para sap
                 var lineasTemporales = await getCheckout.getLineasProductosComprasFinalizadas(checkoutJson, constCompraFinalizada.dataValues.cf_compra_finalizada_id);
                 var isProject = false
+                var newProductsProyects = []
                 for(var i=0; i<constProductoCarritoDeCompra.length; i++){
 
                     const constProducto = await models.Producto.findOne(
@@ -1538,6 +1539,9 @@ export default{
 
                      if(newProductProyect){
                         isProject = newProductProyect.moneda=="USD" ? true : false
+                        newProductsProyects.push({idProduct: constProducto.prod_producto_id, moneda : newProductProyect.moneda, 
+                        precio: newProductProyect.moneda =="USD" ? newProductProyect.precio : Number(newProductProyect.precio* USDValor)
+                        })
                      }
                 }
                  
@@ -1628,7 +1632,7 @@ export default{
 
                     //Cuando venga de un proyecto
                     //Regresa un array de la orden dividida en MXN y USD
-                    var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales);
+                    var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales,newProductsProyects );
                     var ordenDivididaBool = false
                     var ordenNoTieneMXN = false
 
