@@ -1632,7 +1632,7 @@ export default{
 
                     //Cuando venga de un proyecto
                     //Regresa un array de la orden dividida en MXN y USD
-                    var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales,newProductsProyects );
+                    var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales,newProductsProyects, USDValor);
                     var ordenDivididaBool = false
                     var ordenNoTieneMXN = false
 

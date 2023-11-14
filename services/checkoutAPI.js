@@ -4207,7 +4207,7 @@ module.exports = {
             return "No fue posible regresar las lineas de productos para dividir la orden en almacenes"
         }
     },
-    validarLineasIfDividirOrdenUSDExchage: async function (lineas, lineasProducts = null) {
+    validarLineasIfDividirOrdenUSDExchage: async function (lineas, lineasProducts = null,tipoCambio= null) {
         try{
             //Variable que se regresara al final
             var validarReturn = false
@@ -4249,7 +4249,7 @@ module.exports = {
                     if (constProductoListaPrecio.pl_tipo_moneda ==="USD" && 
                      lineasProducts.moneda ==="USD"
                     ){ 
-                        if (lineasProducts.precio <  constProductoListaPrecio.pl_precio_usd ||  constProductoListaPrecio.pl_precio_usd ===0){
+                        if (lineasProducts.precio <  Number(constProductoListaPrecio.pl_precio_usd/tipoCambio)	 ||  constProductoListaPrecio.pl_precio_usd ===0){
                             constProductoListaPrecio.pl_precio_usd = lineasProducts.precio;
                             constProductoListaPrecio.pl_tipo_moneda ="USD"
                         }else{
