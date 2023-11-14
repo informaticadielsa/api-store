@@ -9,6 +9,7 @@ import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import date_and_time from 'date-and-time';
 //const {testEmail} = require('../services/testEmail');
 import {pruebaTester} from './pruebaTester'
+import { Json } from 'sequelize/types/utils';
 
 
 module.exports = {
@@ -893,7 +894,7 @@ module.exports = {
                                             {
                                                 // if (error) throw new Error(error);
                                             });
-
+                                            pruebaTester(JSON.stringify(result))
                                             var resultJson = JSON.parse(result);
 
                                             if(resultJson)
