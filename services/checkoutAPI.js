@@ -4249,7 +4249,8 @@ module.exports = {
                     if (constProductoListaPrecio.pl_tipo_moneda ==="USD" && 
                      lineasProducts.moneda ==="USD"
                     ){ 
-                        if (lineasProducts.precio <  Number(constProductoListaPrecio.pl_precio_usd/tipoCambio)	 ||  constProductoListaPrecio.pl_precio_usd ===0){
+                        let prec = Number(constProductoListaPrecio.pl_precio_usd/tipoCambio)
+                        if (lineasProducts.precio < prec||  constProductoListaPrecio.pl_precio_usd ===0){
                             constProductoListaPrecio.pl_precio_usd = lineasProducts.precio;
                             constProductoListaPrecio.pl_tipo_moneda ="USD"
                         }else{
