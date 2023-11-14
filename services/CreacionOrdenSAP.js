@@ -9,7 +9,7 @@ import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import date_and_time from 'date-and-time';
 //const {testEmail} = require('../services/testEmail');
 import {pruebaTester} from './pruebaTester'
-import { Json } from 'sequelize/types/utils';
+
 
 
 module.exports = {
