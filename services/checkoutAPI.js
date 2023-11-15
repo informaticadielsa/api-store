@@ -1173,7 +1173,7 @@ module.exports = {
             for (var z = 0; z < prodCarritoLenght; z++) 
             {
                 //Ver que estamos filtrando
-                let cardK = String(constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id)
+                //let cardK = String(constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id)
                  //  pruebaTester(cardK +' : ' + constProductoCarritoDeCompra[z].dataValues.producto.prod_precio)
                    
                 //Consultar tabla productos stock general por producto
@@ -4244,30 +4244,35 @@ module.exports = {
                         pl_listp_lista_de_precio_id: sqlResult[0].listp_lista_de_precio_id
                     }
                 })
-                if(lineasProducts!= null){
+               /* if(lineasProducts!= null){
 
                     if (constProductoListaPrecio.pl_tipo_moneda ==="USD" && 
                      lineasProducts.moneda ==="USD"
                     ){ 
-                        let prec = Number(constProductoListaPrecio.pl_precio_usd/tipoCambio)
-                        if (lineasProducts.precio < prec||  constProductoListaPrecio.pl_precio_usd ===0){
+                       
+                        if (lineasProducts.precio < constProductoListaPrecio.pl_precio_usd ||  constProductoListaPrecio.pl_precio_usd ===0){
                             constProductoListaPrecio.pl_precio_usd = lineasProducts.precio;
                             constProductoListaPrecio.pl_tipo_moneda ="USD"
+                            console.log('1')
                         }else{
                             constProductoListaPrecio.pl_precio_usd =  constProductoListaPrecio.pl_precio_usd
                             constProductoListaPrecio.pl_tipo_moneda="USD"
+                            console.log('11')
                         }
                     }else if(constProductoListaPrecio.pl_tipo_moneda === null && 
                     lineasProducts.moneda ==="USD"){
                         constProductoListaPrecio.pl_precio_usd = lineasProducts.precio;
                         constProductoListaPrecio.pl_tipo_moneda="USD"
+                        console.log('2')
                     }else{
                         if (lineasProducts.precio <  constProductoListaPrecio.pl_precio_producto ||  constProductoListaPrecio.pl_precio_producto ===0){
                             constProductoListaPrecio.pl_precio_producto = lineasProducts.precio;
-                            constProductoListaPrecio.pl_tipo_moneda="MXN"
+                            constProductoListaPrecio.pl_tipo_moneda="MXP"
+                            console.log('4')
                         }else{
+                            console.log('3')
                             constProductoListaPrecio.pl_precio_producto =  constProductoListaPrecio.pl_precio_producto
-                            constProductoListaPrecio.pl_tipo_moneda="MXN"
+                            constProductoListaPrecio.pl_tipo_moneda="MXP"
                         }
                     }
 
@@ -4275,12 +4280,12 @@ module.exports = {
                 //constProductoListaPrecio.pl_precio_usd == lineas.precio
 
                 }
-
+                    */
                 if(constProductoListaPrecio.pl_tipo_moneda == 'USD' )
                 {
                     lineasArraySecundaria.push(lineas[i])
                 }
-                else
+                else if(constProductoListaPrecio.pl_tipo_moneda=='MXP')
                 {
                     lineasArrayPrincipal.push(lineas[i])
                 }
