@@ -11,6 +11,7 @@ import date_and_time from 'date-and-time';
 import {pruebaTester} from './pruebaTester'
 
 
+
 module.exports = {
     CreacionOrdenSAP: async function (cdc_sn_socio_de_negocio_id, cf_compra_finalizada_id, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre) {
         try{
@@ -786,7 +787,7 @@ module.exports = {
                                             {
                                                 //if (error) throw new Error(error);
                                             });
-
+                                            pruebaTester(JSON.stringify(result))
                                             var resultJson = JSON.parse(result);
 
                                             if(resultJson)
@@ -893,7 +894,7 @@ module.exports = {
                                             {
                                                 // if (error) throw new Error(error);
                                             });
-
+                                            pruebaTester(JSON.stringify(result))
                                             var resultJson = JSON.parse(result);
 
                                             if(resultJson)
@@ -2111,13 +2112,15 @@ module.exports = {
                         attributes: ["cmm_valor"]
                     })
                     var USDValor = constTipoCambio.cmm_valor
-                 
+                // pruebaTester(JSON.stringify(constPreProductoCompraFinalizada[i]))
                  var newPrices=precioBase;
                  if(newProductProyect) {
                     if(newProductProyect.moneda=="USD"){
-                    newPrices=  newProductProyect.precio
+                    newPrices= ( newProductProyect.precio < precioBase ?  newProductProyect.precio : precioBase)
                    }else if(newProductProyect.moneda=="MXP"){
-                    newPrices =Number(newProductProyect.precio*USDValor)
+
+                    let newPric = Number(newProductProyect.precio*USDValor)
+                    newPrices = ( newPric < precioBase? newPric : precioBase)
                    }else{
                     newPrices=precioBase
                    }
@@ -2128,13 +2131,15 @@ module.exports = {
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": Number(newPrices),
+                    "precioUnitario":   Number(newPrices),
                     "codigoImpuesto": ImpuestoFinal,
                     "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
+                pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
+
                 //testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
                 array.push(jsonArray);
@@ -2392,7 +2397,7 @@ module.exports = {
                 type: sequelize.QueryTypes.SELECT 
             });
 
-
+            //pruebaTester(JSON.stringify(constPreProductoCompraFinalizada[i]))
                 const newProductProyect =data[0];
 
                 const constTipoCambio = await models.ControlMaestroMultiple.findOne(
@@ -2407,16 +2412,18 @@ module.exports = {
                  var newPrices=precioBase;
                  if(newProductProyect) {
                     if(newProductProyect.moneda=="USD"){
-                    newPrices=  newProductProyect.precio
+                    newPrices= ( newProductProyect.precio < precioBase ?  newProductProyect.precio : precioBase)
                    }else if(newProductProyect.moneda=="MXP"){
-                    newPrices =Number(newProductProyect.precio*USDValor)
+
+                    let newPric = Number(newProductProyect.precio*USDValor)
+                    newPrices = ( newPric < precioBase? newPric : precioBase)
                    }else{
                     newPrices=precioBase
                    }
                 }else{
                      newPrices= precioBase
                  }
-            
+                 
                      
                 //Variable para Lineas
                 var jsonArray = {
@@ -2429,6 +2436,8 @@ module.exports = {
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
                 }
+
+                pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
 
                // testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
