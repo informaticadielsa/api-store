@@ -947,6 +947,7 @@ module.exports = {
 
             //Set precios nuevos y resumen
             constCarritoDeCompra.dataValues.tipoImpuesto = tipoImpuesto + "%"
+            //Nota este es el total de descuento promociones Revisar 
             constCarritoDeCompra.dataValues.totalDescuentosPromociones = totalDescuentosPromociones.toFixed(2)
             constCarritoDeCompra.dataValues.totalDescuentosCupones = totalDescuentosCupones.toFixed(2)
             constCarritoDeCompra.dataValues.totalDescuentos = (totalDescuentosCupones+totalDescuentosPromociones).toFixed(2)
@@ -1089,7 +1090,7 @@ module.exports = {
             console.log(e)
             return "error"
         }
-    },
+    }, 
     getCheckoutAPI2: async function (cdc_sn_socio_de_negocio_id) {
         try{
 
