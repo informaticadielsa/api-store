@@ -4500,7 +4500,7 @@ module.exports = {
                     {
                         // Conversión peso a dolar
                         precioTotal_usd += (totalCantidadProducto * precioFinalProduct)/USDValor;
-                        totalDescuentos_usd += (totalCantidadProducto * precioFinalProduct/USDValor);
+                        totalDescuentos_usd += (totalCantidadProducto * discountAmount/USDValor);
     
                         //Variable que saca el total subtotal (cantidad x precio base)
                         precioTotalTemp = totalCantidadProducto * precioFinalProduct;
@@ -4514,7 +4514,10 @@ module.exports = {
             }
 
 
-            precioFinalTotal_usd += precioTotal_usd-totalDescuentos_usd
+            cdc_costo_envio_usd = checkoutJson.dataValues.cdc_costo_envio / USDValor;
+
+            precioFinalTotal_usd += (precioTotal_usd + cdc_costo_envio_usd) - totalDescuentos_usd
+
             var cantidadImpuesto
             if(checkoutJson.dataValues.tipoImpuesto == "16%")
             {
