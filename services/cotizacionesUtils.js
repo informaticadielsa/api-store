@@ -985,7 +985,7 @@ module.exports = {
                         }
                     }
                     else
-                    {
+                    {   
                         constProducto.dataValues.pcf_precio_base_venta = constProducto.dataValues.prod_precio
                     }
                     productos[i] = constProducto
@@ -1011,9 +1011,17 @@ module.exports = {
 
 
     //PASO 5
-    cotizacionesObtenerPromocionesProductos: async function (body, productos, lineasProductos) {
+    cotizacionesObtenerPromocionesProductos: async function (body, productos, lineasProductos, socio_de_negocio_id) {
         try
         {
+            const { cmm_valor: USDValor } = await models.ControlMaestroMultiple.findOne(
+            {
+                where: {
+                    cmm_nombre: "TIPO_CAMBIO_USD"
+                },
+                attributes: ["cmm_valor"]
+            });
+            console.log('USDValor ---> ', USDValor);
             // console.log(1111)
             // console.log(productos.length)
             // console.log(2222)
@@ -1118,6 +1126,17 @@ module.exports = {
             //Obtener precios base y final con descuento de grupo
             for (var i = 0; i < productos.length; i++) 
             {
+                const dataProduct = await sequelize.query(`
+                    SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
+                    INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
+                    INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
+                    WHERE sn.sn_socios_negocio_id = '${socio_de_negocio_id}'
+                    AND lpro."codigoArticulo" = '${productos[i].dataValues.prod_sku}'
+                    AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                {
+                    type: sequelize.QueryTypes.SELECT 
+                });
+                console.log('dataProduct ---> ', dataProduct);
                 // console.log(888888777)
                 // console.log(productos[i])
                 //--NO GENERA PRECIOS FINALES
@@ -1408,7 +1427,7 @@ module.exports = {
                     //Valores de promocion/descuento antes de cupon
                     var cantidadPromocion = totalPromocion
                     precioTemporal = precioMenosPromo
-
+                    console.log('precioMenosPromo ---> ', precioMenosPromo);
                     productos[i].dataValues.precioDespuesDePromocion = precioTemporal.toFixed(2)
                     productos[i].dataValues.cantidadDescuentoPromocion = cantidadPromocion
 
@@ -1462,6 +1481,14 @@ module.exports = {
                     }
                     else
                     {
+                        if(dataProduct[0]) {
+                            if(dataProduct[0].precio < precioTemporal 
+                            || precioTemporal == 0) {
+                                precioTemporal = dataProduct[0].moneda === 'MXP'
+                                    ? Number(dataProduct[0].precio)
+                                    : Number(dataProduct[0].precio) * USDValor;
+                            }
+                        }
                         productos[i].dataValues.precioFinal = parseFloat((precioTemporal).toFixed(2))
                     }
                     
@@ -1482,6 +1509,14 @@ module.exports = {
                     }
                     else
                     {
+                        if(dataProduct[0]) {
+                            if(dataProduct[0].precio < precioBase 
+                            || precioBase == 0) {
+                                precioBase = dataProduct[0].moneda === 'MXP'
+                                    ? Number(dataProduct[0].precio)
+                                    : Number(dataProduct[0].precio) * USDValor;
+                            }
+                        }
                         productos[i].dataValues.precioFinal = parseFloat((precioBase).toFixed(2))
                     }
                     productos[i].dataValues.precioFinalMasImpuesto = (productos[i].dataValues.precioFinal * (1 + (tipoImpuesto / 100)))
@@ -1499,8 +1534,8 @@ module.exports = {
 
                 productos[i].dataValues.totalDescuentoPorcentual = parseFloat(porcentajeDescuentoTemporal.toFixed(2))
 
-
-
+                console.log('tempPrecioBase ---> ', tempPrecioBase);
+                console.log('tempPrecioFinal ---> ', tempPrecioFinal);
 
 
 

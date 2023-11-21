@@ -4880,7 +4880,7 @@ export default {
             //PASO COT 5
             console.log("/////////// Comienza PASO 5 ///////////")
             //Obtener promociones a partir de las lineas generadas (Aplicara Backorders tralados etc~)
-                productos = await cotizacionesUtils.cotizacionesObtenerPromocionesProductos(req.body, productos, lineasProductos);
+                productos = await cotizacionesUtils.cotizacionesObtenerPromocionesProductos(req.body, productos, lineasProductos, req.body.cdc_sn_socio_de_negocio_id);
             //FIN Obtener promociones a partir de las lineas generadas
             console.log("/////////// FIN PASO 5 ///////////")
 

@@ -11,6 +11,7 @@ import date_and_time from 'date-and-time';
 import {pruebaTester} from './pruebaTester'
 
 
+
 module.exports = {
     CreacionOrdenSAP: async function (cdc_sn_socio_de_negocio_id, cf_compra_finalizada_id, cdc_politica_envio_surtir_un_solo_almacen, cdc_politica_envio_nombre) {
         try{
@@ -223,12 +224,12 @@ module.exports = {
                                                 },
                                                 body: JSON.stringify(dataCreateOrder)
                                             };
-                                            pruebaTester(JSON.stringify(dataCreateOrder))
+                                           // pruebaTester(JSON.stringify(dataCreateOrder))
                                             var result = await request(options, function (error, response) 
                                             {
                                                 //if (error) throw new Error(error);
                                             });
-
+                                           
                                             var resultJson = JSON.parse(result);
                                                 console.log('OJO de DIOS')
                                                 console.log(resultJson)
@@ -243,6 +244,8 @@ module.exports = {
                                                     "cf_estatus_creacion_sap" :  resultJson.estatus,
                                                     "cf_sap_json_creacion" :  dataCreateOrder
                                                 };
+                                                //pruebaTester
+                                                console.log('inserto sap MXP Creacion Sap')
                                                 await constCompraFinalizada.update(bodyUpdate);
                                             }
                                             else
@@ -444,6 +447,8 @@ module.exports = {
                 //Si ambas parte de la orden existen
                 if(constCompraFinalizada && constProductoCompraFinalizada)
                 {
+                   // pruebaTester(JSON.stringify(constCompraFinalizada))
+                   // pruebaTester(JSON.stringify(constProductoCompraFinalizada))
                     //Obtener informacion del Socio de Negocio
                     const constSociosNegocio = await models.SociosNegocio.findOne(
                     {
@@ -550,6 +555,8 @@ module.exports = {
                                         }
                                     })
 
+                                   // pruebaTester(JSON.stringify(constProductoCompraFinalizadaNoUSD))
+
                                     //Variable que servira para mandar el costo de envio en USD en caso de que no tenga productos en MXN una orden
                                     // var CostoEnvioEnUSDBool = true
 
@@ -646,6 +653,8 @@ module.exports = {
                                         }
                                     })
 
+                                    //pruebaTester(JSON.stringify(constProductoCompraFinalizadaNoUSD))
+
                                     //Mandara los productos en precio USD a SAP
                                     if(constProductoCompraFinalizadaUSD.length > 0)
                                     {
@@ -694,7 +703,7 @@ module.exports = {
                                             }
 
                                             dataCreateOrderUSD = dataCreateOrder
-
+                                            //pruebaTester(JSON.stringify(dataCreateOrderUSD))
 
                                             
 
@@ -781,12 +790,12 @@ module.exports = {
                                                 },
                                                 body: JSON.stringify(dataCreateOrderMXN)
                                             };
-                                            pruebaTester(JSON.stringify(dataCreateOrderMXN))
+                                            //pruebaTester(JSON.stringify(dataCreateOrderMXN))
                                             var result = await request(options, function (error, response) 
                                             {
                                                 //if (error) throw new Error(error);
                                             });
-
+                                            //pruebaTester(JSON.stringify(result))
                                             var resultJson = JSON.parse(result);
 
                                             if(resultJson)
@@ -800,6 +809,8 @@ module.exports = {
                                                     "cf_estatus_creacion_sap" :  resultJson.estatus,
                                                     "cf_sap_json_creacion" :  dataCreateOrderMXN
                                                 };
+                                                //pruebaTester
+                                                console.log('Inserto SAP MXP')
                                                 await constCompraFinalizada.update(bodyUpdate);
                                             }
                                             else
@@ -888,14 +899,17 @@ module.exports = {
                                                 },
                                                 body: JSON.stringify(dataCreateOrderUSD)
                                             };
-                                            pruebaTester(JSON.stringify(dataCreateOrderUSD))
+                                            
                                             var result = await request(options, function (error, response) 
                                             {
                                                 // if (error) throw new Error(error);
                                             });
-
+                                           // pruebaTester(JSON.stringify(dataCreateOrderUSD))
+                                         //  console.log('Sappp:',JSON.stringify(dataCreateOrderUSD) )
+                                           // pruebaTester(JSON.stringify(result))
+                                           console.log(dataCreateOrderUSD)
                                             var resultJson = JSON.parse(result);
-
+                                            console.log(resultJson)
                                             if(resultJson)
                                             {
                                                 if(resultJson.descripcion == "ERROR - Este documento ya ha sido creado en SAP")
@@ -907,6 +921,8 @@ module.exports = {
                                                     "cf_estatus_creacion_sap_usd" :  resultJson.estatus,
                                                     "cf_sap_json_creacion_usd" :  dataCreateOrderUSD
                                                 };
+                                               // pruebaTester
+                                               console.log('Inserto SAP USD')
                                                 await constCompraFinalizada.update(bodyUpdate);
                                             }
                                             else
@@ -2102,39 +2118,24 @@ module.exports = {
              
                  const newProductProyect =data[0];
 
-
-                 const constTipoCambio = await models.ControlMaestroMultiple.findOne(
-                    {
-                        where: {
-                            cmm_nombre: "TIPO_CAMBIO_USD"
-                        },
-                        attributes: ["cmm_valor"]
-                    })
-                    var USDValor = constTipoCambio.cmm_valor
-                 
                  var newPrices=precioBase;
-                 if(newProductProyect) {
-                    if(newProductProyect.moneda=="USD"){
-                    newPrices=  newProductProyect.precio
-                   }else if(newProductProyect.moneda=="MXP"){
-                    newPrices =Number(newProductProyect.precio*USDValor)
-                   }else{
-                    newPrices=precioBase
-                   }
-                }else{
-                     newPrices= precioBase
-                 }
-                //Variable para Lineas
+              
+
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": newProductProyect ? Number(newProductProyect.precio) : precioBase,
+                    "precioUnitario": ((Number(newPrices) ===0 && newProductProyect) || (newProductProyect && Number(newProductProyect.precio) === Number(precioFinal))) ? newProductProyect.precio : Number(newPrices),
                     "codigoImpuesto": ImpuestoFinal,
-                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
+                    "descuento":  (constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != "null" && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual) ? 
+                    constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual:0,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
-                    "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
+                    "acuerdoG": (newProductProyect ? ( Number(newProductProyect.precio) === Number(precioFinal))? parseInt(newProductProyect.idProyecto): null : null)
                 }
+
+              // pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
+               // pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
+
                 //testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
                 array.push(jsonArray);
@@ -2392,7 +2393,7 @@ module.exports = {
                 type: sequelize.QueryTypes.SELECT 
             });
 
-
+            //pruebaTester(JSON.stringify(constPreProductoCompraFinalizada[i]))
                 const newProductProyect =data[0];
 
                 const constTipoCambio = await models.ControlMaestroMultiple.findOne(
@@ -2405,49 +2406,25 @@ module.exports = {
                     var USDValor = constTipoCambio.cmm_valor
                  
                  var newPrices=precioBase;
-                 if(newProductProyect) {
-                    if(newProductProyect.moneda=="USD"){
-                    newPrices=  newProductProyect.precio
-                   }else if(newProductProyect.moneda=="MXP"){
-                    newPrices =Number(newProductProyect.precio*USDValor)
-                   }else{
-                    newPrices=precioBase
-                   }
-                }else{
-                     newPrices= precioBase
-                 }
-            
+                 
+                 
                      
                 //Variable para Lineas
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
-                    "precioUnitario": newProductProyect ? Number(newProductProyect.precio) : precioBase,
+                    "precioUnitario": ((Number(newPrices) ===0 && newProductProyect) || (newProductProyect && Number(newProductProyect.precio) === Number(precioFinal))) ? newProductProyect.precio : Number(newPrices),
                     "codigoImpuesto": ImpuestoFinal,
-                    "descuento": constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual!= null && !newProductProyect? constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual: 0,
+                    "descuento":  (constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != "null" && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual) ? 
+                    constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual:0,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
-                    "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
+                    "acuerdoG": (newProductProyect ? ( Number(newProductProyect.precio) === Number(precioFinal))? parseInt(newProductProyect.idProyecto): null : null)
                 }
 
+               //pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
+
                // testEmail('ricardo.ramos@daltum.mx', jsonArray)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                 array.push(jsonArray);
             }

@@ -1,7 +1,7 @@
 import {  Sequelize } from 'sequelize';
 const sequelize = new Sequelize(process.env.POSTGRESQL);
 
-const Proyectos = sequelize.define('Proyectos', {
+const Registros = sequelize.define('Registros', {
     id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -69,7 +69,7 @@ const Proyectos = sequelize.define('Proyectos', {
 },
 {
     //Options
-    tableName: 'proyectos'
+    tableName: 'registros'
 });
 
-export default Proyectos;
+export default Registros;
