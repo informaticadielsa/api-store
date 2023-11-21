@@ -947,6 +947,7 @@ module.exports = {
 
             //Set precios nuevos y resumen
             constCarritoDeCompra.dataValues.tipoImpuesto = tipoImpuesto + "%"
+            //Nota este es el total de descuento promociones Revisar 
             constCarritoDeCompra.dataValues.totalDescuentosPromociones = totalDescuentosPromociones.toFixed(2)
             constCarritoDeCompra.dataValues.totalDescuentosCupones = totalDescuentosCupones.toFixed(2)
             constCarritoDeCompra.dataValues.totalDescuentos = (totalDescuentosCupones+totalDescuentosPromociones).toFixed(2)
@@ -1089,7 +1090,7 @@ module.exports = {
             console.log(e)
             return "error"
         }
-    },
+    }, 
     getCheckoutAPI2: async function (cdc_sn_socio_de_negocio_id) {
         try{
 
@@ -1173,7 +1174,7 @@ module.exports = {
             for (var z = 0; z < prodCarritoLenght; z++) 
             {
                 //Ver que estamos filtrando
-                let cardK = String(constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id)
+                //let cardK = String(constProductoCarritoDeCompra[z].dataValues.pcdc_prod_producto_id)
                  //  pruebaTester(cardK +' : ' + constProductoCarritoDeCompra[z].dataValues.producto.prod_precio)
                    
                 //Consultar tabla productos stock general por producto
@@ -4207,7 +4208,7 @@ module.exports = {
             return "No fue posible regresar las lineas de productos para dividir la orden en almacenes"
         }
     },
-    validarLineasIfDividirOrdenUSDExchage: async function (lineas) {
+    validarLineasIfDividirOrdenUSDExchage: async function (lineas, lineasProducts = null,tipoCambio= null) {
         try{
             //Variable que se regresara al final
             var validarReturn = false
@@ -4239,21 +4240,57 @@ module.exports = {
 
                 const constProductoListaPrecio = await models.ProductoListaPrecio.findOne(
                 {
-                    where: {
+                    where: { 
                         pl_prod_producto_id: sqlResult[0].prod_producto_id,
                         pl_listp_lista_de_precio_id: sqlResult[0].listp_lista_de_precio_id
                     }
                 })
+               /* if(lineasProducts!= null){
 
-                if(constProductoListaPrecio.pl_tipo_moneda == 'USD')
+                    if (constProductoListaPrecio.pl_tipo_moneda ==="USD" && 
+                     lineasProducts.moneda ==="USD"
+                    ){ 
+                       
+                        if (lineasProducts.precio < constProductoListaPrecio.pl_precio_usd ||  constProductoListaPrecio.pl_precio_usd ===0){
+                            constProductoListaPrecio.pl_precio_usd = lineasProducts.precio;
+                            constProductoListaPrecio.pl_tipo_moneda ="USD"
+                            console.log('1')
+                        }else{
+                            constProductoListaPrecio.pl_precio_usd =  constProductoListaPrecio.pl_precio_usd
+                            constProductoListaPrecio.pl_tipo_moneda="USD"
+                            console.log('11')
+                        }
+                    }else if(constProductoListaPrecio.pl_tipo_moneda === null && 
+                    lineasProducts.moneda ==="USD"){
+                        constProductoListaPrecio.pl_precio_usd = lineasProducts.precio;
+                        constProductoListaPrecio.pl_tipo_moneda="USD"
+                        console.log('2')
+                    }else{
+                        if (lineasProducts.precio <  constProductoListaPrecio.pl_precio_producto ||  constProductoListaPrecio.pl_precio_producto ===0){
+                            constProductoListaPrecio.pl_precio_producto = lineasProducts.precio;
+                            constProductoListaPrecio.pl_tipo_moneda="MXP"
+                            console.log('4')
+                        }else{
+                            console.log('3')
+                            constProductoListaPrecio.pl_precio_producto =  constProductoListaPrecio.pl_precio_producto
+                            constProductoListaPrecio.pl_tipo_moneda="MXP"
+                        }
+                    }
+
+                //constProductoListaPrecio.pl_tipo_moneda ==  () ?   lineasProducts.moneda
+                //constProductoListaPrecio.pl_precio_usd == lineas.precio
+
+                }
+                    */
+                if(constProductoListaPrecio.pl_tipo_moneda == 'USD' )
                 {
                     lineasArraySecundaria.push(lineas[i])
                 }
-                else
+                else if(constProductoListaPrecio.pl_tipo_moneda=='MXP')
                 {
                     lineasArrayPrincipal.push(lineas[i])
                 }
-            }
+            } 
 
             // console.log(lineasArrayPrincipal)
             // console.log(lineasArraySecundaria)
@@ -4463,7 +4500,7 @@ module.exports = {
                     {
                         // Conversión peso a dolar
                         precioTotal_usd += (totalCantidadProducto * precioFinalProduct)/USDValor;
-                        totalDescuentos_usd += (totalCantidadProducto * precioFinalProduct/USDValor);
+                        totalDescuentos_usd += (totalCantidadProducto * discountAmount/USDValor);
     
                         //Variable que saca el total subtotal (cantidad x precio base)
                         precioTotalTemp = totalCantidadProducto * precioFinalProduct;
@@ -4477,7 +4514,10 @@ module.exports = {
             }
 
 
-            precioFinalTotal_usd += precioTotal_usd-totalDescuentos_usd
+            cdc_costo_envio_usd = checkoutJson.dataValues.cdc_costo_envio / USDValor;
+
+            precioFinalTotal_usd += (precioTotal_usd + cdc_costo_envio_usd) - totalDescuentos_usd
+
             var cantidadImpuesto
             if(checkoutJson.dataValues.tipoImpuesto == "16%")
             {

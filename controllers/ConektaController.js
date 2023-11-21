@@ -649,8 +649,8 @@ export default {
 
 
           // await pagoAceptado(constSociosNegocioUsuario.snu_correo_electronico, usuario_sn_id, checkoutJson.dataValues.cdc_numero_orden);
-          await pagoAceptado("henry@puntocommerce.com", constSociosNegocioUsuario.dataValues.snu_usuario_snu_id, checkoutJson.dataValues.cdc_numero_orden, checkoutJson);
-          await pagoAceptado("gabriel@puntocommerce.com", constSociosNegocioUsuario.dataValues.snu_usuario_snu_id, checkoutJson.dataValues.cdc_numero_orden, checkoutJson);
+          await pagoAceptado("informatica@dielsa.com", constSociosNegocioUsuario.dataValues.snu_usuario_snu_id, checkoutJson.dataValues.cdc_numero_orden, checkoutJson);
+          //await pagoAceptado("gabriel@puntocommerce.com", constSociosNegocioUsuario.dataValues.snu_usuario_snu_id, checkoutJson.dataValues.cdc_numero_orden, checkoutJson);
           // console.log("paso el await")
 
           

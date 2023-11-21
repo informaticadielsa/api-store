@@ -9,6 +9,7 @@ import request from 'request-promise';
 const {ordenCreadaEmail} = require('../services/ordenCreadaEmail');
 const {ordenAbiertaCreadaEmail} = require('../services/ordenAbiertaCreadaEmail');
 const {ordenCreadaUsuarioDielsaEmail} = require('../services/ordenCreadaUsuarioDielsaEmail');
+import {pruebaTester} from '../services/pruebaTester'
 
 const sortJSON = function(data, key, orden) {
     return data.sort(function (a, b) {
@@ -1399,6 +1400,7 @@ export default{
                     pcdc_carrito_de_compra_id: constCarritoDeCompra.cdc_carrito_de_compra_id
                 },
                 attributes: {
+
                     exclude: ['createdAt','updatedAt','pcdc_lista_precio','pcdc_precio','pcdc_prod_producto_id_regalo','pcdc_cantidad_producto_regalo',
                     'pcdc_descuento_promocion', 'pcdc_prod_producto_id_promocion', 'pcdc_cantidad_producto_promocion', 'pcdc_cupon_aplicado',
                     'pcdc_mejor_descuento', 'pcdc_almacen_surtido', 'pcdc_no_disponible_para_compra', 'pcdc_back_order', 'pcdc_validado']
@@ -1512,6 +1514,7 @@ export default{
                 //Obtener Lineas para insertar en la tabla productos compra finalizada y para sap
                 var lineasTemporales = await getCheckout.getLineasProductosComprasFinalizadas(checkoutJson, constCompraFinalizada.dataValues.cf_compra_finalizada_id);
                 var isProject = false
+                var newProductsProyects = []
                 for(var i=0; i<constProductoCarritoDeCompra.length; i++){
 
                     const constProducto = await models.Producto.findOne(
@@ -1538,16 +1541,630 @@ export default{
 
                      if(newProductProyect){
                         isProject = newProductProyect.moneda=="USD" ? true : false
+                        newProductsProyects.push({idProduct: constProducto.prod_producto_id, moneda : newProductProyect.moneda, 
+                        precio: newProductProyect.moneda =="USD" ? newProductProyect.precio : Number(newProductProyect.precio* USDValor)
+                        })
                      }
                 }
                  
                
 
-                //Pago con credito dielsa
-                if(constCarritoDeCompra.cdc_forma_pago_codigo == 99 || isProject)
+                //Pago con credito dielsa 
+                if(constCarritoDeCompra.cdc_forma_pago_codigo == 99 && !isProject)
                 {
                     //Regresa un array de la orden dividida en MXN y USD
                     var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales);
+                    var ordenDivididaBool = false
+                    var ordenNoTieneMXN = false
+
+                    //la orden puede estar dividida en dos
+                    for (var j = 0; j < ordernDividida.length; j++) 
+                    {
+                        
+
+                        if(ordernDividida[j].principal.length > 0)
+                        {
+                            // Ordenar order por producto id (posible solucion a aveces hace lo que quiere para las lineas sap)
+                            var principalTemp = sortJSON(ordernDividida[j].principal, 'pcf_prod_producto_id', 'asc');
+                            ordernDividida[j].principal = principalTemp
+
+                            //Insertar cada producto en la tabla de productos compras finalizadas
+                            for (var i = 0; i < ordernDividida[j].principal.length; i++) 
+                            {
+                                console.log(ordernDividida[j].principal[i])
+                                ordernDividida[j].principal[i].pcf_order_dividida_sap = false
+                                ordernDividida[j].principal[i].pcf_numero_orden_usd_sap = null
+                                await models.ProductoCompraFinalizada.create(ordernDividida[j].principal[i]);
+                            }
+                            ordenNoTieneMXN = true
+                        }
+                        else if(ordernDividida[j].secundario.length > 0)
+                        {
+                            // Ordenar order por producto id (posible solucion a aveces hace lo que quiere para las lineas sap)
+                            var principalTemp = sortJSON(ordernDividida[j].secundario, 'pcf_prod_producto_id', 'asc');
+                            ordernDividida[j].secundario = principalTemp
+
+                            //Insertar cada producto en la tabla de productos compras finalizadas
+                            for (var i = 0; i < ordernDividida[j].secundario.length; i++) 
+                            {
+                                console.log(ordernDividida[j].secundario[i])
+                                ordernDividida[j].secundario[i].pcf_order_dividida_sap = true
+                                ordernDividida[j].secundario[i].pcf_precio = parseFloat((ordernDividida[j].secundario[i].pcf_precio / USDValor).toFixed(2))
+                                ordernDividida[j].secundario[i].pcf_descuento_promocion = parseFloat((ordernDividida[j].secundario[i].pcf_descuento_promocion / USDValor).toFixed(2))
+                                ordernDividida[j].secundario[i].pcf_numero_orden_usd_sap = constCarritoDeCompra.cdc_numero_orden + '-01'
+                                await models.ProductoCompraFinalizada.create(ordernDividida[j].secundario[i]);
+                            }
+                            ordenDivididaBool = true
+                        }
+                    }
+
+                    // Obtener status ordenes null
+                        if(ordenNoTieneMXN == false && constCarritoDeCompra.cdc_cmm_tipo_envio_id == 17)
+                        {
+                            //Como no vendran productos en MXN y el tipo envio es recoleccion no tendra status orden MXN
+                            const bodyUpdate = {
+                                "cf_estatus_orden": null
+                            }
+                            await constCompraFinalizada.update(bodyUpdate);
+                        }
+
+                        //Si tiene productos en USD dara valor a la parte de que tambien es orden en USD
+                        if(ordenDivididaBool == true)
+                        {
+                            await constCompraFinalizada.update({
+                                cf_orden_dividida_sap : constCarritoDeCompra.cdc_numero_orden + '-01',
+                                updatedAt: Date()
+                            });
+                        }
+                        else
+                        {
+                            //Como no vendran productos en USD pondre en null el status
+                            const bodyUpdate = {
+                                "cf_estatus_orden_usd": null
+                            }
+                            await constCompraFinalizada.update(bodyUpdate);
+                        }
+                    //
+
+                    //Crear Num lineas para sap a la tabla productos compra finalizada
+                    // var lineaNum = await CreacionOrdenSAP.CreaLineasNumSAP(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+
+                    var jsonSAP = await CreacionOrdenSAP.CreacionOrdenSAPDivididaUSD(req.body.cdc_sn_socio_de_negocio_id, constCompraFinalizada.dataValues.cf_compra_finalizada_id, checkoutJson.dataValues.cdc_politica_envio_surtir_un_solo_almacen, checkoutJson.dataValues.cdc_politica_envio_nombre);
+                }else if (isProject){
+
+                    //Cuando venga de un proyecto
+                    //Regresa un array de la orden dividida en MXN y USD
+                    var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales,newProductsProyects, USDValor);
+                    var ordenDivididaBool = false
+                    var ordenNoTieneMXN = false
+                   // pruebaTester(JSON.stringify(ordernDividida))
+                    //la orden puede estar dividida en dos
+                    for (var j = 0; j < ordernDividida.length; j++) 
+                    {
+                        
+
+                        if(ordernDividida[j].principal.length > 0)
+                        {
+                            // Ordenar order por producto id (posible solucion a aveces hace lo que quiere para las lineas sap)
+                            var principalTemp = sortJSON(ordernDividida[j].principal, 'pcf_prod_producto_id', 'asc');
+                            ordernDividida[j].principal = principalTemp
+
+                            //Insertar cada producto en la tabla de productos compras finalizadas
+                            for (var i = 0; i < ordernDividida[j].principal.length; i++) 
+                            {
+                                console.log(ordernDividida[j].principal[i])
+                                ordernDividida[j].principal[i].pcf_order_dividida_sap = false
+                                ordernDividida[j].principal[i].pcf_numero_orden_usd_sap = null
+                               
+                                
+                                //ordernDividida[j].principal[i].pcf_precio
+                                var newPrice = parseFloat(ordernDividida[j].principal[i].pcf_precio.toFixed(2))
+                               // var newPrice= parseFloat(ordernDividida[j].principal[i].pcf_precio_base_venta).toFixed(2))
+                                var discount = ordernDividida[j].principal[i].pcf_descuento_porcentual
+
+                                const constProducto = await models.Producto.findOne(
+                                    {
+                                        where: {
+                                            prod_producto_id:  ordernDividida[j].principal[i].pcf_prod_producto_id
+                                        }
+                                    });
+                                const data = await sequelize.query(`
+                                SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
+                                INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
+                                INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
+                                WHERE sn.sn_socios_negocio_id = '${req.body.cdc_sn_socio_de_negocio_id}'
+                                AND lpro."codigoArticulo" = '${constProducto.dataValues.prod_sku}'
+                                AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                               {
+                                type: sequelize.QueryTypes.SELECT 
+                                });
+                             
+                                 const newProductProyect =data[0];
+
+                                newPrice === (newProductProyect ?(newProductProyect.moneda ==="MXP" && newProductProyect.precio < newPrice  || newPrice ===0) ? newProductProyect.precio : newPrice  : newPrice )
+                                ordernDividida[j].principal[i].pcf_descuento_porcentual= (newProductProyect ?(newProductProyect.moneda ==="MXP" && newProductProyect.precio < newPrice  || newPrice ===0) ?  0: discount : discount)
+
+                                ordernDividida[j].principal[i].pcf_precio = newPrice
+                                
+                                await models.ProductoCompraFinalizada.create(ordernDividida[j].principal[i]);
+                               // pruebaTester('inyectamos producto mxp')
+                            }
+                            ordenNoTieneMXN = true
+                        }
+                        else if(ordernDividida[j].secundario.length > 0)
+                        {
+                            // Ordenar order por producto id (posible solucion a aveces hace lo que quiere para las lineas sap)
+                            var principalTemp = sortJSON(ordernDividida[j].secundario, 'pcf_prod_producto_id', 'asc');
+                            ordernDividida[j].secundario = principalTemp
+
+                            //Insertar cada producto en la tabla de productos compras finalizadas
+                            for (var i = 0; i < ordernDividida[j].secundario.length; i++) 
+                            {
+                                console.log(ordernDividida[j].secundario[i])
+                                ordernDividida[j].secundario[i].pcf_order_dividida_sap = true
+                                var newPrice= parseFloat((ordernDividida[j].secundario[i].pcf_precio / USDValor).toFixed(2))
+                                var discount = ordernDividida[j].secundario[i].pcf_descuento_porcentual
+
+                                const constProducto = await models.Producto.findOne(
+                                    {
+                                        where: {
+                                            prod_producto_id:  ordernDividida[j].secundario[i].pcf_prod_producto_id
+                                        }
+                                    });
+                                const data = await sequelize.query(`
+                                SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
+                                INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
+                                INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
+                                WHERE sn.sn_socios_negocio_id = '${req.body.cdc_sn_socio_de_negocio_id}'
+                                AND lpro."codigoArticulo" = '${constProducto.dataValues.prod_sku}'
+                                AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                               {
+                                type: sequelize.QueryTypes.SELECT 
+                                });
+                             
+                                 const newProductProyect =data[0];
+
+                                newPrice === (newProductProyect ?(newProductProyect.moneda ==="USD" && newProductProyect.precio < newPrice  || newPrice ===0) ? newProductProyect.precio : newPrice  : newPrice )
+                                ordernDividida[j].secundario[i].pcf_descuento_porcentual= (newProductProyect ?(newProductProyect.moneda ==="USD" && newProductProyect.precio < newPrice  || newPrice ===0) ?  0: discount : discount)
+
+                                ordernDividida[j].secundario[i].pcf_precio = newPrice
+                                ordernDividida[j].secundario[i].pcf_descuento_promocion = parseFloat((ordernDividida[j].secundario[i].pcf_descuento_promocion / USDValor).toFixed(2))
+                                ordernDividida[j].secundario[i].pcf_numero_orden_usd_sap = constCarritoDeCompra.cdc_numero_orden + '-01'
+                                
+                               // pruebaTester('Precio:'+newPrice)
+                                await models.ProductoCompraFinalizada.create(ordernDividida[j].secundario[i]);
+                                let cad = JSON.stringify(ordernDividida[j].secundario[i])
+                                //pruebaTester("prueba xxxx" )
+                                //pruebaTester(cad)
+                            }
+                            ordenDivididaBool = true
+                        }
+                    }
+
+                    // Obtener status ordenes null
+                        if(ordenNoTieneMXN == false && constCarritoDeCompra.cdc_cmm_tipo_envio_id == 17)
+                        {
+                            //Como no vendran productos en MXN y el tipo envio es recoleccion no tendra status orden MXN
+                            const bodyUpdate = {
+                                "cf_estatus_orden": null
+                            }
+                            await constCompraFinalizada.update(bodyUpdate);
+                         //   pruebaTester('Pasamos 1')
+                        }
+
+                        //Si tiene productos en USD dara valor a la parte de que tambien es orden en USD
+                        if(ordenDivididaBool == true)
+                        {
+                            await constCompraFinalizada.update({
+                                cf_orden_dividida_sap : constCarritoDeCompra.cdc_numero_orden + '-01',
+                                updatedAt: Date()
+                            });
+                          //  pruebaTester('Pasamos 2')
+                        }
+                        else
+                        {
+                            //Como no vendran productos en USD pondre en null el status
+                            const bodyUpdate = {
+                                "cf_estatus_orden_usd": null
+                            }
+                            await constCompraFinalizada.update(bodyUpdate);
+                           // pruebaTester('Pasamos 3')
+                        }
+                    //
+
+                    //Crear Num lineas para sap a la tabla productos compra finalizada
+                    // var lineaNum = await CreacionOrdenSAP.CreaLineasNumSAP(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+                  //  pruebaTester('Empezamos a probar antes de utilizar Creacion Sap Divida USD')
+                    var jsonSAP = await CreacionOrdenSAP.CreacionOrdenSAPDivididaUSD(req.body.cdc_sn_socio_de_negocio_id, constCompraFinalizada.dataValues.cf_compra_finalizada_id, checkoutJson.dataValues.cdc_politica_envio_surtir_un_solo_almacen, checkoutJson.dataValues.cdc_politica_envio_nombre);
+                }
+                else
+                {
+                    //Como no vendran productos en USD pondre en null el status
+                    const bodyUpdate = {
+                        "cf_estatus_orden_usd": null
+                    }
+                    await constCompraFinalizada.update(bodyUpdate);
+
+                    var lineasTemporalesTemp = sortJSON(lineasTemporales, 'pcf_prod_producto_id', 'asc');
+                    lineasTemporales = lineasTemporalesTemp
+
+                    //Insertar cada producto en la tabla de productos compras finalizadas
+                    for (var i = 0; i < lineasTemporales.length; i++) 
+                    {
+                        await models.ProductoCompraFinalizada.create(lineasTemporales[i]);
+                    }
+
+                    // //Obtener Lineas para insertar en la tabla productos compra finalizada y para sap
+                    // var lineasTemporales = await CreacionOrdenSAP.CreacionOrdenSAP(checkoutJson, constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+
+
+                    //Crear Num lineas para sap a la tabla productos compra finalizada
+                    // var lineaNum = await CreacionOrdenSAP.CreaLineasNumSAP(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+
+                    //Crear Orden Sap
+                   // pruebaTester('paso por aca')
+                    var jsonSAP = await CreacionOrdenSAP.CreacionOrdenSAP(req.body.cdc_sn_socio_de_negocio_id, constCompraFinalizada.dataValues.cf_compra_finalizada_id, checkoutJson.dataValues.cdc_politica_envio_surtir_un_solo_almacen, checkoutJson.dataValues.cdc_politica_envio_nombre);
+                }
+
+
+
+
+                // //borrar despues el if y dejar solo codigo, Cuando se hace desde ENV no borra carrito
+                // if(process.env.PORT != 5000)
+                // {
+                    //Borrar carrito actual
+                    await models.ProductoCarritoDeCompra.destroy({
+                        where: {
+                            pcdc_carrito_de_compra_id: constCarritoDeCompra.dataValues.cdc_carrito_de_compra_id
+                        }
+                    });
+                    await models.CarritoDeCompra.destroy({
+                        where: {
+                            cdc_carrito_de_compra_id: constCarritoDeCompra.dataValues.cdc_carrito_de_compra_id
+                        }
+                    });
+                    
+                // }
+                // else
+                // {
+                //     var newNumeroOrden =  parseInt(constCarritoDeCompra.cdc_numero_orden)+1
+                //     newNumeroOrden = "0000000" + newNumeroOrden
+
+                     
+                //     const bodyUpdate = {
+                //         "cdc_numero_orden": newNumeroOrden,
+                //         updatedAt: Date()
+                //     };
+                    
+                //     await constCarritoDeCompra.update(bodyUpdate);
+
+                // }
+
+               //Revisar aqui envia un correo
+
+               //Envia correo a usuarios clientres de dielsa.com
+
+                await ordenCreadaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+
+                //Para los usuarios de dielsa mandar correo cuando se crea una orden
+                const constBussinessPartner = await models.SociosNegocio.findOne(
+                    {
+                        where: {
+                            sn_socios_negocio_id: constCarritoDeCompra.cdc_sn_socio_de_negocio_id
+                        }
+                    })
+                    const constUsuarioSellerID = await models.Usuario.findOne(
+                        {
+                            where: {
+                                usu_codigo_vendedor: constBussinessPartner.sn_vendedor_codigo_sap
+                            }
+                        })
+                // console.log('Socio de negocio:'+ constBussinessPartner.sn_cardcode )
+                 //console.log('hola vendedor:'+constBussinessPartner.sn_vendedor_codigo_sap);
+                // console.log('vendedor info',constUsuarioSellerID.usu_correo_electronico)
+                await ordenCreadaUsuarioDielsaEmail(constCompraFinalizada.dataValues.cf_compra_finalizada_id, constBussinessPartner.sn_vendedor_codigo_sap ==='-1'? null :constUsuarioSellerID.usu_correo_electronico );
+
+
+                
+
+                // //Validar el json de sap
+                // var validarOrdenSAP = await CreacionOrdenSAP.preValidarCreacionOrdenSAP(req.body.cdc_sn_socio_de_negocio_id, constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+
+                res.status(200).send({
+                    message: 'Orden creada con exito',
+                    cf_compra_finalizada_id: constCompraFinalizada.dataValues.cf_compra_finalizada_id
+                })
+            }  
+            else
+            {
+                res.status(500).send({
+                    message: 'No fue posible crear la orden de compra. revisar.'
+                })
+            }
+
+        }
+        catch(e){
+            console.log(e)
+            res.status(500).send({
+                message: 'No fue posible crear la orden',
+                e
+            });
+            next(e);
+        }
+    },
+    V2finalizarCompra2: async(req, res, next) =>{
+        try{
+            
+ 
+            //Obtener tipo de cambio
+            const {cmm_valor} = await models.ControlMaestroMultiple.findOne(
+            {
+                where: {
+                    cmm_nombre: "TIPO_CAMBIO_USD"
+                },
+                attributes: ["cmm_valor"]
+            })
+            var USDValor = cmm_valor
+
+                console.log('Valor Dolar:',USDValor)
+         
+            //Fin guardar carrito
+
+            //variable de socio de negocio
+            var cdc_sn_socio_de_negocio_id = req.body.cdc_sn_socio_de_negocio_id
+
+            console.log('idSocioNegocio:' ,cdc_sn_socio_de_negocio_id )
+            //Obtener carrito
+            const constCarritoDeCompra = await models.CarritoDeCompra.findOne(
+            {
+                where: {
+                    cdc_sn_socio_de_negocio_id: cdc_sn_socio_de_negocio_id
+                }
+            })
+
+            console.log('Carrito:', constCarritoDeCompra)
+            //Productos del carrito de compra
+            const constProductoCarritoDeCompra = await models.ProductoCarritoDeCompra.findAll(
+            {
+                where: {
+                    pcdc_carrito_de_compra_id: constCarritoDeCompra.cdc_carrito_de_compra_id
+                },
+                attributes: {
+
+                    exclude: ['createdAt','updatedAt','pcdc_lista_precio','pcdc_precio','pcdc_prod_producto_id_regalo','pcdc_cantidad_producto_regalo',
+                    'pcdc_descuento_promocion', 'pcdc_prod_producto_id_promocion', 'pcdc_cantidad_producto_promocion', 'pcdc_cupon_aplicado',
+                    'pcdc_mejor_descuento', 'pcdc_almacen_surtido', 'pcdc_no_disponible_para_compra', 'pcdc_back_order', 'pcdc_validado']
+                }
+            })
+            
+            console.log('Productos Carrito:', constProductoCarritoDeCompra)
+
+            //informacion Vendedor
+            var cf_vendido_por_usu_usuario_id
+            if(req.body.cf_vendido_por_usu_usuario_id)
+            {
+                cf_vendido_por_usu_usuario_id = req.body.cf_vendido_por_usu_usuario_id
+            }
+            else
+            {
+                //Obtener carrito
+                const constSociosNegocioVendedor = await models.SociosNegocio.findOne(
+                {
+                    where: {
+                        sn_socios_negocio_id: constCarritoDeCompra.cdc_sn_socio_de_negocio_id
+                    }
+                })
+                
+                //Obtener carrito
+                const constUsuarioSellerID = await models.Usuario.findOne(
+                {
+                    where: {
+                        usu_codigo_vendedor: constSociosNegocioVendedor.sn_vendedor_codigo_sap
+                    }
+                })
+
+                if(constUsuarioSellerID)
+                {
+                    cf_vendido_por_usu_usuario_id = constUsuarioSellerID.usu_usuario_id
+                }
+                else
+                {
+                    cf_vendido_por_usu_usuario_id = null
+                }
+            }
+
+            console.log('Vendedor:', cf_vendido_por_usu_usuario_id)
+
+
+
+            
+
+            //Obtener Checkout
+            var checkoutJson = await getCheckout.getCheckoutAPI2(req.body.cdc_sn_socio_de_negocio_id);
+
+            //Validar si el carrito es de tipo credito forma de pago y si lo es restar el credito y pasar la orden
+            var creditoResult = await CreacionOrdenSAP.validarCreditoDisponible(constCarritoDeCompra.cdc_forma_pago_codigo, constCarritoDeCompra.cdc_sn_socio_de_negocio_id, checkoutJson.dataValues.TotalFinal);
+
+            console.log(checkoutJson)
+            
+
+
+
+            //obtener tipo impuesto cmm
+            const constControlMaestroMultiple = await models.ControlMaestroMultiple.findOne(
+            {
+                where: {
+                    cmm_valor: checkoutJson.dataValues.tipoImpuesto
+                }
+            })
+
+
+            //Obtener resumenes divididos
+            var resumenDividido = await getCheckout.getCheckoutResumenDetalle(req.body.cdc_sn_socio_de_negocio_id);
+
+
+            //Crear compra finalizada en tabla preValidadora
+        //    const constCompraFinalizada = await models.CompraFinalizada.create({
+        //         cf_compra_numero_orden: constCarritoDeCompra.cdc_numero_orden,
+        //         cf_compra_fecha: Date(),
+        //         cf_vendido_por_usu_usuario_id: cf_vendido_por_usu_usuario_id,
+        //         cf_cmm_tipo_compra_id: null, //no aplica, porque existe el campo forma de pago
+        //         cf_vendido_a_socio_negocio_id: constCarritoDeCompra.cdc_sn_socio_de_negocio_id,
+        //         cf_cmm_tipo_envio_id: constCarritoDeCompra.cdc_cmm_tipo_envio_id, 
+        //         cf_direccion_envio_id: constCarritoDeCompra.cdc_direccion_envio_id,
+        //         cf_cmm_tipo_impuesto: constControlMaestroMultiple.cmm_control_id, 
+        //         cf_alm_almacen_recoleccion: constCarritoDeCompra.cdc_alm_almacen_recoleccion,
+        //         cf_total_compra: resumenDividido[1].TotalFinal,
+        //         cf_estatus_orden: 1000185,
+        //         cf_fletera_id: constCarritoDeCompra.cdc_fletera_id,
+        //         cf_sap_metodos_pago_codigo: /*!!req.body.cdc_forma_pago_codigo ? req.body.cdc_forma_pago_codigo : null,*/ "PUE", //pago unico
+        //         cf_sap_forma_pago_codigo: constCarritoDeCompra.cdc_forma_pago_codigo ? constCarritoDeCompra.cdc_forma_pago_codigo : null,
+        //         cf_estatus_creacion_sap: null,
+        //         cf_descripcion_sap: null,
+        //         cf_referencia: constCarritoDeCompra.cdc_referencia, 
+        //         cf_promcup_promociones_cupones_id: constCarritoDeCompra.cdc_promcup_promociones_cupones_id,
+        //         cf_orden_subtotal: resumenDividido[1].precioTotal,
+        //         cf_orden_descuento: resumenDividido[1].totalDescuentos,
+        //         cf_orden_subtotal_aplicado: resumenDividido[1].precioFinalTotal,
+        //         cf_orden_gastos_envio: parseFloat(resumenDividido[1].cdc_costo_envio.toFixed(2)),
+        //         cf_order_iva: resumenDividido[1].TotalImpuesto,
+        //         cf_cfdi: constCarritoDeCompra.cdc_cfdi,
+        //         cf_estatus_orden_usd: 1000185,
+        //         cf_resume_mxn: resumenDividido[1],
+        //         cf_resume_usd: resumenDividido[0],
+        //         cf_snu_usuario_snu_id: req.body.cf_snu_usuario_snu_id,
+        //         cf_generado_en: !!req.body.cf_generado_en ? req.body.cf_generado_en : null
+        //    }); 
+
+
+ 
+          /*  
+          if(constCompraFinalizada)
+            {
+                //Obtener Lineas para insertar en la tabla productos compra finalizada y para sap
+                var lineasTemporales = await getCheckout.getLineasProductosComprasFinalizadas(checkoutJson, constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+                var isProject = false
+                var newProductsProyects = []
+                for(var i=0; i<constProductoCarritoDeCompra.length; i++){
+
+                    const constProducto = await models.Producto.findOne(
+                        {
+                            where: {
+                                prod_producto_id: constProductoCarritoDeCompra[i].pcdc_prod_producto_id
+                            }
+                        });
+                    
+
+
+                    const data = await sequelize.query(`
+                    SELECT lpro.*, pro.moneda, pro."idProyecto" FROM socios_negocio AS sn
+                    INNER JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode
+                    INNER JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id"
+                    WHERE sn.sn_socios_negocio_id = '${req.body.cdc_sn_socio_de_negocio_id}'
+                    AND lpro."codigoArticulo" = '${constProducto.dataValues.prod_sku}'
+                    AND pro.estatus in ('Autorizado','Aprobado') AND CURRENT_DATE < "date"(pro."fechaVencimiento")`,
+                {
+                    type: sequelize.QueryTypes.SELECT 
+                });
+                 
+                     const newProductProyect =data[0];
+
+                     if(newProductProyect){
+                        isProject = newProductProyect.moneda=="USD" ? true : false
+                        newProductsProyects.push({idProduct: constProducto.prod_producto_id, moneda : newProductProyect.moneda, 
+                        precio: newProductProyect.moneda =="USD" ? newProductProyect.precio : Number(newProductProyect.precio* USDValor)
+                        })
+                     }
+                }
+                 
+               
+
+                //Pago con credito dielsa 
+                if(constCarritoDeCompra.cdc_forma_pago_codigo == 99)
+                {
+                    //Regresa un array de la orden dividida en MXN y USD
+                    var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales);
+                    var ordenDivididaBool = false
+                    var ordenNoTieneMXN = false
+
+                    //la orden puede estar dividida en dos
+                    for (var j = 0; j < ordernDividida.length; j++) 
+                    {
+                        
+
+                        if(ordernDividida[j].principal.length > 0)
+                        {
+                            // Ordenar order por producto id (posible solucion a aveces hace lo que quiere para las lineas sap)
+                            var principalTemp = sortJSON(ordernDividida[j].principal, 'pcf_prod_producto_id', 'asc');
+                            ordernDividida[j].principal = principalTemp
+
+                            //Insertar cada producto en la tabla de productos compras finalizadas
+                            for (var i = 0; i < ordernDividida[j].principal.length; i++) 
+                            {
+                                console.log(ordernDividida[j].principal[i])
+                                ordernDividida[j].principal[i].pcf_order_dividida_sap = false
+                                ordernDividida[j].principal[i].pcf_numero_orden_usd_sap = null
+                                await models.ProductoCompraFinalizada.create(ordernDividida[j].principal[i]);
+                            }
+                            ordenNoTieneMXN = true
+                        }
+                        else if(ordernDividida[j].secundario.length > 0)
+                        {
+                            // Ordenar order por producto id (posible solucion a aveces hace lo que quiere para las lineas sap)
+                            var principalTemp = sortJSON(ordernDividida[j].secundario, 'pcf_prod_producto_id', 'asc');
+                            ordernDividida[j].secundario = principalTemp
+
+                            //Insertar cada producto en la tabla de productos compras finalizadas
+                            for (var i = 0; i < ordernDividida[j].secundario.length; i++) 
+                            {
+                                console.log(ordernDividida[j].secundario[i])
+                                ordernDividida[j].secundario[i].pcf_order_dividida_sap = true
+                                ordernDividida[j].secundario[i].pcf_precio = parseFloat((ordernDividida[j].secundario[i].pcf_precio / USDValor).toFixed(2))
+                                ordernDividida[j].secundario[i].pcf_descuento_promocion = parseFloat((ordernDividida[j].secundario[i].pcf_descuento_promocion / USDValor).toFixed(2))
+                                ordernDividida[j].secundario[i].pcf_numero_orden_usd_sap = constCarritoDeCompra.cdc_numero_orden + '-01'
+                                await models.ProductoCompraFinalizada.create(ordernDividida[j].secundario[i]);
+                            }
+                            ordenDivididaBool = true
+                        }
+                    }
+
+                    // Obtener status ordenes null
+                        if(ordenNoTieneMXN == false && constCarritoDeCompra.cdc_cmm_tipo_envio_id == 17)
+                        {
+                            //Como no vendran productos en MXN y el tipo envio es recoleccion no tendra status orden MXN
+                            const bodyUpdate = {
+                                "cf_estatus_orden": null
+                            }
+                            await constCompraFinalizada.update(bodyUpdate);
+                        }
+
+                        //Si tiene productos en USD dara valor a la parte de que tambien es orden en USD
+                        if(ordenDivididaBool == true)
+                        {
+                            await constCompraFinalizada.update({
+                                cf_orden_dividida_sap : constCarritoDeCompra.cdc_numero_orden + '-01',
+                                updatedAt: Date()
+                            });
+                        }
+                        else
+                        {
+                            //Como no vendran productos en USD pondre en null el status
+                            const bodyUpdate = {
+                                "cf_estatus_orden_usd": null
+                            }
+                            await constCompraFinalizada.update(bodyUpdate);
+                        }
+                    //
+
+                    //Crear Num lineas para sap a la tabla productos compra finalizada
+                    // var lineaNum = await CreacionOrdenSAP.CreaLineasNumSAP(constCompraFinalizada.dataValues.cf_compra_finalizada_id);
+
+                    var jsonSAP = await CreacionOrdenSAP.CreacionOrdenSAPDivididaUSD(req.body.cdc_sn_socio_de_negocio_id, constCompraFinalizada.dataValues.cf_compra_finalizada_id, checkoutJson.dataValues.cdc_politica_envio_surtir_un_solo_almacen, checkoutJson.dataValues.cdc_politica_envio_nombre);
+                }else if (isProject){
+
+                    //Cuando venga de un proyecto
+                    //Regresa un array de la orden dividida en MXN y USD
+                    var ordernDividida = await getCheckout.validarLineasIfDividirOrdenUSDExchage(lineasTemporales,newProductsProyects, USDValor);
                     var ordenDivididaBool = false
                     var ordenNoTieneMXN = false
 
@@ -1727,7 +2344,15 @@ export default{
                 res.status(500).send({
                     message: 'No fue posible crear la orden de compra. revisar.'
                 })
-            }
+            }  
+
+
+            */
+
+            res.status(200).send({
+                message: 'Orden creada con exito',
+               // cf_compra_finalizada_id: constCompraFinalizada.dataValues.cf_compra_finalizada_id
+            })
 
         }
         catch(e){
@@ -1738,8 +2363,7 @@ export default{
             });
             next(e);
         }
-    },
-
+    }
 
 
 
