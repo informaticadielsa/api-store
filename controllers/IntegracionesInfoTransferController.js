@@ -4134,11 +4134,7 @@ export default {
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": almacenAsignadoPerProducto,
-<<<<<<< HEAD
-                    "precioUnitario": constProductoCompraFinalizada[i].dataValues.pcf_precio,
-=======
                     "precioUnitario":newPrices,
->>>>>>> QA
                     "codigoImpuesto": ImpuestoFinal,
                     "cantidad": constProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": newProductProyect ? parseInt(newProductProyect.idProyecto) : null
