@@ -1630,7 +1630,7 @@ export default {
             
 
             await systemLog.insertLog('Integracion Inventario All Apis raw','Integracion Inventario All Apis raw: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Inventario All Apis raw: correctamente.')
+            //integracionEmail('Integracion Inventario All Apis raw: correctamente.')
 
 
             //Response
