@@ -5186,6 +5186,46 @@ export default {
             next(e);
         }
     },
+    addProductToQuotes: async(req, res, next) => {
+        try {
+            console.log('socio_negocio_id --> ', req.body.socio_negocio_id, req.body.idProduct);
+            var productos
+            var tipoImpuesto = 16
+            var multiplicadorImpuesto = 1.16
+
+            const socio_negocio_id = req.body.socio_negocio_id;
+            const idProduct = req.body.idProduct;
+            const idCotizacion = req.body.idCotizacion;
+            const cotp_producto_cantidad = req.body.cantidad;
+            
+
+            // Datos a insertar a la tabla CotizacionesProductos
+            // const constCotizacionesProductosInserted = await models.CotizacionesProductos.create({
+            //     cotp_prod_producto_id: productos[i].dataValues.prod_producto_id,
+            //     cotp_cotizacion_id: constCotizacionesResult.dataValues.cot_cotizacion_id,
+            //     cotp_producto_cantidad: productos[i].dataValues.cantidad,
+            //     cotp_precio_base_lista: productos[i].dataValues.prod_precio,
+            //     cotp_precio_menos_promociones: productos[i].dataValues.precioFinal,
+            //     cotp_porcentaje_descuento_vendedor: porcentajeDescuentoVendedor,
+            //     cotp_precio_descuento_vendedor: (porcentajeDescuentoVendedor*productos[i].dataValues.precioFinal)/100,
+            //     cotp_usu_descuento_cotizacion: null,
+            //     cotp_back_order: productos[i].dataValues.pcf_is_backorder,
+            //     cotp_tipo_precio_lista: productos[i].dataValues.pcf_tipo_precio_lista,
+            //     cotp_dias_resurtimiento: productos[i].dataValues.pcf_dias_resurtimiento,
+            //     cotp_almacen_linea: productos[i].dataValues.pcf_almacen_linea,
+            //     cotp_recoleccion_resurtimiento: productos[i].dataValues.pcf_recoleccion_resurtimiento,
+            //     cotp_fecha_entrega: productos[i].dataValues.dateFinal,
+            //     cotp_backorder_precio_lista: productos[i].dataValues.pcf_backorder_precio_lista,
+            //     cotp_descuento_porcentual: productos[i].dataValues.totalDescuentoPorcentual,
+            // });
+        } catch (error) {
+            res.status(500).send({
+                message: 'Error en la petición',
+                error
+            });
+            next(error);
+        }
+    },
 
     //Obtiene el detalle basico de la cotizacion
     getCotizacionesDetalle: async(req, res, next) =>{
@@ -5194,7 +5234,8 @@ export default {
             const constCotizaciones = await models.Cotizaciones.findOne(
             {
                 where: {
-                    cot_cotizacion_id: req.params.id
+                    cot_cotizacion_id: req.params.id,
+                    cot_sn_socios_negocio_id: req.body.socio_negocio_id
                 },
             });
 
