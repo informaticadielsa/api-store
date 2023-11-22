@@ -5237,7 +5237,7 @@ export default {
                     cot_cotizacion_id: req.params.id,
                     cot_sn_socios_negocio_id: req.body.socio_negocio_id
                 },
-            });
+            }); 
 
             if(constCotizaciones)
             {
