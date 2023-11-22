@@ -7,7 +7,6 @@ import request from 'request-promise';
 import email_validator from 'email-validator';
 import {integracionEmail} from '../services/integracionEmail'
 import systemLog from '../services/systemLog'
-import integrations from "./Integraciones"
 
 
 const {ordenAbiertaCreadaEmail} = require('../services/ordenAbiertaCreadaEmail');
@@ -6602,7 +6601,7 @@ export default {
     IntegracionRawArticulosAndInfoTransferProductos: async(req, res, next) =>{
         try{
 
-       
+        
             //REQUEST DE LA API Y DATOS DE RETORNO
             var options2 = {
                 'method': 'GET',
@@ -6948,9 +6947,7 @@ export default {
             await systemLog.insertLog('Integracion Productos Admin','Integracion Productos Admin: correctamente.', '2.-Administrador', 'Portal Admin', 'informative')
             integracionEmail('Integracion Productos Admin: correctamente.')
  
-            integrations.ExecuteEndpoint("/api/rawintegraciones/IntegracionListasPreciosBasicas")
-            integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionInfoTransferProductosListasPrecios/")
-            integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionInfoTransferProductosSetPrecioBaseFromListasPrecios/")
+          
             //Response
             res.status(200).send(
             {
