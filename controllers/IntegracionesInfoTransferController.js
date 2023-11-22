@@ -2817,7 +2817,7 @@ export default {
           var USDValor = constTipoCambio.cmm_valor
 
             await systemLog.insertLog('Integracion Transfer Productos set Prices Nuevos','Integracion Transfer Productos set Prices Nuevos: correctamente. Tipo cambio: ' + USDValor, '1.-webApi', 'Sistema', 'informative')
-            let cadenaTipo = $`Integracion Transfer Productos set Prices Nuevos: correctamente. Tipo cambio: ${USDValor}`
+            let cadenaTipo = `Integracion Transfer Productos set Prices Nuevos: correctamente. Tipo cambio:`
             integracionEmail(String(cadenaTipo))
 
             //Response
