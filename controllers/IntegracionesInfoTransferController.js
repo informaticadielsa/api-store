@@ -5,6 +5,10 @@ import {  Sequelize } from 'sequelize';
 const sequelize = new Sequelize(process.env.POSTGRESQL);
 import request from 'request-promise';
 import email_validator from 'email-validator';
+import {integracionEmail} from '../services/integracionEmail'
+import systemLog from '../services/systemLog'
+
+
 const {ordenAbiertaCreadaEmail} = require('../services/ordenAbiertaCreadaEmail');
 const {ordenCreadaUsuarioDielsaEmail} = require('../services/ordenCreadaUsuarioDielsaEmail');
 const {ordenFallidaToSapEmail} = require('../services/ordenFallidaToSapEmail');
@@ -183,6 +187,29 @@ const generadorPassword = function(num){
 
 export default {
     
+    IntegrarLogs: async (req, res, next)=>{
+        try {
+
+            const {status, message}= await systemLog.insertLog('integracciones','Integraccion de dolares', '1.-webApi', 'Sistema', 'warning')
+
+           
+            
+            res.status(200).send(
+                {
+                    status:status,
+                    message: message
+                   
+                })
+
+
+        }catch(e){
+            res.status(500).send({
+                message: 'Error en la petición: '+e,
+                status:'fail'
+            });
+            next(e);
+        }
+    },
     //Integra el tipo de cambio de SAP
     IntegracionInfoTransferTipoCambioUSD: async(req, res, next) =>{
         try{
@@ -245,6 +272,11 @@ export default {
                         updatedAt: Date()
                     });
 
+                    //Integrar 
+
+                    await systemLog.insertLog('Integracion tipo de cambio','Integracion tipo de cambio: se actualizo correctamente el tipo de cambio: '+jsonApi[0].tipoCambio, '1.-webApi', 'Sistema', 'informative')
+                    integracionEmail('Integracion tipo de cambio: se actualizo correctamente el tipo de cambio: ' +jsonApi[0].tipoCambio)
+
                     //Response
                     res.status(200).send(
                     {
@@ -255,6 +287,8 @@ export default {
                 }
                 else
                 {
+                    await systemLog.insertLog('Integracion tipo de cambio','Integracion tipo de cambio: se debe actualizar el tipo de cambio en sap, ya que no se haran correctamente las integraciones', '1.-webApi', 'Sistema', 'warning')
+                    integracionEmail('Integracion tipo de cambio: se debe actualizar el tipo de cambio en sap, ya que no se haran correctamente las integraciones')
                     //Response
                     res.status(500).send(
                     {
@@ -264,6 +298,8 @@ export default {
             }
             else
             {
+                await systemLog.insertLog('Integracion tipo de cambio','Integracion tipo de cambio: la peticion para integrar el tipo de cambio, regreso un error, revisar', '1.-webApi', 'Sistema', 'warning')
+                integracionEmail('Integracion tipo de cambio: la peticion para integrar el tipo de cambio, regreso un error, revisar')
                 //Response
                 res.status(500).send(
                 {
@@ -271,6 +307,8 @@ export default {
                 })
             }
         }catch(e){
+            await systemLog.insertLog('Integracion tipo de cambio','Integracion tipo de cambio: hubo un error en la petición, para integrar el tipo de cambio', '1.webApi', 'Sistema', 'error')
+            integracionEmail('Integracion tipo de cambio: hubo un error en la petición, para integrar el tipo de cambio')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -457,6 +495,8 @@ export default {
                 }
             }
 
+            await systemLog.insertLog('Integraciones Socio de Negocios','Integraciones Socio de Negocios: correctamente', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integraciones Socio de Negocios: correctamente')
             //Response
             res.status(200).send(
             {
@@ -465,6 +505,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integraciones Socio de Negocios','Integraciones Socio de Negocios: error al integrar peticion', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integraciones Socio de Negocios: error al integrar peticcion.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -653,6 +695,8 @@ export default {
                 }
             }
 
+            await systemLog.insertLog('Integraciones Socio de Negocios Transfer','Integraciones Socio de Negocios Transfer: se integra correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integraciones Socio de Negocios Transfer: se integra correctamente.')
             //Response
             res.status(200).send(
             {
@@ -661,6 +705,9 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integraciones Socio de Negocios Transfer','Integraciones Socio de Negocios Transfer: error en la peticion.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integraciones Socio de Negocios Transfer: error en la petición')
+
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -802,6 +849,8 @@ export default {
                 }
             }//Fin FOR
 
+            await systemLog.insertLog('Integraciones Socio de Negocios Transfer Direcciones','Integraciones Socio de Negocios Transfer Direcciones: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integraciones Socio de Negocios Transfer Direcciones: correctamente')
             //Response
             res.status(200).send(
             {
@@ -809,6 +858,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integraciones Socio de Negocios Transfer Direcciones','Integraciones Socio de Negocios Transfer Direcciones: error en la peticion', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integraciones Socio de Negocios Transfer Direcciones: error en la peticion ')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -928,12 +979,17 @@ export default {
                 }
             }
 
+            
+            await systemLog.insertLog('Integracion de proyectos','Integracion de proyectos: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integracion de proyectos: correctamente.')
             res.status(200).send(
             {
               
                 message: 'Integracion de proyectos se realizo correctamente.',
             });
         } catch (error) {
+            await systemLog.insertLog('Integracion de proyectos','Integracion de proyectos: error en la petición de proyectos.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion de proyectos: error en la petición de proyectos.')
             console.error('Error en IntegracionInfoTranferProyectos, ----> ', error);
             res.status(500).send({
                 message: 'Error en la petición',
@@ -1036,7 +1092,8 @@ export default {
                     await models.SociosNegocioDescuentos.create(bodyCreate);
                 }
             }
-
+            await systemLog.insertLog('Integracion de Transfer SN Descuentos','Integracion de Transfer SN Descuentos: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integracion de Transfer SN Descuentos: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1045,6 +1102,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integracion de Transfer SN Descuentos','Integracion de Transfer SN Descuentos: error en la petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion de Transfer SN Descuentos: error en la petición.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -1188,12 +1247,17 @@ export default {
             }//Fin FOR
 
             //Response
+
+            await systemLog.insertLog('Integracion de Transfer SN Direcciones','Integracion de Transfer SN Direcciones: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integracion de Transfer SN Direcciones: correctamente.')
             res.status(200).send(
             {
                 message: 'Integracion Transfer SN Direcciones Correcta',
             })
             
         }catch(e){
+            await systemLog.insertLog('Integracion de Transfer SN Direcciones','Integracion de Transfer SN Direcciones: error en la petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion de Transfer SN Direcciones: error en la petición.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -1268,7 +1332,8 @@ export default {
                 }
             }
             
-
+            await systemLog.insertLog('Integracion Transfer Asignacion SN a vendedores','Integracion Transfer Asignacion SN a vendedores: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integracion de Transfer SN Direcciones: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1277,6 +1342,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integracion Transfer Asignacion SN a vendedores','Integracion Transfer Asignacion SN a vendedores:  error en petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion Transfer Asignacion SN a vendedores: error en petición.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -1386,6 +1453,9 @@ export default {
                 }
             }
 
+
+            await systemLog.insertLog('Integracion Transfer Almacenes','Integracion Transfer Almacenes: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integracion Transfer Almacenes: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1396,6 +1466,10 @@ export default {
             })
             
         }catch(e){
+
+            await systemLog.insertLog('Integracion Transfer Almacenes','Integracion Transfer Almacenes: error en la petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion Transfer Almacenes: error en la petición.')
+
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -1472,6 +1546,8 @@ export default {
                 }
             }
 
+            await systemLog.insertLog('Integracion Transfer Categorias from Articulos Grupos','Integracion Transfer Categorias from Articulos Grupos: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integracion Transfer Categorias from Articulos Grupos: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1482,6 +1558,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integracion Transfer Categorias from Articulos Grupos','Integracion Transfer Categorias from Articulos Grupos: error en la petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion Transfer Categorias from Articulos Grupos: error en la petición.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -1561,7 +1639,8 @@ export default {
 
             }
 
-
+            await systemLog.insertLog('Integracion Marcas directo a tablas PCP','Integracion Marcas directo a tablas PCP: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integracion Marcas directo a tablas PCP: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1570,6 +1649,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integracion Marcas directo a tablas PCP','Integracion Marcas directo a tablas PCP: error petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion Marcas directo a tablas PCP: error petición.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -1823,6 +1904,8 @@ export default {
                 }
             }
 
+            await systemLog.insertLog('Integracion Transfer Productos Padres e Hijos','Integracion Transfer Productos Padres e Hijos: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integracion Transfer Productos Padres e Hijos: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1832,6 +1915,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integracion Transfer Productos Padres e Hijos','Integracion Transfer Productos Padres e Hijos: error en la petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion Transfer Productos Padres e Hijos: error en la petición.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -1898,7 +1983,8 @@ export default {
 
                 }
             }
-
+            await systemLog.insertLog('Integracion Transfer Listas Precios (Nombres Codigos)','Integracion Transfer Listas Precios (Nombres Codigos): correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integracion Transfer Listas Precios (Nombres Codigos): correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1908,6 +1994,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integracion Transfer Listas Precios (Nombres Codigos)','Integracion Transfer Listas Precios (Nombres Codigos): error en la petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion Transfer Listas Precios (Nombres Codigos): error en la petición.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -2368,6 +2456,8 @@ export default {
                 }
             }//Fin for i (lista de productos base (SKU))
             
+            await systemLog.insertLog('Integracion Info Transfer Productos Listas Precios','Integracion Info Transfer Productos Listas Precios: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integracion Info Transfer Productos Listas Precios: correctamente.')
 
             //Response
             res.status(200).send(
@@ -2377,6 +2467,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integracion Info Transfer Productos Listas Precios','Integracion Info Transfer Productos Listas Precios: error en la petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion Info Transfer Productos Listas Precios: error en la petición.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -2715,6 +2807,18 @@ export default {
                     
                 }
             //Fin Settear Padres
+            const constTipoCambio = await models.ControlMaestroMultiple.findOne(
+                {
+                    where: {
+                        cmm_nombre: "TIPO_CAMBIO_USD"
+                    },
+                    attributes: ["cmm_valor"]
+                })
+          var USDValor = constTipoCambio.cmm_valor
+
+            await systemLog.insertLog('Integracion Transfer Productos set Prices Nuevos','Integracion Transfer Productos set Prices Nuevos: correctamente. Tipo cambio: ' + USDValor, '1.-webApi', 'Sistema', 'informative')
+            let cadenaTipo = $`Integracion Transfer Productos set Prices Nuevos: correctamente. Tipo cambio: ${USDValor}`
+            integracionEmail(String(cadenaTipo))
 
             //Response
             res.status(200).send(
@@ -2724,6 +2828,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integracion Transfer Productos set Prices Nuevos','Integracion Transfer Productos set Prices Nuevos: error en la petición', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion Transfer Productos set Prices Nuevos: error en la petición.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e
@@ -4991,7 +5097,8 @@ export default {
 
 
 
-
+            await systemLog.insertLog('Integracion Actualizar Ordenes','Integracion Actualizar Ordenes: correctamente.', '1.-webApi', 'Sistema', 'informative')
+           // integracionEmail('Integracion Actualizar Ordenes: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -5001,6 +5108,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integracion Actualizar Ordenes','Integracion Actualizar Ordenes: error en la petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion Actualizar Ordenes: error en la petición.')
             console.log(e)
             res.status(500).send({
                 message: 'Error en la petición:' + e,
@@ -5477,7 +5586,10 @@ export default {
                 }//FIN FOR TODOS LOS REGISTROS SN
 
             }
+        
 
+            await systemLog.insertLog('Integracion Info Transfer Paises Estados','Integracion Info Transfer Paises Estados: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integracion Info Transfer Paises Estados: correctamente.')
 
             //Response
             res.status(200).send(
@@ -5487,6 +5599,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integracion Info Transfer Paises Estados','Integracion Info Transfer Paises Estados: error en la petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integracion Info Transfer Paises Estados: error en la petición.')
             res.status(500).send({
                 message: 'Error en la petición', 
                 e
@@ -6449,6 +6563,8 @@ export default {
 
 
 
+            await systemLog.insertLog('Integraciones de correos','Integraciones de correos: correctamente.', '1.-webApi', 'Sistema', 'informative')
+            integracionEmail('Integraciones de correos: correctamente.')
 
 
             //Response
@@ -6458,6 +6574,8 @@ export default {
             })
             
         }catch(e){
+            await systemLog.insertLog('Integraciones de correos','Integraciones de correos: error en la petición.', '1.-webApi', 'Sistema', 'warning')
+            integracionEmail('Integraciones de correos: error en la petición.')
             console.log(e)
             res.status(500).send({
                 message: 'Error en la petición',
@@ -6483,7 +6601,7 @@ export default {
     IntegracionRawArticulosAndInfoTransferProductos: async(req, res, next) =>{
         try{
 
-       
+        
             //REQUEST DE LA API Y DATOS DE RETORNO
             var options2 = {
                 'method': 'GET',
@@ -6826,10 +6944,10 @@ export default {
             
 
 
-
-
-
-
+            await systemLog.insertLog('Integracion Productos Admin','Integracion Productos Admin: correctamente.', '2.-Administrador', 'Portal Admin', 'informative')
+            integracionEmail('Integracion Productos Admin: correctamente.')
+ 
+          
             //Response
             res.status(200).send(
             {
@@ -6837,7 +6955,9 @@ export default {
             })
             
         }catch(e){
-            console.log(e)
+            //console.log(e)
+            await systemLog.insertLog('Integracion Productos Admin','Integracion Productos Admin: error en la petición.', '2.-Administrador', 'Portal Admin', 'warning')
+            integracionEmail('Integracion Productos Admin: error en la petición.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e

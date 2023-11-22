@@ -8,54 +8,20 @@ const Registros = sequelize.define('Registros', {
         primaryKey: true,
         autoIncrement: true, 
     },
-    CodigoEjecutivo: {
-        type: Sequelize.INTEGER
-    },
-    NombreEjecutivo: {
+    seccion: {
         type: Sequelize.STRING
     },
-    codigoCliente: {
-        type: Sequelize.STRING,
+    descripcion: {
+        type: Sequelize.STRING
     }, 
-    estatus: {
+    sistema: {
         type: Sequelize.STRING
     },
-    fechaInicio: {
-        type: Sequelize.STRING,
-        unique: true
-    },
-    fechaVencimiento: {
+    usuario: {
         type: Sequelize.STRING
     },
-    moneda: {
+    tipoRegistro: {
         type: Sequelize.STRING
-    },
-    nombreCliente: {
-        type: Sequelize.STRING
-    },
-    nombreProyecto: {
-        type: Sequelize.STRING
-    },
-    recordatorio: {
-        type: Sequelize.INTEGER
-    },
-    referenciaFabrica: {
-        type: Sequelize.STRING
-    },
-    renovacion: {
-        type: Sequelize.STRING
-    },
-    total: {
-        type: Sequelize.DECIMAL
-    },
-    unidadesRecordatorio: {
-        type: Sequelize.STRING
-    },
-    idProyecto: {
-        type: Sequelize.STRING
-    },
-    activo: {
-        type: Sequelize.INTEGER
     },
     createdAt: {
         type: Sequelize.DATE,
@@ -69,8 +35,7 @@ const Registros = sequelize.define('Registros', {
 },
 {
     //Options
-    tableName: 'registros'
+    tableName: 'registros_logs'
 });
 
-export default Registr
-os;
+export default Registros;

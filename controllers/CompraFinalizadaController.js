@@ -1,5 +1,5 @@
 import models from '../models';
-const { Op } = require("sequelize");
+const { Op } = require("sequelize"); 
 import {  Sequelize } from 'sequelize';
 import controles from '../mapeos/mapeoControlesMaestrosMultiples';
 const sequelize = new Sequelize(process.env.POSTGRESQL);
