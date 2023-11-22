@@ -6,6 +6,8 @@ import {  Sequelize } from 'sequelize';
 const sequelize = new Sequelize(process.env.POSTGRESQL);
 import XLSX from  'xlsx';
 import productosUtils from "../services/productosUtils";
+import systemLog from "../services/systemLog"
+import {integracionEmail} from '../services/integracionEmail'
 
 
 
@@ -6143,12 +6145,16 @@ export default {
                     }
                 }   
 
+                await systemLog.insertLog('Integracion de PRODUCTOS VENDIDOS','Integracion de PRODUCTOS VENDIDOS: correctamente.', '1.-webApi', 'Sistema', 'informative')
+                integracionEmail('Integracion de PRODUCTOS VENDIDOS: correctamente.')
                 res.status(200).send({
                     message: "Finalizo con exito"
                 })
             }
             else
             {
+                await systemLog.insertLog('Integracion de PRODUCTOS VENDIDOS','Integracion de PRODUCTOS VENDIDOS: error.', '1.-webApi', 'Sistema', 'warning')
+                integracionEmail('Integracion de PRODUCTOS VENDIDOS: error.')
                 res.status(500).send({
                     message: "Error"
                 })
@@ -6163,6 +6169,8 @@ export default {
 
 
         }catch(e){
+            await systemLog.insertLog('Integracion de PRODUCTOS VENDIDOS','Integracion de PRODUCTOS VENDIDOS: error en la petición.', '1.-webApi', 'Sistema', 'error')
+                integracionEmail('Integracion de PRODUCTOS VENDIDOS: error en la petición.')
             res.status(500).send({
                 message: 'Error en la petición',
                 e

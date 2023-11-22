@@ -4,6 +4,7 @@ import auth from '../middlewares/auth';
 
 const router = routerx();
 
+router.get('/pruebas-tester-log', IntegracionesInfoTransferController.IntegrarLogs);
 //Integra el tipo de cambio del dia
 router.get('/IntegracionInfoTransferTipoCambioUSD', IntegracionesInfoTransferController.IntegracionInfoTransferTipoCambioUSD);
 
