@@ -23,7 +23,7 @@ export default {
             if(itemCotizacion){
              //cot_cmm_estatus_id
 
-             const result= await itemCotizacion.update({cot_cmm_estatus_id:1000198})
+             await itemCotizacion.update({cot_cmm_estatus_id:1000198})
 
              let arrayProducts =[]
              if(req.body.productos){
