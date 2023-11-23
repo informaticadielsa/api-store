@@ -60,6 +60,8 @@ import search from './search';
 import sitemapRouter from './SitemapRoutes';
 import ProyectosRoutes from './ProyectosRoutes';
 
+import FinalizarCotizacionRoutes from './FinalizarCotizacionRoutes';
+
 const router = routerx();
 router.use('/v1/sitemap', sitemapRouter);
 router.use('/user', userRouter);
@@ -123,4 +125,5 @@ router.use('/vendedores', VendedoresRoutes);
 router.use('/gerentes', GerentesRoutes);
 router.use('/search', search);
 router.use('/proyectos', ProyectosRoutes);
+router.use('/finish-quotes', FinalizarCotizacionRoutes);
 export default router;
