@@ -8,8 +8,6 @@ export default {
     finishQuotesCart: async(req, res, next) =>{
         try
         {
-            //await models.Almacenes.create(req.body.sn_socios_negocio_id)
-      
             // Actualizar Estatus de cotizacion 1000198
 
             const itemCotizacion = await models.Cotizaciones.findOne(
@@ -21,8 +19,7 @@ export default {
                 })
 
             if(itemCotizacion){
-             //cot_cmm_estatus_id
-
+          
              await itemCotizacion.update({cot_cmm_estatus_id:1000198})
 
              let arrayProducts =[]
@@ -64,7 +61,7 @@ export default {
         {
             res.status(500).send(
             {
-              message: 'Error al crear Almacen',
+              message: 'Error al actualizar el estatus de la cotización',
               e
             });
             next(e);
