@@ -5343,6 +5343,9 @@ export default {
                     constCotizacionesProductos[i].dataValues.prod_nombre_extranjero = constProducto.prod_nombre_extranjero
                     constCotizacionesProductos[i].dataValues.prod_nombre = constProducto.prod_nombre
                     constCotizacionesProductos[i].dataValues.prod_descripcion = constProducto.prod_descripcion
+                    constCotizacionesProductos[i].dataValues.prod_peso= constProducto.prod_peso
+                    constCotizacionesProductos[i].dataValues.prod_volumen= constProducto.prod_volumen
+                    constCotizacionesProductos[i].dataValues.prod_total_stock= constProducto.prod_total_stock
 
                     //Cotizacion productos
                     const constImagenProducto = await models.ImagenProducto.findAll(
