@@ -5231,12 +5231,10 @@ export default {
     getCotizacionesDetalle: async(req, res, next) =>{
         try{
             //cotizacion general
+            let requestJson = req.body.socio_negocio_id ? { cot_cotizacion_id: req.params.id,cot_sn_socios_negocio_id: req.body.socio_negocio_id}: {cot_cotizacion_id: req.params.id}
             const constCotizaciones = await models.Cotizaciones.findOne(
             {
-                where: {
-                    cot_cotizacion_id: req.params.id,
-                    cot_sn_socios_negocio_id: req.body.socio_negocio_id
-                },
+                where: requestJson,
             }); 
 
             if(constCotizaciones)
