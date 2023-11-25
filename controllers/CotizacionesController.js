@@ -5188,36 +5188,40 @@ export default {
     },
     addProductToQuotes: async(req, res, next) => {
         try {
-            console.log('socio_negocio_id --> ', req.body.socio_negocio_id, req.body.idProduct);
-            var productos
-            var tipoImpuesto = 16
-            var multiplicadorImpuesto = 1.16
 
             const socio_negocio_id = req.body.socio_negocio_id;
-            const idProduct = req.body.idProduct;
             const idCotizacion = req.body.idCotizacion;
-            const cotp_producto_cantidad = req.body.cantidad;
+            const prodSKU = req.body.prod_sku;
+            const cantidadProd = req.body.cantidad;
+
             
+            const dataProduct = await cotizacionesUtils.getPriceForCheaperProduct(socio_negocio_id, idCotizacion, prodSKU, cantidadProd)
+            console.log('dataProduct ', dataProduct);
 
             // Datos a insertar a la tabla CotizacionesProductos
-            // const constCotizacionesProductosInserted = await models.CotizacionesProductos.create({
-            //     cotp_prod_producto_id: productos[i].dataValues.prod_producto_id,
-            //     cotp_cotizacion_id: constCotizacionesResult.dataValues.cot_cotizacion_id,
-            //     cotp_producto_cantidad: productos[i].dataValues.cantidad,
-            //     cotp_precio_base_lista: productos[i].dataValues.prod_precio,
-            //     cotp_precio_menos_promociones: productos[i].dataValues.precioFinal,
-            //     cotp_porcentaje_descuento_vendedor: porcentajeDescuentoVendedor,
-            //     cotp_precio_descuento_vendedor: (porcentajeDescuentoVendedor*productos[i].dataValues.precioFinal)/100,
-            //     cotp_usu_descuento_cotizacion: null,
-            //     cotp_back_order: productos[i].dataValues.pcf_is_backorder,
-            //     cotp_tipo_precio_lista: productos[i].dataValues.pcf_tipo_precio_lista,
-            //     cotp_dias_resurtimiento: productos[i].dataValues.pcf_dias_resurtimiento,
-            //     cotp_almacen_linea: productos[i].dataValues.pcf_almacen_linea,
-            //     cotp_recoleccion_resurtimiento: productos[i].dataValues.pcf_recoleccion_resurtimiento,
-            //     cotp_fecha_entrega: productos[i].dataValues.dateFinal,
-            //     cotp_backorder_precio_lista: productos[i].dataValues.pcf_backorder_precio_lista,
-            //     cotp_descuento_porcentual: productos[i].dataValues.totalDescuentoPorcentual,
-            // });
+            const constCotizacionesProductosInserted = await models.CotizacionesProductos.create({
+                cotp_prod_producto_id: dataProduct.prod_producto_id,
+                cotp_cotizacion_id: idCotizacion,
+                cotp_producto_cantidad: dataProduct.cantidad,
+                cotp_precio_base_lista: dataProduct.prod_precio,
+                cotp_precio_menos_promociones: dataProduct.preciofinal,
+                cotp_porcentaje_descuento_vendedor: 0,
+                cotp_precio_descuento_vendedor: 0,
+                cotp_usu_descuento_cotizacion: null,
+                cotp_back_order: dataProduct.aplicabackorder,
+                cotp_tipo_precio_lista: dataProduct.prod_tipo_precio_base,
+                cotp_dias_resurtimiento: dataProduct.prod_dias_resurtimiento,
+                cotp_almacen_linea: null,
+                cotp_recoleccion_resurtimiento: false,
+                cotp_fecha_entrega: Date(),
+                cotp_backorder_precio_lista: dataProduct.backorderpreciolista,
+                cotp_descuento_porcentual: dataProduct.porcentajeDescuento,
+            });
+            console.log('constCotizacionesProductosInserted', constCotizacionesProductosInserted);
+            res.status(200).send({
+                message: 'Cotización actualizada',
+                data: dataProduct
+            })
         } catch (error) {
             res.status(500).send({
                 message: 'Error en la petición',

@@ -686,7 +686,197 @@ module.exports = {
 
 
 
+    getPriceForCheaperProduct: async(socio_negocio_id, idCotizacion, prodSKU, cantidadProd) => {
+        // Obtenemos el porcentaje de descuento para ese producto y cliente
+        const discountPercentage = await sequelize.query(`
+            SELECT * FROM
+            ((
+                SELECT
+                    pd.promdes_descuento_exacto,
+                    (CASE WHEN pd.promdes_tipo_descuento_id = 1000063 THEN
+                        CAST(prod.prod_precio AS numeric) - ((CAST(prod.prod_precio AS numeric) / 100) * CAST(pd.promdes_descuento_exacto AS numeric))
+                    ELSE
+                        CAST(prod.prod_precio AS numeric) - (CAST(pd.promdes_descuento_exacto AS numeric))
+                    END) as discount,
+                    
+                    (CASE WHEN pd.promdes_tipo_descuento_id = 1000063 THEN 1 ELSE 0 END) AS percent,
+                    'Promo' AS sndes_tipo
+                FROM productos_promociones pp
+                    JOIN productos prod on prod.prod_sku = '${prodSKU}'
+                    JOIN promociones_descuentos pd on pd.promdes_promocion_descuento_id = pp.prodprom_promdes_promocion_descuento_id
+                where pp.prodprom_prod_producto_id = prod.prod_producto_id AND CURRENT_DATE BETWEEN pd.promdes_fecha_inicio_validez AND pd.promdes_fecha_finalizacion_validez
+                AND pd.promdes_estatus_id = 1000059
+            )
+            UNION
+            (
+                SELECT 
+                    snd.sndes_porcentaje_descuento as promdes_descuento_exacto,
+                    CAST(prod.prod_precio AS numeric) - ((CAST(prod.prod_precio AS numeric) / 100) * CAST(snd.sndes_porcentaje_descuento AS numeric)) AS discount,
+                    1 AS percent,
+                    snd.sndes_tipo
+                FROM socios_negocio AS sn
+                JOIN socios_negocio_descuentos AS snd ON snd.sndes_cmm_estatus_id = 1000175
+                AND current_date between  snd.sndes_fecha_inicio and snd.sndes_fecha_final
+                AND sn.sn_cardcode = snd.sndes_codigo
 
+                or (snd.sndes_tipo = 'Clientes' and snd.sndes_codigo = sn.sn_cardcode)
+                or (snd.sndes_tipo = 'Grupo' and snd.sndes_codigo = sn.sn_codigo_grupo)
+                or (snd.sndes_tipo = 'CLIENTES' and snd.sndes_codigo = 'TODOS')
+                JOIN productos AS prod ON prod.prod_sku = '${prodSKU}'
+
+                    WHERE sn.sn_socios_negocio_id = ${socio_negocio_id}
+                    AND ((snd.sndes_subtipo = 'Articulos' AND snd.sndes_sub_codigo = prod.prod_sku)
+                    OR (snd.sndes_subtipo = 'Fabricante' AND snd.sndes_sub_codigo = prod.prod_codigo_marca)
+                    OR (snd.sndes_subtipo = 'PropArticulos' AND snd.sndes_sub_codigo in (
+                        select (
+                            SELECT string_agg(value::text, ', ') 
+                            FROM json_array_elements_text(prod_codigo_prop_list) AS value
+                        ) from productos where prod_sku = '${prodSKU}'
+                        ))
+                    OR (snd.sndes_subtipo = 'GrupoArticulos' AND snd.sndes_sub_codigo = prod.prod_codigo_grupo))
+                order by snd.sndes_porcentaje_descuento desc limit 1
+            )) AS discounts ORDER BY discount ASC LIMIT 1;
+        `,
+        {
+        type: sequelize.QueryTypes.SELECT 
+        });
+
+        const discountPercent = discountPercentage[0] ? discountPercentage[0].promdes_descuento_exacto : 0;
+        // Obtenemos el precio del producto y precio de lista
+        const dataProduct = await sequelize.query(`
+            (
+                SELECT
+                    prod.prod_producto_id,
+                    round(CAST(prod.prod_precio AS numeric), 2) AS prod_precio,
+                    
+                    (CASE WHEN pro.moneda = 'USD' THEN
+                        round(CAST(lpro.precio AS numeric) * CAST(cmm.cmm_valor AS numeric), 2)
+                    ELSE
+                        round(CAST(lpro.precio AS numeric), 2)
+                    END) precioFinal,
+                    
+                    prod.prod_sku,
+                    prod.prod_nombre,
+                    
+                    ( CASE WHEN ${cantidadProd} > prod.prod_total_stock
+                        AND prod.prod_tipo_precio_base != 'Precio de Lista'
+                        AND prod.prod_dias_resurtimiento > 0 THEN
+                            prod.prod_total_stock
+                        ELSE
+                            ${cantidadProd}
+                        END ) AS cantidad,
+                    prod.prod_total_stock,
+                    
+                    ( CASE WHEN prod.prod_dias_resurtimiento > 0 THEN TRUE ELSE FALSE END ) AS aplicaBackOrder,
+                    prod.prod_tipo_precio_base,
+                    prod.prod_dias_resurtimiento,
+                    
+                    ( CASE WHEN 1 > prod.prod_total_stock
+                        AND prod.prod_tipo_cambio_base != 'Precio de Lista'
+                        AND prod.prod_dias_resurtimiento > 0 THEN
+                            FALSE
+                        ELSE
+                            TRUE
+                        END ) AS backOrderPrecioLista,
+                    pro."idProyecto"
+                    
+                FROM socios_negocio AS sn
+                JOIN proyectos AS pro ON pro."codigoCliente" = sn.sn_cardcode 
+                    AND pro.estatus in ('Autorizado','Aprobado')
+                    AND CURRENT_DATE < "date"(pro."fechaVencimiento")
+                JOIN lineas_proyectos AS lpro ON lpro."idProyecto" = pro."id" AND lpro."codigoArticulo" = '${prodSKU}'
+                JOIN controles_maestros_multiples AS cmm ON cmm.cmm_nombre = 'TIPO_CAMBIO_USD'
+                JOIN productos AS prod ON prod.prod_sku = lpro."codigoArticulo"
+                WHERE sn.sn_socios_negocio_id = 66
+            )
+            UNION
+            ----------------------------- Consulta que busca los precios de lista -------------------------------
+            (SELECT
+                prod.prod_producto_id,
+                
+                round(CAST(prod.prod_precio AS numeric), 2) AS prod_precio,
+                
+                (CASE WHEN 
+                        (CASE WHEN pldp.pl_tipo_moneda = 'USD' THEN
+                            round(CAST(pldp.pl_precio_usd AS numeric) * CAST(cmm.cmm_valor AS numeric), 2)
+                        ELSE
+                            round(CAST(pldp.pl_precio_producto AS numeric), 2)
+                        END) 
+                            <
+                        round(CAST(prod.prod_precio AS numeric), 2)
+                    THEN
+                        (CASE WHEN pldp.pl_tipo_moneda = 'USD' THEN
+                            round(CAST(pldp.pl_precio_usd AS numeric) * CAST(cmm.cmm_valor AS numeric), 2)
+                    ELSE
+                        round(CAST(pldp.pl_precio_producto AS numeric), 2)
+                    END)
+                ELSE
+                    round(CAST(prod.prod_precio AS numeric), 2)
+                END) AS precioFinal,
+                
+                prod.prod_sku,
+                prod.prod_nombre,
+                
+                ( CASE WHEN ${cantidadProd} > prod.prod_total_stock 
+                    AND prod.prod_tipo_precio_base != 'Precio de Lista' 
+                    AND prod.prod_dias_resurtimiento > 0 THEN
+                        prod.prod_total_stock 
+                    ELSE
+                        ${cantidadProd}
+                    END ) AS cantidad,
+                prod.prod_total_stock,
+                
+                ( CASE WHEN prod.prod_dias_resurtimiento > 0 THEN TRUE ELSE FALSE END ) AS aplicaBackOrder,
+                prod.prod_tipo_precio_base,
+                prod.prod_dias_resurtimiento,
+                
+                ( CASE WHEN ${cantidadProd} > prod.prod_total_stock 
+                    AND prod.prod_tipo_cambio_base != 'Precio de Lista' 
+                    AND prod.prod_dias_resurtimiento > 0 THEN 
+                        FALSE 
+                    ELSE 
+                        TRUE
+                    END ) AS backOrderPrecioLista,
+
+                null AS idProyecto
+            FROM
+                productos AS prod
+                JOIN listas_de_precios AS ldp ON ldp.listp_nombre = prod.prod_tipo_precio_base
+                JOIN productos_lista_de_precio AS pldp ON pldp.pl_listp_lista_de_precio_id = ldp.listp_lista_de_precio_id 
+                    AND pldp.pl_prod_producto_id = prod.prod_producto_id
+                JOIN controles_maestros_multiples AS cmm ON cmm.cmm_nombre = 'TIPO_CAMBIO_USD'
+
+            WHERE
+                prod_sku = '${prodSKU}')  
+        `,
+        {
+            type: sequelize.QueryTypes.SELECT 
+        });
+        
+        const filteredPrice = dataProduct.map((item) => {
+            const precioFinal = (item.idProyecto
+                ? Number(item.preciofinal)
+                : Number(item.preciofinal) - ((Number(item.preciofinal)/100) * discountPercent))
+                    .toFixed(2);
+            const precioDescuento = (item.idProyecto
+                ? 0
+                : ((Number(item.preciofinal)/100) * discountPercent))
+                    .toFixed(2);
+            const porcentajeDescuento = item.idProyecto ? 0 : discountPercent;
+            return {
+                ...item, prod_precio: Number(item.prod_precio),
+                preciofinal: Number(precioFinal),
+                precioDescuento: Number(precioDescuento),
+                porcentajeDescuento,
+            }
+        });
+
+        const filteredPriceLow = filteredPrice.reduce((min, obj) => 
+            (obj.preciofinal < min.preciofinal ? obj : min),
+            filteredPrice[0]);
+
+        return filteredPriceLow;
+    },
 
 
 
