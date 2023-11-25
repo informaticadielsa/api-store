@@ -2198,7 +2198,7 @@ export default {
             await systemLog.insertLog('Integracion Listas Precios Basicas raw','Integracion Listas Precios Basicas raw: error en la petición.', '1.-webApi', 'Sistema', 'warning')
             integracionEmail('Integracion Listas Precios Basicas raw: error en petición.')
             console.log(e)
-            res.status(500).send({
+            res.status(500).send({ 
                 message: 'Error en la petición',
                 e
             });

@@ -5235,13 +5235,11 @@ export default {
     getCotizacionesDetalle: async(req, res, next) =>{
         try{
             //cotizacion general
+            let requestJson = req.body.socio_negocio_id ? { cot_cotizacion_id: req.params.id,cot_sn_socios_negocio_id: req.body.socio_negocio_id}: {cot_cotizacion_id: req.params.id}
             const constCotizaciones = await models.Cotizaciones.findOne(
             {
-                where: {
-                    cot_cotizacion_id: req.params.id,
-                    cot_sn_socios_negocio_id: req.body.socio_negocio_id
-                },
-            });
+                where: requestJson,
+            }); 
 
             if(constCotizaciones)
             {
@@ -5349,6 +5347,9 @@ export default {
                     constCotizacionesProductos[i].dataValues.prod_nombre_extranjero = constProducto.prod_nombre_extranjero
                     constCotizacionesProductos[i].dataValues.prod_nombre = constProducto.prod_nombre
                     constCotizacionesProductos[i].dataValues.prod_descripcion = constProducto.prod_descripcion
+                    constCotizacionesProductos[i].dataValues.prod_peso= constProducto.prod_peso
+                    constCotizacionesProductos[i].dataValues.prod_volumen= constProducto.prod_volumen
+                    constCotizacionesProductos[i].dataValues.prod_total_stock= constProducto.prod_total_stock
 
                     //Cotizacion productos
                     const constImagenProducto = await models.ImagenProducto.findAll(
