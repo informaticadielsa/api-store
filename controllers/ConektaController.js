@@ -552,11 +552,13 @@ export default {
               } 
             }]
         }).then(function (result) {
+            pruebaTester(JSON.stringify(result))
           pagado = true
           console.log(result.toObject().charges.data)
           return result.toObject()
         }, function (error) {
           console.log(error)
+          pruebaTester(String(error))
           return error
         })
 
