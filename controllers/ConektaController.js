@@ -558,7 +558,7 @@ export default {
           return result.toObject()
         }, function (error) {
           console.log(error)
-          pruebaTester(String(error))
+          pruebaTester(JSON.stringify(error))
           return error
         })
 
