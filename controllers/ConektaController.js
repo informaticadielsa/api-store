@@ -7,6 +7,7 @@ import conekta from 'conekta';
 const { pagoAceptado } = require('../services/pagoAceptadoEmail');
 const { pagoRechazado } = require('../services/pagoRechazadoEmail')
 import getCheckout from "../services/checkoutAPI";
+import {pruebaTester} from "../services/pruebaTester"
 export default {
    
 
@@ -422,7 +423,9 @@ export default {
             }
         })
 
-        var checkoutJson = await getCheckout.getCheckoutAPI2(cdc_sn_socio_de_negocio_id)
+        var checkoutJson = await getCheckout.getCheckoutAPI2(cdc_sn_socio_de_negocio_id) 
+
+        pruebaTester(JSON.stringify(checkoutJson))
         var productos = checkoutJson.dataValues.productos
 
         var array = []
