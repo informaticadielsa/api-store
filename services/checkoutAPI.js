@@ -1159,10 +1159,7 @@ module.exports = {
                  const newProductProyect =data[0];
 
                  constProductoCarritoDeCompra[s].dataValues.producto.prod_precio = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio )
-                 constProductoCarritoDeCompra[s].dataValues.precioBaseFinal = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio )
-                 constProductoCarritoDeCompra[s].dataValues.precioFinal =(newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio )
-
-
+            
                 //pruebaTester( constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
                newProductsProyects.push(constProductoCarritoDeCompra[s])
            }
@@ -1445,13 +1442,15 @@ module.exports = {
 
                 // Buscar precio por SN en caso de que no sea stock inactivo (precio base final)
                     //El precio base siempre sera la misma variable porque ya no se usara lo de listas de precios de SN
+
+                    // Crea precios
                     if(constProductoCarritoDeCompra[i].dataValues.backOrderPrecioLista == true)
                     {
                         constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = constProductoCarritoDeCompra[i].dataValues.prod_precio
                     }
                     else
                     {
-                        precioBaseFinal = constProducto.prod_precio
+                        precioBaseFinal = constProducto.prod_precio === 0 ? constProductoCarritoDeCompra[i].dataValues.prod_precio :  constProducto.prod_precio
                         constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = precioBaseFinal
                     }
                     
@@ -1926,7 +1925,7 @@ module.exports = {
                     }
                     
 
-
+                    
                     constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = (constProductoCarritoDeCompra[j].dataValues.precioFinal * (1 + (tipoImpuesto / 100)))
                     constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = parseFloat(constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto.toFixed(2))
                     
