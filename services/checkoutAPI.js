@@ -1159,6 +1159,8 @@ module.exports = {
                  const newProductProyect =data[0];
 
                  constProductoCarritoDeCompra[s].dataValues.producto.prod_precio = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio )
+
+                 constProductoCarritoDeCompra[s].dataValues.producto.prod_precioOriginal = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio )
             
                 //pruebaTester( constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
                newProductsProyects.push(constProductoCarritoDeCompra[s])
@@ -1446,12 +1448,14 @@ module.exports = {
                     // Crea
                     if(constProductoCarritoDeCompra[i].dataValues.backOrderPrecioLista == true)
                     {
-                        constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = 1000
+                        constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = constProductoCarritoDeCompra[i].dataValues.prod_precio ===0? constProductoCarritoDeCompra[i].dataValues.prod_precioOriginal :constProductoCarritoDeCompra[i].dataValues.prod_precio
+
+                        //prod_precioOriginal
                         //constProductoCarritoDeCompra[i].dataValues.prod_precio
                     }
                     else
                     {
-                        precioBaseFinal = 1000
+                        precioBaseFinal = constProducto.prod_precio ===0 ? constProductoCarritoDeCompra[i].dataValues.prod_precioOriginal :constProductoCarritoDeCompra[i].dataValues.prod_precio
                         //constProducto.prod_precio
                         constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = precioBaseFinal
                     }
