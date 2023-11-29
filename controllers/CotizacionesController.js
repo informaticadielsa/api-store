@@ -5186,48 +5186,87 @@ export default {
             next(e);
         }
     },
-    addProductToQuotes: async(req, res, next) => {
+    addProductToQuote: async(req, res, next) => {
         try {
-
             const socio_negocio_id = req.body.socio_negocio_id;
             const idCotizacion = req.body.idCotizacion;
             const prodSKU = req.body.prod_sku;
             const cantidadProd = req.body.cantidad;
 
-            
+            // Traer el precio más bajo del producto
             const dataProduct = await cotizacionesUtils.getPriceForCheaperProduct(socio_negocio_id, idCotizacion, prodSKU, cantidadProd)
-            console.log('dataProduct ', dataProduct);
 
-            // Datos a insertar a la tabla CotizacionesProductos
-            const constCotizacionesProductosInserted = await models.CotizacionesProductos.create({
-                cotp_prod_producto_id: dataProduct.prod_producto_id,
-                cotp_cotizacion_id: idCotizacion,
-                cotp_producto_cantidad: dataProduct.cantidad,
-                cotp_precio_base_lista: dataProduct.prod_precio,
-                cotp_precio_menos_promociones: dataProduct.preciofinal,
-                cotp_porcentaje_descuento_vendedor: 0,
-                cotp_precio_descuento_vendedor: 0,
-                cotp_usu_descuento_cotizacion: null,
-                cotp_back_order: dataProduct.aplicabackorder,
-                cotp_tipo_precio_lista: dataProduct.prod_tipo_precio_base,
-                cotp_dias_resurtimiento: dataProduct.prod_dias_resurtimiento,
-                cotp_almacen_linea: null,
-                cotp_recoleccion_resurtimiento: false,
-                cotp_fecha_entrega: Date(),
-                cotp_backorder_precio_lista: dataProduct.backorderpreciolista,
-                cotp_descuento_porcentual: dataProduct.porcentajeDescuento,
+            const dataProductExist = await models.CotizacionesProductos.findOne({
+                where: {
+                    cotp_prod_producto_id: dataProduct.prod_producto_id,
+                    cotp_cotizacion_id: idCotizacion,
+                }
             });
-            console.log('constCotizacionesProductosInserted', constCotizacionesProductosInserted);
+            
+            let constCotizacionesProductosInserted = {};
+            if(!dataProductExist) {
+                // Datos a insertar a la tabla CotizacionesProductos
+                constCotizacionesProductosInserted = await models.CotizacionesProductos.create({
+                    cotp_prod_producto_id: dataProduct.prod_producto_id,
+                    cotp_cotizacion_id: idCotizacion,
+                    cotp_producto_cantidad: dataProduct.cantidad,
+                    cotp_precio_base_lista: dataProduct.prod_precio,
+                    cotp_precio_menos_promociones: dataProduct.preciofinal,
+                    cotp_porcentaje_descuento_vendedor: 0,
+                    cotp_precio_descuento_vendedor: 0,
+                    cotp_usu_descuento_cotizacion: null,
+                    cotp_back_order: dataProduct.aplicabackorder,
+                    cotp_tipo_precio_lista: dataProduct.prod_tipo_precio_base,
+                    cotp_dias_resurtimiento: dataProduct.prod_dias_resurtimiento,
+                    cotp_almacen_linea: null,
+                    cotp_recoleccion_resurtimiento: false,
+                    cotp_fecha_entrega: Date(),
+                    cotp_backorder_precio_lista: dataProduct.backorderpreciolista,
+                    cotp_descuento_porcentual: dataProduct.porcentajeDescuento,
+                });
+            } else {
+                // Esto sucede cuando se manda nuevamente un producto existente en la cotización
+                constCotizacionesProductosInserted = dataProductExist.update(  
+                    {
+                        cotp_producto_cantidad: dataProductExist.cotp_producto_cantidad + 1
+                    });
+            }
+
             res.status(200).send({
                 message: 'Cotización actualizada',
-                data: dataProduct
-            })
+                data: dataProduct,
+                error: false,
+            });
         } catch (error) {
             res.status(500).send({
                 message: 'Error en la petición',
                 error
             });
             next(error);
+        }
+    },
+
+    deleteProductOfQuote: async(req, res, next) => {
+        try {
+            const idProductoCotizacion = req.body.idProductoCotizacion;
+
+            const respondProduct = await models.CotizacionesProductos.destroy({
+                where: {
+                    cotp_cotizaciones_productos_id: idProductoCotizacion,
+                }
+            });
+            
+            res.status(200).send({
+                message: 'Producto eliminidado correctamente',
+                data: respondProduct,
+                error: false,
+            });
+        } catch (error) {
+            res.status(500).send({
+                message: 'Error en la petición',
+                error
+            });
+            next(error);   
         }
     },
 
