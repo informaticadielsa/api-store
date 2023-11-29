@@ -1451,15 +1451,17 @@ module.exports = {
                     {   
                        
                         constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = constProductoCarritoDeCompra[i].dataValues.prod_precio ==0? constProductoCarritoDeCompra[i].dataValues.producto.prod_precio :constProductoCarritoDeCompra[i].dataValues.prod_precio
+                        pruebaTester('hola 1')
+                        pruebaTester(String( constProductoCarritoDeCompra[i].dataValues.producto.prod_precio))
                        // constProductoCarritoDeCompra[s].dataValues.producto.prod_precioOriginal
                         //prod_precioOriginal
                         //constProductoCarritoDeCompra[i].dataValues.prod_precio
                     }
                     else
                     {
-                        precioBaseFinal = constProducto.prod_precio ==0 ? constProductoCarritoDeCompra[i].dataValues.prod_precio :constProductoCarritoDeCompra[i].dataValues.prod_precio
+                        precioBaseFinal = constProducto.prod_precio ==0 ? constProductoCarritoDeCompra[i].dataValues.producto.prod_precio :constProductoCarritoDeCompra[i].dataValues.prod_precio
                         //constProducto.prod_precio
-                        constProductoCarritoDeCompra[i].dataValues.producto.precioBaseFinal = precioBaseFinal
+                        constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = precioBaseFinal
                     }
                     
                     // if(constProducto.prod_es_stock_inactivo == true)
