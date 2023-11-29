@@ -2126,7 +2126,7 @@ module.exports = {
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
                     "precioUnitario": ((Number(newPrices) ===0 && newProductProyect) || (newProductProyect && Number(newProductProyect.precio) === Number(precioFinal))) ? newProductProyect.precio : Number(newPrices),
                     "codigoImpuesto": ImpuestoFinal,
-                    "descuento":  (constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != "null" && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual) ? 
+                    "descuento":  (constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null) ? 
                     constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual:0,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
@@ -2135,7 +2135,7 @@ module.exports = {
 
               // pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
                // pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
-
+            
                 //testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
                 array.push(jsonArray);
@@ -2415,7 +2415,7 @@ module.exports = {
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
                     "precioUnitario": ((Number(newPrices) ===0 && newProductProyect) || (newProductProyect && Number(newProductProyect.precio) === Number(precioFinal))) ? newProductProyect.precio : Number(newPrices),
                     "codigoImpuesto": ImpuestoFinal,
-                    "descuento":  (constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != "null" && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual) ? 
+                    "descuento":  (constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null) ? 
                     constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual:0,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
@@ -2423,7 +2423,7 @@ module.exports = {
                 }
 
                //pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
-
+                    pruebaTester(JSON.stringify(jsonArray))
                // testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
                 array.push(jsonArray);
