@@ -425,7 +425,7 @@ export default {
 
         var checkoutJson = await getCheckout.getCheckoutAPI2(cdc_sn_socio_de_negocio_id) 
 
-        pruebaTester(JSON.stringify(checkoutJson))
+       // pruebaTester(JSON.stringify(checkoutJson))
         var productos = checkoutJson.dataValues.productos
 
         var array = []
@@ -654,7 +654,7 @@ export default {
 
 
           // await pagoAceptado(constSociosNegocioUsuario.snu_correo_electronico, usuario_sn_id, checkoutJson.dataValues.cdc_numero_orden);
-        //  await pagoAceptado("informatica@dielsa.com", constSociosNegocioUsuario.dataValues.snu_usuario_snu_id, checkoutJson.dataValues.cdc_numero_orden, checkoutJson);
+          await pagoAceptado("informatica@dielsa.com", constSociosNegocioUsuario.dataValues.snu_usuario_snu_id, checkoutJson.dataValues.cdc_numero_orden, checkoutJson);
           //await pagoAceptado("gabriel@puntocommerce.com", constSociosNegocioUsuario.dataValues.snu_usuario_snu_id, checkoutJson.dataValues.cdc_numero_orden, checkoutJson);
           // console.log("paso el await")
 
