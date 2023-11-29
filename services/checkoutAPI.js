@@ -1162,7 +1162,9 @@ module.exports = {
                  constProductoCarritoDeCompra[s].dataValues.producto.prod_precio = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio );
 
                  constProductoCarritoDeCompra[s].dataValues.producto.prod_precioOriginal = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio );
-                 pruebaTester(String(constProductoCarritoDeCompra[s].dataValues.producto.prod_precioOriginal))
+                 //pruebaTester(String(constProductoCarritoDeCompra[s].dataValues.producto.prod_precioOriginal))
+                 constProductoCarritoDeCompra[s].dataValues.producto.isProject = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? true : false );
+
                 //pruebaTester( constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
                newProductsProyects.push(constProductoCarritoDeCompra[s])
            }
@@ -1446,13 +1448,13 @@ module.exports = {
                 // Buscar precio por SN en caso de que no sea stock inactivo (precio base final)
                     //El precio base siempre sera la misma variable porque ya no se usara lo de listas de precios de SN
 
-                    // Crea
+                    // Crea y asigna precios.
                     if(constProductoCarritoDeCompra[i].dataValues.backOrderPrecioLista == true)
                     {   
                        
                         constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = constProductoCarritoDeCompra[i].dataValues.prod_precio ==0? constProductoCarritoDeCompra[i].dataValues.producto.prod_precio :constProductoCarritoDeCompra[i].dataValues.prod_precio
-                        pruebaTester('hola 1')
-                        pruebaTester(String( constProductoCarritoDeCompra[i].dataValues.producto.prod_precio))
+                       // pruebaTester('hola 1')
+                      //  pruebaTester(String( constProductoCarritoDeCompra[i].dataValues.producto.prod_precio))
                        // constProductoCarritoDeCompra[s].dataValues.producto.prod_precioOriginal
                         //prod_precioOriginal
                         //constProductoCarritoDeCompra[i].dataValues.prod_precio
@@ -1500,8 +1502,9 @@ module.exports = {
 
 
                 //PROMOCION
-                    //Si es stock inactivo no tendra ni revisara descuentos
-                    if(constProductoCarritoDeCompra[i].dataValues.prod_es_stock_inactivo == true)
+                    //Si es stock inactivo no tendra ni revisara descuentos, ni tampoco si pertecene a un Proyecto
+                    if(constProductoCarritoDeCompra[i].dataValues.prod_es_stock_inactivo == true  ||
+                        constProductoCarritoDeCompra[i].dataValues.producto.isProject )
                     {
                         constProductoCarritoDeCompra[i].dataValues.promocion = []
                     }
@@ -1522,8 +1525,9 @@ module.exports = {
 
                 //DESCUENTOS SN/GRUPO/DIELSA
                     //Este codigo se repite desde la util getChildsSNDiscounts
-                    //Si es stock inactivo no tendra ni revisara descuentos
-                    if(constProductoCarritoDeCompra[i].dataValues.prod_es_stock_inactivo == true)
+                    //Si es stock inactivo no tendra ni revisara descuentos, ni tampoco si pertecene aun proyecto
+                    if(constProductoCarritoDeCompra[i].dataValues.prod_es_stock_inactivo == true ||
+                        constProductoCarritoDeCompra[i].dataValues.producto.isProject  )
                     {
                         constProductoCarritoDeCompra[i].dataValues.descuentoGrupoBool = false
                         constProductoCarritoDeCompra[i].dataValues.descuentoGrupo = 0
@@ -1553,7 +1557,8 @@ module.exports = {
 
 
                 //CUPON
-                    if(constProductoCarritoDeCompra[i].dataValues.prod_es_stock_inactivo == true)
+                    if(constProductoCarritoDeCompra[i].dataValues.prod_es_stock_inactivo == true || 
+                        constProductoCarritoDeCompra[i].dataValues.producto.isProject )
                     {
                         constProductoCarritoDeCompra[i].dataValues.cupon = []
                     }
