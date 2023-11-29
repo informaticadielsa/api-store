@@ -7,6 +7,7 @@ import statusControllers from '../mapeos/mapeoControlesMaestrosMultiples';
 import productosUtils from "../services/productosUtils";
 import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import Producto from '../models/ProductoModel';
+import {pruebaTester} from './pruebaTester'
 
 module.exports = {
     getCheckoutAPI: async function (cdc_sn_socio_de_negocio_id) {
@@ -1161,7 +1162,8 @@ module.exports = {
                  constProductoCarritoDeCompra[s].dataValues.producto.prod_precio = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio )
 
                  constProductoCarritoDeCompra[s].dataValues.producto.prod_precioOriginal = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio )
-            
+                 
+                 //pruebaTester(String(constProductoCarritoDeCompra[s].dataValues.producto.prod_precioOriginal))
                 //pruebaTester( constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
                newProductsProyects.push(constProductoCarritoDeCompra[s])
            }
@@ -1447,8 +1449,9 @@ module.exports = {
 
                     // Crea
                     if(constProductoCarritoDeCompra[i].dataValues.backOrderPrecioLista == true)
-                    {
-                        constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = constProductoCarritoDeCompra[i].dataValues.prod_precio ==0? constProductoCarritoDeCompra[i].dataValues.prod_precioOriginal :constProductoCarritoDeCompra[i].dataValues.prod_precio
+                    {   
+                       
+                        constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = constProductoCarritoDeCompra[i].dataValues.prod_precio ==0? constProductoCarritoDeCompra[i].dataValues.producto.prod_precioOriginal :constProductoCarritoDeCompra[i].dataValues.prod_precio
 
                         //prod_precioOriginal
                         //constProductoCarritoDeCompra[i].dataValues.prod_precio
@@ -1457,7 +1460,7 @@ module.exports = {
                     {
                         precioBaseFinal = constProducto.prod_precio ==0 ? constProductoCarritoDeCompra[i].dataValues.prod_precioOriginal :constProductoCarritoDeCompra[i].dataValues.prod_precio
                         //constProducto.prod_precio
-                        constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = precioBaseFinal
+                        constProductoCarritoDeCompra[i].dataValues.producto.precioBaseFinal = precioBaseFinal
                     }
                     
                     // if(constProducto.prod_es_stock_inactivo == true)
