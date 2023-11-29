@@ -495,7 +495,7 @@ module.exports = {
                 });
 
                 //Precio Base
-                var precioBase = constProductoCarritoDeCompra[j].dataValues.precioBaseFinal
+                var precioBase = constProductoCarritoDeCompra[j].dataValues.precioBaseFinal 
                 var precioTemporal = constProductoCarritoDeCompra[j].dataValues.precioBaseFinal
                 var totalDescuentoTemporal = 0
 
@@ -1159,6 +1159,8 @@ module.exports = {
                  const newProductProyect =data[0];
 
                  constProductoCarritoDeCompra[s].dataValues.producto.prod_precio = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio )
+                 constProductoCarritoDeCompra[s].dataValues.precioBaseFinal = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio )
+
 
                 //pruebaTester( constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
                newProductsProyects.push(constProductoCarritoDeCompra[s])
