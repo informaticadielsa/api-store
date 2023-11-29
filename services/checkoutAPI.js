@@ -1448,14 +1448,14 @@ module.exports = {
                     // Crea
                     if(constProductoCarritoDeCompra[i].dataValues.backOrderPrecioLista == true)
                     {
-                        constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = constProductoCarritoDeCompra[i].dataValues.prod_precio ===0? constProductoCarritoDeCompra[i].dataValues.prod_precioOriginal :constProductoCarritoDeCompra[i].dataValues.prod_precio
+                        constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = constProductoCarritoDeCompra[i].dataValues.prod_precio ==0? constProductoCarritoDeCompra[i].dataValues.prod_precioOriginal :constProductoCarritoDeCompra[i].dataValues.prod_precio
 
                         //prod_precioOriginal
                         //constProductoCarritoDeCompra[i].dataValues.prod_precio
                     }
                     else
                     {
-                        precioBaseFinal = constProducto.prod_precio ===0 ? constProductoCarritoDeCompra[i].dataValues.prod_precioOriginal :constProductoCarritoDeCompra[i].dataValues.prod_precio
+                        precioBaseFinal = constProducto.prod_precio ==0 ? constProductoCarritoDeCompra[i].dataValues.prod_precioOriginal :constProductoCarritoDeCompra[i].dataValues.prod_precio
                         //constProducto.prod_precio
                         constProductoCarritoDeCompra[i].dataValues.precioBaseFinal = precioBaseFinal
                     }
