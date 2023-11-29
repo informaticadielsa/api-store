@@ -1660,7 +1660,7 @@ export default{
                                 //ordernDividida[j].principal[i].pcf_precio
                                 var newPrice = parseFloat(ordernDividida[j].principal[i].pcf_precio.toFixed(2))
                                // var newPrice= parseFloat(ordernDividida[j].principal[i].pcf_precio_base_venta).toFixed(2))
-                                var discount = ordernDividida[j].principal[i].pcf_descuento_porcentual
+                                var discount = ordernDividida[j].principal[i].pcf_descuento_porcentual != null ? ordernDividida[j].principal[i].pcf_descuento_porcentual : 0
 
                                 const constProducto = await models.Producto.findOne(
                                     {
@@ -1703,7 +1703,7 @@ export default{
                                 console.log(ordernDividida[j].secundario[i])
                                 ordernDividida[j].secundario[i].pcf_order_dividida_sap = true
                                 var newPrice= parseFloat((ordernDividida[j].secundario[i].pcf_precio / USDValor).toFixed(2))
-                                var discount = ordernDividida[j].secundario[i].pcf_descuento_porcentual
+                                var discount = ordernDividida[j].secundario[i].pcf_descuento_porcentual != null ? ordernDividida[j].secundario[i].pcf_descuento_porcentual:0
 
                                 const constProducto = await models.Producto.findOne(
                                     {

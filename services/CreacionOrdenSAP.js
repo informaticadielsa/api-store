@@ -2424,6 +2424,7 @@ module.exports = {
 
                //pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
                     pruebaTester(JSON.stringify(jsonArray))
+                    pruebaTester(JSON.stringify(constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual))
                // testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
                 array.push(jsonArray);
