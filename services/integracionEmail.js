@@ -45,9 +45,9 @@ exports.integracionEmail = async function (cadena ) {
             "informatica@dielsa.com",
             "oscar.espinosa@daltum.mx",
             "luis.sanchez@daltum.mx",
-            "baltazar.ibarra@dielsa.com",
-           "gustavo.arizpe@dielsa.com",
-           "marlen.pena@dielsa.com"
+           // "baltazar.ibarra@dielsa.com",
+          // "gustavo.arizpe@dielsa.com",
+          // "marlen.pena@dielsa.com"
          
         ];
     }
