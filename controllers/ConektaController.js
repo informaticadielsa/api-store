@@ -425,7 +425,7 @@ export default {
 
         var checkoutJson = await getCheckout.getCheckoutAPI2(cdc_sn_socio_de_negocio_id) 
 
-       pruebaTester(JSON.stringify(checkoutJson))
+      // pruebaTester(JSON.stringify(checkoutJson))
         var productos = checkoutJson.dataValues.productos
 
         var array = []
@@ -558,7 +558,7 @@ export default {
           return result.toObject()
         }, function (error) {
           console.log(error)
-          pruebaTester(JSON.stringify(error))
+          //pruebaTester(JSON.stringify(error))
           return error
         })
 
