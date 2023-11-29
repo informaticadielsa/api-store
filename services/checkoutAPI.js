@@ -1162,7 +1162,7 @@ module.exports = {
                  constProductoCarritoDeCompra[s].dataValues.producto.prod_precio = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio );
 
                  constProductoCarritoDeCompra[s].dataValues.producto.prod_precioOriginal = (newProductProyect && (newProductProyect.precio < constProductoCarritoDeCompra[s].dataValues.producto.prod_precio || constProductoCarritoDeCompra[s].dataValues.producto.prod_precio ===0)? Number(newProductProyect.precio*USDValor) : constProductoCarritoDeCompra[s].dataValues.producto.prod_precio );
-                 //pruebaTester(String(constProductoCarritoDeCompra[s].dataValues.producto.prod_precioOriginal))
+                 pruebaTester(String(constProductoCarritoDeCompra[s].dataValues.producto.prod_precioOriginal))
                 //pruebaTester( constProductoCarritoDeCompra[s].dataValues.producto.prod_precio + ' sku:' + constProductoCarritoDeCompra[s].dataValues.producto.prod_sku)
                newProductsProyects.push(constProductoCarritoDeCompra[s])
            }
