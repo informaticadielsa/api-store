@@ -1724,7 +1724,7 @@ module.exports = {
 
 
                     // totalPromocion
-                    // constProductoCarritoDeCompra[j].dataValues.totalDescuentoPorcentual = totalPromocion
+                    constProductoCarritoDeCompra[j].dataValues.totalDescuentoPorcentual = totalPromocion
 
 
 
@@ -1990,7 +1990,7 @@ module.exports = {
                 var tempPrecioBase = constProductoCarritoDeCompra[j].dataValues.prod_precio
                 var tempPrecioFinal = constProductoCarritoDeCompra[j].dataValues.precioFinal
 
-                var porcentajeDescuentoTemporal = 100-((tempPrecioFinal*100)/tempPrecioBase)
+                var porcentajeDescuentoTemporal =  constProductoCarritoDeCompra[j].dataValues.producto.isProject? 0:100-((tempPrecioFinal*100)/tempPrecioBase)
 
                 constProductoCarritoDeCompra[j].dataValues.totalDescuentoPorcentual = parseFloat(porcentajeDescuentoTemporal.toFixed(2))
 
