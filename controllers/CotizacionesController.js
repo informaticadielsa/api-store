@@ -4862,13 +4862,14 @@ export default {
             console.log("/////////// Comienza PASO 2 ///////////")
             //Obtener la informacion de los productos (Antes de separar lineas/backorder/stockinactivo/hastaagotarexistencia/precioLista)
                 productos = await cotizacionesUtils.cotizacionesObtenerInfoBaseProductos(req.body, productos);
-             pruebaTester(JSON.stringify(productos))
+             //pruebaTester(JSON.stringify(productos))
             //Fin obtener productos base
             console.log("/////////// FIN PASO 2 ///////////")
 
             //PASO COT 3
             console.log("/////////// Comienza PASO 3 ///////////")
             //Mandar obtener lineas para saber de que almacen se surtiran y obtener si es precio lista, precio hae o si
+            pruebaTester('JSON:'+JSON.stringify(productos))
                 var lineasProductos = await cotizacionesUtils.cotizacionesObtenerLineasProductos(req.body, productos);
                 pruebaTester(JSON.stringify(lineasProductos))
                 // console.log(lineasProductos)
