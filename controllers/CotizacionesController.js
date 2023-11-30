@@ -4854,7 +4854,7 @@ export default {
             //Obtener productos ya sea de carrito id o del array de prospectos solo regresar id de productos en mismo formato
                 productos = await cotizacionesUtils.cotizacionesObtenerProductos(req.body);
                 
-               pruebaTester(JSON.stringify(productos))
+              // pruebaTester(JSON.stringify(productos))
             //Fin obtener mismo formato productos
             console.log("/////////// FIN PASO 1 ///////////")
 
