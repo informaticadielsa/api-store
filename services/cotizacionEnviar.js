@@ -19,7 +19,7 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idP
       where: {
         cot_cotizacion_id: cotizacion_id,
       },
-    });
+    }); 
 
     const constCotizacionesProductos = await models.CotizacionesProductos.findAll({
       where: {
@@ -610,7 +610,7 @@ var prod_nombre_foraneo = constProducto.prod_nombre_extranjero;
 var cantidad =
   constCotizacionesProductos[x].dataValues.cotp_producto_cantidad;
 
-var precio = constCotizacionesProductos[x].dataValues.cotp_precio_base_lista;
+var precio = constCotizacionesProductos[x].dataValues.cotp_precio_menos_promociones;
 precio = formatter.format(precio);
 
 if (constImagenProducto) {

@@ -4845,7 +4845,7 @@ export default {
                         }
                     }
                 //Fin Obtener informacion de impuesto de SN o Prospecto
-            //Fin obtener informacion de iva
+            //Fin obtener informacion de iva 
             console.log("/////////// FIN PASO 0 ///////////")
 
             //PASO COT 1
