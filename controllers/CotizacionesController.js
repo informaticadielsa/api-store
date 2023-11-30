@@ -4862,7 +4862,7 @@ export default {
             console.log("/////////// Comienza PASO 2 ///////////")
             //Obtener la informacion de los productos (Antes de separar lineas/backorder/stockinactivo/hastaagotarexistencia/precioLista)
                 productos = await cotizacionesUtils.cotizacionesObtenerInfoBaseProductos(req.body, productos);
-              //  pruebaTester(JSON.stringify(productos))
+             pruebaTester(JSON.stringify(productos))
             //Fin obtener productos base
             console.log("/////////// FIN PASO 2 ///////////")
 
@@ -4879,7 +4879,7 @@ export default {
             console.log("/////////// Comienza PASO 4 ///////////")
             //Recalcular productos base en base a la informacion de las lineas (obtener productos en back etc~)
                 productos = await cotizacionesUtils.cotizacionesObtenerInformacionDeLineas(req.body, productos, lineasProductos);
-                pruebaTester(JSON.stringify(productos))
+               // pruebaTester(JSON.stringify(productos))
             //FIN Recalcular productos base en base a la informacion de las lineas (obtener productos en back etc~)
             console.log("/////////// FIN PASO 4 ///////////")
 
