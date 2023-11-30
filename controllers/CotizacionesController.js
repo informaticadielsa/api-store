@@ -8,6 +8,7 @@ import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import CreacionOrdenSAP from "../services/CreacionOrdenSAP";
 const {ordenCreadaEmail} = require('../services/ordenCreadaEmail');
 const { cotizacionEnviar } = require('../services/cotizacionEnviar');
+import {pruebaTester} from '../services/pruebaTester'
 
 
 const {ordenAbiertaCreadaEmail} = require('../services/ordenAbiertaCreadaEmail');
@@ -5133,10 +5134,12 @@ export default {
                             snu_super_usuario: true
                         }
                     });
+                    pruebaTester('si llegamos sin usuario')
                      console.log('enviar correo:'+constSociosNegocioUsuario.snu_correo_electronico+' cotizacion :'+constCotizacionesResult.cot_cotizacion_id)
             await cotizacionEnviar(constSociosNegocioUsuario.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id, req.body.cot_referencia, 0, constSociosNegocioUsuario.snu_cardcode);
             //constCotizacionesResult.cot_cotizacion_id
             }else{
+                
                
                 const infoCliente = await models.UsuariosProspectos.findOne(
                     {
@@ -5145,7 +5148,8 @@ export default {
                         },
                     });
 
-                    console.log(infoCliente)
+                    //console.log(infoCliente)
+                    pruebaTester('si con usuario')
                     console.log('enviar correo'+infoCliente.up_email_facturacion+' cotizacion:'+constCotizacionesResult.cot_cotizacion_id)
 
                await cotizacionEnviar(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id,  req.body.cot_referencia,  req.body.up_usuarios_prospectos_id);
