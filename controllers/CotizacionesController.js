@@ -4862,7 +4862,7 @@ export default {
             console.log("/////////// Comienza PASO 2 ///////////")
             //Obtener la informacion de los productos (Antes de separar lineas/backorder/stockinactivo/hastaagotarexistencia/precioLista)
                 productos = await cotizacionesUtils.cotizacionesObtenerInfoBaseProductos(req.body, productos);
-                pruebaTester(JSON.stringify(productos))
+              //  pruebaTester(JSON.stringify(productos))
             //Fin obtener productos base
             console.log("/////////// FIN PASO 2 ///////////")
 
