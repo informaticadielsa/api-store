@@ -1059,7 +1059,7 @@ module.exports = {
         catch(e)
         {
             console.log(e)
-            return "Error al obtener la informacion base de los productos para cotizaciones"
+            return "Error al obtener la informacion base de los productos para cotizaciones paso 2"
         }
     },
 
@@ -1792,7 +1792,7 @@ module.exports = {
         catch(e)
         {
             console.log(e)
-            return "Error al obtener la informacion base de los productos para cotizaciones"
+            return "Error al obtener la informacion base de los productos para cotizaciones paso 5"
         }
     },
     cotizacionesObtenerPromocionesProductosOneProductCotInicio: async function (body, productos, lineasProductos) {
@@ -2356,7 +2356,7 @@ module.exports = {
         catch(e)
         {
             console.log(e)
-            return "Error al obtener la informacion base de los productos para cotizaciones"
+            return "Error al obtener la informacion base de los productos para cotizaciones pasp 5.1" 
         }
     },
 
@@ -2482,7 +2482,7 @@ module.exports = {
         catch(e)
         {
             console.log(e)
-            return "Error al obtener la informacion base de los productos para cotizaciones"
+            return "Error al obtener la informacion base de los productos para cotizaciones paso 6"
         }
     },
 
@@ -2523,7 +2523,7 @@ module.exports = {
         catch(e)
         {
             console.log(e)
-            return "Error al obtener la informacion base de los productos para cotizaciones"
+            return "Error al obtener la informacion base de los productos para cotizaciones paso 7"
         }
     },
 
@@ -2653,7 +2653,7 @@ module.exports = {
         catch(e)
         {
             console.log(e)
-            return "Error al obtener la informacion base de los productos para cotizaciones"
+            return "Error al obtener la informacion base de los productos para cotizaciones paso 8" 
         }
     },
 
