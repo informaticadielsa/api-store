@@ -2127,17 +2127,17 @@ module.exports = {
             }
             else
             {
-                var CotizacionResult = await this.CotizarCarritoFunctionForCotizacionesSNandProspecto(
-                    body.cot_prospecto,
-                    body.up_usuarios_prospectos_id,
-                    body.tipo_envio,
-                    body.upd_direcciones_id,
-                    body.recoleccion_almacen_id,
-                    3,
-                    productos, //Productos total
-                    totalCotizacion
-                );
-                console.log(CotizacionResult)
+                
+
+
+                CotizacionResult = {
+                    tipoEnvio: "Recolección",
+                    fleteraID: almacenID,
+                    totalFinal: precioFinal,
+                    politicaBool: false,
+                    politicaNombre: "Recolección",
+                    suertirUnSoloAlmacen: true
+                }
             }
 
             var returner = {
