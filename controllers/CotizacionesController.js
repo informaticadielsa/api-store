@@ -4933,6 +4933,7 @@ export default {
                 var constCotizacionesProductosResult = []
                 if(req.body.cot_prospecto == false)
                 {
+                    pruebaTester('si pas')
                     const constCarritoDeCompraOrder = await models.CarritoDeCompra.findOne({
                         where: {
                             cdc_sn_socio_de_negocio_id : req.body.cdc_sn_socio_de_negocio_id
@@ -4986,6 +4987,8 @@ export default {
                         cot_iva_cantidad: parseFloat(((TotalBaseYDescuentos.totalPromocion*multiplicadorImpuesto)-TotalBaseYDescuentos.totalPromocion).toFixed(2))
 
                     });
+
+                    pruebaTester(JSON.stringify(constCotizacionesResult))
                 }
                 else
                 {
