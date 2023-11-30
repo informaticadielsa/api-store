@@ -5053,7 +5053,8 @@ export default {
                         cot_iva_cantidad: parseFloat(((TotalBaseYDescuentos.totalPromocion*multiplicadorImpuesto)-TotalBaseYDescuentos.totalPromocion).toFixed(2))
                     });
                 }
-
+                
+                pruebaTester(JSON.stringify(constCotizacionesResult))
                 console.log('hj: ', constCotizacionesResult)
                 //Si se inserto correctamente la cotizacion insertara ahora los productos
                 if(constCotizacionesResult != '')
