@@ -4869,9 +4869,9 @@ export default {
             //PASO COT 3
             console.log("/////////// Comienza PASO 3 ///////////")
             //Mandar obtener lineas para saber de que almacen se surtiran y obtener si es precio lista, precio hae o si
-            pruebaTester('JSON:'+JSON.stringify(productos))
+          //pruebaTester('JSON:'+JSON.stringify(productos))
                 var lineasProductos = await cotizacionesUtils.cotizacionesObtenerLineasProductos(req.body, productos);
-                pruebaTester(JSON.stringify(lineasProductos))
+             //   pruebaTester(JSON.stringify(lineasProductos))
                 // console.log(lineasProductos)
             //Final Mandar obtener lineas para saber de que almacen se surtiran y obtener si es precio lista, precio hae o si
             console.log("/////////// FIN PASO 3 ///////////")
@@ -4913,7 +4913,7 @@ export default {
                 var cotizacionCarritoEnvioPoliticas = await cotizarCarritoFunction.CotizarCarritoFunctionForCotizacionesFunction(req.body, productos, TotalFinal);
                 console.log(cotizacionCarritoEnvioPoliticas)
                 let json = {boyd:req.body, prod:productos, sk:String(TotalFinal)}
-                pruebaTester(JSON.stringify(json))
+                //pruebaTester(JSON.stringify(json))
             //FIN Obtener costos envios
             console.log("/////////// FIN PASO 7 ///////////")
 
@@ -4927,7 +4927,7 @@ export default {
             //PASO COT 9
             console.log("/////////// Comienza PASO 9 ///////////")
             //Insertar Cotizacion
-             pruebaTester('Iniciamos')
+            // pruebaTester('Iniciamos')
                 //Obtener tiempo de caducidad cotizacion
                 const constControlMaestroMultiple = await models.ControlMaestroMultiple.findOne(
                 {
