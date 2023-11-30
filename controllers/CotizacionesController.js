@@ -4995,11 +4995,11 @@ export default {
 
                     });
 
-                    pruebaTester(JSON.stringify(constCotizacionesResult))
+                   // pruebaTester(JSON.stringify(constCotizacionesResult))
                 }
                 else
                 {
-                    pruebaTester('si pas')
+                   // pruebaTester('si pas')
                     var ultimoRowNum = 0
                     const constCartLast = await models.CarritoDeCompra.findOne(
                     {
@@ -5061,8 +5061,8 @@ export default {
                     });
 
                 }
-                pruebaTester('soy un hijo de XXX')
-                pruebaTester(JSON.stringify(constCotizacionesResult))
+                //pruebaTester('soy un hijo de XXX')
+                //pruebaTester(JSON.stringify(constCotizacionesResult))
                 console.log('hj: ', constCotizacionesResult)
                 //Si se inserto correctamente la cotizacion insertara ahora los productos
                 if(constCotizacionesResult != '')
@@ -5148,7 +5148,7 @@ export default {
                             snu_super_usuario: true
                         }
                     });
-                    pruebaTester('si llegamos sin usuario')
+                    //pruebaTester('si llegamos sin usuario')
                      console.log('enviar correo:'+constSociosNegocioUsuario.snu_correo_electronico+' cotizacion :'+constCotizacionesResult.cot_cotizacion_id)
             await cotizacionEnviar(constSociosNegocioUsuario.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id, req.body.cot_referencia, 0, constSociosNegocioUsuario.snu_cardcode);
             //constCotizacionesResult.cot_cotizacion_id
@@ -5163,7 +5163,7 @@ export default {
                     });
 
                     //console.log(infoCliente)
-                    pruebaTester('si con usuario')
+                    //pruebaTester('si con usuario')
                     console.log('enviar correo'+infoCliente.up_email_facturacion+' cotizacion:'+constCotizacionesResult.cot_cotizacion_id)
 
                await cotizacionEnviar(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id,  req.body.cot_referencia,  req.body.up_usuarios_prospectos_id);
@@ -5197,7 +5197,7 @@ export default {
                 });
             }
 
-            pruebaTester(JSON.stringify(e))
+            //pruebaTester(JSON.stringify(e))
             
             res.status(200).send({
                 message: 'Error, al generar la cotización',
