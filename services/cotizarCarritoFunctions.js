@@ -2157,7 +2157,7 @@ module.exports = {
            return {
             tipoEnvio: "Recolección",
             fleteraID: 1,
-            totalFinal: 500,
+            totalFinal: 0,
             politicaBool: false,
             politicaNombre: "Recolección",
             suertirUnSoloAlmacen: true
