@@ -4853,7 +4853,7 @@ export default {
             console.log("/////////// Comienza PASO 1 ///////////")
             //Obtener productos ya sea de carrito id o del array de prospectos solo regresar id de productos en mismo formato
                 productos = await cotizacionesUtils.cotizacionesObtenerProductos(req.body);
-                pruebaTester(JSON.stringify(productos))
+              //  pruebaTester(JSON.stringify(productos))
             //Fin obtener mismo formato productos
             console.log("/////////// FIN PASO 1 ///////////")
 
@@ -4876,6 +4876,7 @@ export default {
             console.log("/////////// Comienza PASO 4 ///////////")
             //Recalcular productos base en base a la informacion de las lineas (obtener productos en back etc~)
                 productos = await cotizacionesUtils.cotizacionesObtenerInformacionDeLineas(req.body, productos, lineasProductos);
+                pruebaTester(JSON.stringify(productos))
             //FIN Recalcular productos base en base a la informacion de las lineas (obtener productos en back etc~)
             console.log("/////////// FIN PASO 4 ///////////")
 
