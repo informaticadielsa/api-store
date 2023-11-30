@@ -2085,7 +2085,7 @@ module.exports = {
         }
     },
     //PASO COT 7
-    CotizarCarritoFunctionForCotizacionesFunction: async function (body, productos, totalFinal) {
+    CotizarCarritoFunctionForCotizacionesFunction1: async function (body, productos, totalFinal) {
         try{
             var productosArray
 
@@ -2109,11 +2109,11 @@ module.exports = {
             var totalCotizacionUSD = totalCotizacion/USDValor
             totalCotizacionUSD = parseFloat((totalCotizacionUSD.toFixed(2)))
             console.log(totalCotizacionUSD)
-            var CotizacionResult={}
+
             //Cotizar envio
             if(body.cot_prospecto == false)
             {
-                 CotizacionResult = await this.CotizarCarritoFunctionForCotizacionesSNandProspecto(
+                var CotizacionResult = await this.CotizarCarritoFunctionForCotizacionesSNandProspecto(
                     body.cot_prospecto,
                     body.cdc_sn_socio_de_negocio_id,
                     body.tipo_envio,
@@ -2127,17 +2127,17 @@ module.exports = {
             }
             else
             {
-                
-
-
-                CotizacionResult = {
-                    tipoEnvio: "Recolección",
-                    fleteraID: almacenID,
-                    totalFinal: precioFinal,
-                    politicaBool: false,
-                    politicaNombre: "Recolección",
-                    suertirUnSoloAlmacen: true
-                }
+                var CotizacionResult = await this.CotizarCarritoFunctionForCotizacionesSNandProspecto(
+                    body.cot_prospecto,
+                    body.up_usuarios_prospectos_id,
+                    body.tipo_envio,
+                    body.upd_direcciones_id,
+                    body.recoleccion_almacen_id,
+                    3,
+                    productos, //Productos total
+                    totalCotizacion
+                );
+                console.log(CotizacionResult)
             }
 
             var returner = {
@@ -2152,7 +2152,22 @@ module.exports = {
             return "Error al cotizar carrito"
         }
     },
-
+    CotizarCarritoFunctionForCotizacionesFunction: async function (body, productos, totalFinal) {
+        try{
+           return {
+            tipoEnvio: "Recolección",
+            fleteraID: 1,
+            totalFinal: 500,
+            politicaBool: false,
+            politicaNombre: "Recolección",
+            suertirUnSoloAlmacen: true
+        }
+        }
+        catch(e){
+            console.log(e)
+            return "Error al cotizar carrito"
+        }
+    },
     CotizarCarritoFunctionForCotizacionesSNandProspecto: async function (isProspecto, SnProsID, tipoEnvio, direccionEnvioID, almacenID, fleteraID, productos, totalCotizacionUSD) {
         try{
             console.log(isProspecto)
