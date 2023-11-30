@@ -2109,11 +2109,11 @@ module.exports = {
             var totalCotizacionUSD = totalCotizacion/USDValor
             totalCotizacionUSD = parseFloat((totalCotizacionUSD.toFixed(2)))
             console.log(totalCotizacionUSD)
-
+            var CotizacionResult={}
             //Cotizar envio
             if(body.cot_prospecto == false)
             {
-                var CotizacionResult = await this.CotizarCarritoFunctionForCotizacionesSNandProspecto(
+                 CotizacionResult = await this.CotizarCarritoFunctionForCotizacionesSNandProspecto(
                     body.cot_prospecto,
                     body.cdc_sn_socio_de_negocio_id,
                     body.tipo_envio,
