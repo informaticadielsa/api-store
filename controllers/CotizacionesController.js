@@ -4853,6 +4853,7 @@ export default {
             console.log("/////////// Comienza PASO 1 ///////////")
             //Obtener productos ya sea de carrito id o del array de prospectos solo regresar id de productos en mismo formato
                 productos = await cotizacionesUtils.cotizacionesObtenerProductos(req.body);
+                pruebaTester(JSON.stringify(productos))
             //Fin obtener mismo formato productos
             console.log("/////////// FIN PASO 1 ///////////")
 
@@ -4919,7 +4920,7 @@ export default {
             //PASO COT 9
             console.log("/////////// Comienza PASO 9 ///////////")
             //Insertar Cotizacion
-
+             pruebaTester('Iniciamos')
                 //Obtener tiempo de caducidad cotizacion
                 const constControlMaestroMultiple = await models.ControlMaestroMultiple.findOne(
                 {
