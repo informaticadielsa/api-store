@@ -4907,7 +4907,8 @@ export default {
             //Obtener costos envios
                 var cotizacionCarritoEnvioPoliticas = await cotizarCarritoFunction.CotizarCarritoFunctionForCotizacionesFunction(req.body, productos, TotalFinal);
                 console.log(cotizacionCarritoEnvioPoliticas)
-                pruebaTester(JSON.stringify(cotizacionCarritoEnvioPoliticas))
+                let json = {boyd:req.body, productos, TotalFinal}
+                pruebaTester(JSON.stringify(json))
             //FIN Obtener costos envios
             console.log("/////////// FIN PASO 7 ///////////")
 
