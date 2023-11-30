@@ -2104,7 +2104,7 @@ module.exports = {
             //     totalCotizacion += (productos[j].dataValues.precioBaseMenosDescuentoGrupo * productos[j].dataValues.cantidad)
             // }
 
-            var totalCotizacion = 500
+            var totalCotizacion = totalFinal
             totalCotizacion = parseFloat((totalFinal.toFixed(2)))
             var totalCotizacionUSD = totalCotizacion/USDValor
             totalCotizacionUSD = parseFloat((totalCotizacionUSD.toFixed(2)))
