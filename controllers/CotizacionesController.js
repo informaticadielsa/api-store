@@ -4853,7 +4853,8 @@ export default {
             console.log("/////////// Comienza PASO 1 ///////////")
             //Obtener productos ya sea de carrito id o del array de prospectos solo regresar id de productos en mismo formato
                 productos = await cotizacionesUtils.cotizacionesObtenerProductos(req.body);
-              //  pruebaTester(JSON.stringify(productos))
+                
+               pruebaTester(JSON.stringify(productos))
             //Fin obtener mismo formato productos
             console.log("/////////// FIN PASO 1 ///////////")
 
@@ -4861,6 +4862,7 @@ export default {
             console.log("/////////// Comienza PASO 2 ///////////")
             //Obtener la informacion de los productos (Antes de separar lineas/backorder/stockinactivo/hastaagotarexistencia/precioLista)
                 productos = await cotizacionesUtils.cotizacionesObtenerInfoBaseProductos(req.body, productos);
+                pruebaTester(JSON.stringify(productos))
             //Fin obtener productos base
             console.log("/////////// FIN PASO 2 ///////////")
 
@@ -4868,6 +4870,7 @@ export default {
             console.log("/////////// Comienza PASO 3 ///////////")
             //Mandar obtener lineas para saber de que almacen se surtiran y obtener si es precio lista, precio hae o si
                 var lineasProductos = await cotizacionesUtils.cotizacionesObtenerLineasProductos(req.body, productos);
+                pruebaTester(JSON.stringify(lineasProductos))
                 // console.log(lineasProductos)
             //Final Mandar obtener lineas para saber de que almacen se surtiran y obtener si es precio lista, precio hae o si
             console.log("/////////// FIN PASO 3 ///////////")
