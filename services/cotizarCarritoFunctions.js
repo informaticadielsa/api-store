@@ -2085,7 +2085,7 @@ module.exports = {
         }
     },
     //PASO COT 7
-    CotizarCarritoFunctionForCotizacionesFunction1: async function (body, productos, totalFinal) {
+    CotizarCarritoFunctionForCotizacionesFunction: async function (body, productos, totalFinal) {
         try{
             var productosArray
 
@@ -2104,7 +2104,7 @@ module.exports = {
             //     totalCotizacion += (productos[j].dataValues.precioBaseMenosDescuentoGrupo * productos[j].dataValues.cantidad)
             // }
 
-            var totalCotizacion = totalFinal
+            var totalCotizacion = 500
             totalCotizacion = parseFloat((totalFinal.toFixed(2)))
             var totalCotizacionUSD = totalCotizacion/USDValor
             totalCotizacionUSD = parseFloat((totalCotizacionUSD.toFixed(2)))
@@ -2152,7 +2152,7 @@ module.exports = {
             return "Error al cotizar carrito"
         }
     },
-    CotizarCarritoFunctionForCotizacionesFunction: async function (body, productos, totalFinal) {
+    CotizarCarritoFunctionForCotizacionesFunction1: async function (body, productos, totalFinal) {
         try{
            let CotizacionResult= {
             tipoEnvio: "Recolección",
