@@ -610,7 +610,7 @@ var prod_nombre_foraneo = constProducto.prod_nombre_extranjero;
 var cantidad =
   constCotizacionesProductos[x].dataValues.cotp_producto_cantidad;
 
-var precio = constCotizacionesProductos[x].dataValues.cotp_precio_menos_promociones;
+var precio =idProspecto ==0? constCotizacionesProductos[x].dataValues.cotp_precio_base_lista :constCotizacionesProductos[x].dataValues.cotp_precio_menos_promociones ;
 precio = formatter.format(precio);
 
 if (constImagenProducto) {
