@@ -1201,7 +1201,7 @@ module.exports = {
 
 
     //PASO 5
-    cotizacionesObtenerPromocionesProductos: async function (body, productos, lineasProductos, socio_de_negocio_id=0) {
+    cotizacionesObtenerPromocionesProductos: async function (body, productos, lineasProductos, socio_de_negocio_id) {
         try
         {
             const { cmm_valor: USDValor } = await models.ControlMaestroMultiple.findOne(
