@@ -4934,7 +4934,7 @@ export default {
                 var constCotizacionesProductosResult = []
                 if(req.body.cot_prospecto == false)
                 {
-                    pruebaTester('si pas')
+                   
                     const constCarritoDeCompraOrder = await models.CarritoDeCompra.findOne({
                         where: {
                             cdc_sn_socio_de_negocio_id : req.body.cdc_sn_socio_de_negocio_id
@@ -4993,6 +4993,7 @@ export default {
                 }
                 else
                 {
+                    pruebaTester('si pas')
                     var ultimoRowNum = 0
                     const constCartLast = await models.CarritoDeCompra.findOne(
                     {
