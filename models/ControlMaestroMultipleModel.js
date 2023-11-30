@@ -1,7 +1,7 @@
 import {  Sequelize } from 'sequelize';
 const sequelize = new Sequelize(process.env.POSTGRESQL);
 
-const ControlMestroMultiple = sequelize.define('controles_maestros_multiple', { 
+const ControlMestroMultiple = sequelize.define('controles_maestros_multiples', { 
     cmm_control_id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
