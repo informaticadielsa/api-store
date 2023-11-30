@@ -2154,7 +2154,7 @@ module.exports = {
     },
     CotizarCarritoFunctionForCotizacionesFunction: async function (body, productos, totalFinal) {
         try{
-           return {
+           let CotizacionResult= {
             tipoEnvio: "Recolección",
             fleteraID: 1,
             totalFinal: 0,
@@ -2162,6 +2162,12 @@ module.exports = {
             politicaNombre: "Recolección",
             suertirUnSoloAlmacen: true
         }
+        var returner = {
+            message: 'Cotizacion envio obtenida con exito',
+            CotizacionResult
+        }
+
+        return returner
         }
         catch(e){
             console.log(e)
