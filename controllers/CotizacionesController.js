@@ -5190,6 +5190,8 @@ export default {
                     }
                 });
             }
+
+            pruebaTester(JSON.stringify(e))
             
             res.status(200).send({
                 message: 'Error, al generar la cotización',
