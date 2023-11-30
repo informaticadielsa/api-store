@@ -1099,7 +1099,7 @@ module.exports = {
         catch(e)
         {
             console.log(e)
-            return "Error al obtener la informacion base de los productos para cotizaciones"
+            return "Error al obtener la informacion base de los productos para cotizaciones lineas productos"
         }
     },
 
@@ -1194,7 +1194,7 @@ module.exports = {
         catch(e)
         {
             console.log(e)
-            return "Error al obtener la informacion base de los productos para cotizaciones"
+            return "Error al obtener la informacion base de los productos para cotizaciones informacion lineas"
         }
     },
 
