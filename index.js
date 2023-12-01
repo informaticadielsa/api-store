@@ -4,7 +4,7 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import path from "path";
-//import crons from "./services/Crons" 
+import crons from "./services/Crons" 
 
 // routes
 import router from "./routes";
