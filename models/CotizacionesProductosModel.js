@@ -87,6 +87,9 @@ const CotizacionesProductos = sequelize.define('cotizaciones_productos', {
         type: Sequelize.BOOLEAN,
         defaultValue: false
     },
+    cotp_flag_compra:{
+        type: Sequelize.INTEGER  
+    }
 
 },
 {

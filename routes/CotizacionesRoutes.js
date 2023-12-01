@@ -107,8 +107,19 @@ router.post('/add_prospecto_direccion',  CotizacionesController.createProspectoD
 //Crear cotizacion V3 con cliente id null->prospecto o cliente id registrado
 router.post('/v3_crear_cotizacion', CotizacionesController.V3crearCotizacion);
 
+// Agrega producto a una cotización
+router.post('/addProductToQuotes', CotizacionesController.addProductToQuote);
+
+router.post('/updateProductQuantityOfQuote', CotizacionesController.updateProductQuantityOfQuote);
+
+// Elimina producto de una cotización
+router.post('/deleteProductOfQuotes', CotizacionesController.deleteProductOfQuote);
+
+// Actualiza el tipo y dirección de entrega para la cotización
+router.post('/updateDeliberyOfQuotes', CotizacionesController.updateDeliberyOfQuote);
+
 //Obtener el detalle de una cotizacion sin actualizar nada 
-router.get('/cotizacion_detalle/:id', CotizacionesController.getCotizacionesDetalle);
+router.post('/cotizacion_detalle/:id', CotizacionesController.getCotizacionesDetalle);
 
 //V3 update cotizacion General
 router.post('/v3_update_cotizacion_general', auth.verifyToken, CotizacionesController.V3updateCotizacionGeneral);

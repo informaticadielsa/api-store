@@ -16,7 +16,7 @@ cron.schedule("0 23 * * *", () =>{integrations.ExecuteEndpoint("/api/integracion
 cron.schedule("0 5 * * *", () =>{integrations.ExecuteEndpoint("/api/productos/cargarProductosMasVendidos")});
 
 //Mandar correos cada 30 minutos de correos actualizados
-cron.schedule("*/30 * * * *", () =>{integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionCorreos/")});
+//cron.schedule("*/30 * * * *", () =>{integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionCorreos/")});
 
 //actualizar ordenes cada 2 minutos
 cron.schedule("*/2 * * * *", () =>{integrations.ExecuteEndpoint("/api/integraciones_info_transfer/IntegracionActualizarOrdenes/")});

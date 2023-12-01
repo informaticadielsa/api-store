@@ -5186,17 +5186,166 @@ export default {
             next(e);
         }
     },
+    addProductToQuote: async(req, res, next) => {
+        try {
+            const socio_negocio_id = req.body.socio_negocio_id;
+            const idCotizacion = req.body.idCotizacion;
+            const prodSKU = req.body.prod_sku;
+            const cantidadProd = req.body.cantidad;
+
+            // Traer el precio más bajo del producto
+            const dataProduct = await cotizacionesUtils.getPriceForCheaperProduct(socio_negocio_id, idCotizacion, prodSKU, cantidadProd)
+
+            const dataProductExist = await models.CotizacionesProductos.findOne({
+                where: {
+                    cotp_prod_producto_id: dataProduct.prod_producto_id,
+                    cotp_cotizacion_id: idCotizacion,
+                }
+            });
+            
+            let constCotizacionesProductosInserted = {};
+            if(!dataProductExist) {
+                // Datos a insertar a la tabla CotizacionesProductos
+                constCotizacionesProductosInserted = await models.CotizacionesProductos.create({
+                    cotp_prod_producto_id: dataProduct.prod_producto_id,
+                    cotp_cotizacion_id: idCotizacion,
+                    cotp_producto_cantidad: dataProduct.cantidad,
+                    cotp_precio_base_lista: dataProduct.prod_precio,
+                    cotp_precio_menos_promociones: dataProduct.preciofinal,
+                    cotp_porcentaje_descuento_vendedor: 0,
+                    cotp_precio_descuento_vendedor: 0,
+                    cotp_usu_descuento_cotizacion: null,
+                    cotp_back_order: dataProduct.aplicabackorder,
+                    cotp_tipo_precio_lista: dataProduct.prod_tipo_precio_base,
+                    cotp_dias_resurtimiento: dataProduct.prod_dias_resurtimiento,
+                    cotp_almacen_linea: null,
+                    cotp_recoleccion_resurtimiento: false,
+                    cotp_fecha_entrega: Date(),
+                    cotp_backorder_precio_lista: dataProduct.backorderpreciolista,
+                    cotp_descuento_porcentual: dataProduct.porcentajeDescuento,
+                });
+            } else {
+                // Esto sucede cuando se manda nuevamente un producto existente en la cotización
+                constCotizacionesProductosInserted = dataProductExist.update(  
+                    {
+                        cotp_producto_cantidad: dataProductExist.cotp_producto_cantidad + 1
+                    });
+            }
+
+            res.status(200).send({
+                message: 'Cotización actualizada',
+                data: dataProduct,
+                error: false,
+            });
+        } catch (error) {
+            res.status(500).send({
+                message: 'Error en la petición',
+                error
+            });
+            next(error);
+        }
+    },
+
+    updateDeliberyOfQuote: async(req, res, next) => {
+        try {
+            const { socio_negocio_id, idCotizacion, idTipoEnvio, idUbicacion } = req.body;
+            
+            const dataQuote = await models.Cotizaciones.findOne({
+                where: {
+                    cot_cotizacion_id: idCotizacion,
+                    cot_sn_socios_negocio_id: socio_negocio_id,
+                }
+            });
+
+            if(idTipoEnvio == 16 && dataQuote){
+                await dataQuote.update({
+                    cot_cmm_tipo_envio_id: idTipoEnvio,
+                    cot_direccion_envio_id: idUbicacion,
+                    cot_alm_almacen_recoleccion: null,
+                });
+            } else if (idTipoEnvio == 17 && dataQuote) {
+                await dataQuote.update({
+                    cot_cmm_tipo_envio_id: idTipoEnvio,
+                    cot_direccion_envio_id: null,
+                    cot_alm_almacen_recoleccion: idUbicacion,
+                });
+            }
+
+            res.status(200).send({
+                message: 'Ubicación actualizada en cotización',
+                error: false,
+            });
+        } catch (error) {
+            res.status(200).send({
+                message: 'Error, al generar la cotización',
+                error
+            });
+            next(error);
+        }
+    },
+
+    updateProductQuantityOfQuote: async(req, res, next) => {
+        try {
+            const { idProductoCotizacion, cantidad } = req.body;
+
+            const respondProduct = await models.CotizacionesProductos.findOne({
+                where: {
+                    cotp_cotizaciones_productos_id: idProductoCotizacion,
+                }
+            });
+
+            if(respondProduct) {
+                await respondProduct.update({
+                    cotp_producto_cantidad: cantidad
+                })
+            }
+
+            res.status(200).send({
+                message: 'Cantidad de producto actualizado correctamente',
+                error: false,
+            });
+        } catch (error) {
+            res.status(200).send({
+                message: 'Error, al generar la cotización',
+                error
+            });
+            next(error);
+        }
+    },
+
+    deleteProductOfQuote: async(req, res, next) => {
+        try {
+            const idProductoCotizacion = req.body.idProductoCotizacion;
+
+            const respondProduct = await models.CotizacionesProductos.destroy({
+                where: {
+                    cotp_cotizaciones_productos_id: idProductoCotizacion,
+                }
+            });
+            
+            res.status(200).send({
+                message: 'Producto eliminidado correctamente',
+                data: respondProduct,
+                error: false,
+            });
+        } catch (error) {
+            res.status(500).send({
+                message: 'Error en la petición',
+                error
+            });
+            next(error);   
+        }
+    },
 
     //Obtiene el detalle basico de la cotizacion
     getCotizacionesDetalle: async(req, res, next) =>{
         try{
             //cotizacion general
+            let requestJson = req.body.socio_negocio_id ? { cot_cotizacion_id: req.params.id,cot_sn_socios_negocio_id: req.body.socio_negocio_id}: {cot_cotizacion_id: req.params.id}
             const constCotizaciones = await models.Cotizaciones.findOne(
             {
-                where: {
-                    cot_cotizacion_id: req.params.id
-                },
-            });
+                where: requestJson,
+            }); 
 
             if(constCotizaciones)
             {
@@ -5304,6 +5453,9 @@ export default {
                     constCotizacionesProductos[i].dataValues.prod_nombre_extranjero = constProducto.prod_nombre_extranjero
                     constCotizacionesProductos[i].dataValues.prod_nombre = constProducto.prod_nombre
                     constCotizacionesProductos[i].dataValues.prod_descripcion = constProducto.prod_descripcion
+                    constCotizacionesProductos[i].dataValues.prod_peso= constProducto.prod_peso
+                    constCotizacionesProductos[i].dataValues.prod_volumen= constProducto.prod_volumen
+                    constCotizacionesProductos[i].dataValues.prod_total_stock= constProducto.prod_total_stock
 
                     //Cotizacion productos
                     const constImagenProducto = await models.ImagenProducto.findAll(
