@@ -1,5 +1,5 @@
 import models from '../models';
-import { Sequelize } from 'sequelize';
+import { NUMBER, Sequelize } from 'sequelize';
 const sequelize = new Sequelize(process.env.POSTGRESQL);
 const { Op } = require("sequelize");
 import request from 'request-promise';
@@ -2119,13 +2119,12 @@ module.exports = {
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice = dataProduct[0].moneda === 'MXN' 
                         ? Number(dataProduct[0].precio)
                         : Number(dataProduct[0].precio) * USDValor;
-                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceFinalImpuestos=constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoIs?
-                       (constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr * constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice):0
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceFinalImpuestos=(Number(constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr )* Number(constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice))
                        
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD = dataProduct[0].moneda === 'USD' 
                     ? Number(dataProduct[0].precio)
                     : Number(dataProduct[0].precio) / USDValor;
-                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSDFinalImpuestos =constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoIs? (constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr * constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD):0
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSDFinalImpuestos = (Number(constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr) * Number(constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD))
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductCoinBase = dataProduct[0].moneda;
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProduct = true;
                 } else {
