@@ -2120,16 +2120,14 @@ module.exports = {
 
                  var newPrices=precioBase;
               
-                 let descuento = constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual
-                     
-                 //Variable para Lineas
-                 
+
                 var jsonArray = {
                     "codigoArticulo": constProducto.dataValues.prod_sku,
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
                     "precioUnitario": ((Number(newPrices) ===0 && newProductProyect) || (newProductProyect && Number(newProductProyect.precio) === Number(precioFinal))) ? newProductProyect.precio : Number(newPrices),
                     "codigoImpuesto": ImpuestoFinal,
-                    "descuento":  (descuento != null && descuento !='null') ? descuento : 0,
+                    "descuento":  (constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != "null" && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual) ? 
+                    constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual:0,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": (newProductProyect ? ( Number(newProductProyect.precio) === Number(precioFinal))? parseInt(newProductProyect.idProyecto): null : null)
@@ -2137,7 +2135,7 @@ module.exports = {
 
               // pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
                // pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
-            
+
                 //testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
                 array.push(jsonArray);
@@ -2410,7 +2408,6 @@ module.exports = {
                  var newPrices=precioBase;
                  
                  
-                 let descuento = constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual
                      
                 //Variable para Lineas
                 var jsonArray = {
@@ -2418,15 +2415,15 @@ module.exports = {
                     "codigoAlmacen": constAlmacenes.alm_codigoAlmacen,
                     "precioUnitario": ((Number(newPrices) ===0 && newProductProyect) || (newProductProyect && Number(newProductProyect.precio) === Number(precioFinal))) ? newProductProyect.precio : Number(newPrices),
                     "codigoImpuesto": ImpuestoFinal,
-                    "descuento":  (descuento != null && descuento !='null') ? descuento : 0,
+                    "descuento":  (constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != null && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual != "null" && constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual) ? 
+                    constPreProductoCompraFinalizada[i].dataValues.pcf_descuento_porcentual:0,
                     "fechaEntrega": dateFinal,
                     "cantidad": constPreProductoCompraFinalizada[i].dataValues.pcf_cantidad_producto,
                     "acuerdoG": (newProductProyect ? ( Number(newProductProyect.precio) === Number(precioFinal))? parseInt(newProductProyect.idProyecto): null : null)
                 }
 
                //pruebaTester(constProducto.dataValues.prod_sku + ' : precio proyecto:'+ (newProductProyect? newProductProyect.precio: null) + ' -  precio base: '+ precioBase)
-                    //pruebaTester(JSON.stringify(jsonArray))
-                  
+
                // testEmail('ricardo.ramos@daltum.mx', jsonArray)
 
                 array.push(jsonArray);
