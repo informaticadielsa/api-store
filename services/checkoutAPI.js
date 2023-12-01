@@ -2116,15 +2116,19 @@ module.exports = {
                 
                 if(dataProduct[0]) {
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProducNoAcuerdo = dataProduct[0].idProyecto;
-                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice = dataProduct[0].moneda === 'MXN' 
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice = dataProduct[0].moneda === 'MXP' 
                         ? Number(dataProduct[0].precio)
                         : Number(dataProduct[0].precio) * USDValor;
-                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceFinalImpuestos=constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr * constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice
+
+                    let newPriceMX= constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr * constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceFinalImpuestos=newPriceMX
                        
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD = dataProduct[0].moneda === 'USD' 
                     ? Number(dataProduct[0].precio)
                     : Number(dataProduct[0].precio) / USDValor;
-                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSDFinalImpuestos = constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr* constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD
+
+                    let newPriceUSD= constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr* constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSDFinalImpuestos = newPriceUSD
 
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductCoinBase = dataProduct[0].moneda;
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProduct = true;
