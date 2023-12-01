@@ -852,6 +852,7 @@ module.exports = {
 
 
                     constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = (constProductoCarritoDeCompra[j].dataValues.precioFinal * (1 + (tipoImpuesto / 100)))
+
                     constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = parseFloat(constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto.toFixed(2))
                     
 
@@ -1603,7 +1604,7 @@ module.exports = {
                 var precioTemporal = constProductoCarritoDeCompra[j].dataValues.precioBaseFinal
                 var totalDescuentoTemporal = 0
 
-
+                constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuestoIs = false
                 //Si tiene promocion, descuento o cupon activo el producto calculara el precio
                 if(constProductoCarritoDeCompra[j].dataValues.promocion.length > 0 || (constProductoCarritoDeCompra[j].dataValues.cupon.length > 0 || constProductoCarritoDeCompra[j].dataValues.cupon.promcup_aplica_todo_carrito == false) || constProductoCarritoDeCompra[j].dataValues.descuentoGrupoBool == true)
                 {   
@@ -1925,6 +1926,8 @@ module.exports = {
 
 
                     constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = (constProductoCarritoDeCompra[j].dataValues.precioFinal * (1 + (tipoImpuesto / 100)))
+                    constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuestoOr  = (1 + (tipoImpuesto / 100))
+                    constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuestoIs =true
                     constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = parseFloat(constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto.toFixed(2))
                     
 
@@ -1957,6 +1960,8 @@ module.exports = {
 
 
                     constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = (constProductoCarritoDeCompra[j].dataValues.precioFinal * (1 + (tipoImpuesto / 100)))
+                    constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuestoOr  = (1 + (tipoImpuesto / 100))
+                    constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuestoIs =true
                     constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto = parseFloat(constProductoCarritoDeCompra[j].dataValues.precioFinalMasImpuesto.toFixed(2))
                     constProductoCarritoDeCompra[j].dataValues.totalDescuento = 0
 
@@ -2114,9 +2119,13 @@ module.exports = {
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice = dataProduct[0].moneda === 'MXN' 
                         ? Number(dataProduct[0].precio)
                         : Number(dataProduct[0].precio) * USDValor;
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceFinalImpuestos=constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoIs?
+                       (constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr * constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice):0
+                       
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD = dataProduct[0].moneda === 'USD' 
                     ? Number(dataProduct[0].precio)
                     : Number(dataProduct[0].precio) / USDValor;
+                    constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSDFinalImpuestos =constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoIs? (constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr * constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD):0
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductCoinBase = dataProduct[0].moneda;
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProduct = true;
                 } else {

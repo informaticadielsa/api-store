@@ -433,7 +433,9 @@ export default {
 
         for (var i = 0; i < productos.length; i++) 
         {
-          var priceWithoutDot = productos[i].dataValues.precioFinalMasImpuesto.toFixed(2).split('.').join("");
+
+          let newPrice =(productos[i].dataValues.projectProductPriceFinalImpuestos&& (productos[i].dataValues.projectProductPriceFinalImpuestos < productos[i].dataValues.precioFinalMasImpuesto || productos[i].dataValues.precioFinalMasImpuesto ==0)? productos[i].dataValues.projectProductPriceFinalImpuestos: productos[i].dataValues.precioFinalMasImpuesto)
+          var priceWithoutDot = newPrice.toFixed(2).split('.').join("");
 
           var body = {
             "name": productos[i].dataValues.prod_nombre,
