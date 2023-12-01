@@ -2120,14 +2120,15 @@ module.exports = {
                         ? Number(dataProduct[0].precio)
                         : Number(dataProduct[0].precio) * USDValor;
 
-                    let newPriceMX= (constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr * constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice)
+                    let newPriceMX= (constCarritoDeCompra.dataValues.productos[y].dataValues.precioFinalMasImpuestoOr * constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPrice)
+                    
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceFinalImpuestos=newPriceMX
                        
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD = dataProduct[0].moneda === 'USD' 
                     ? Number(dataProduct[0].precio)
                     : Number(dataProduct[0].precio) / USDValor;
 
-                    let newPriceUSD= (constCarritoDeCompra.dataValues.productos[y].precioFinalMasImpuestoOr* constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD)
+                    let newPriceUSD= (constCarritoDeCompra.dataValues.productos[y].dataValues.precioFinalMasImpuestoOr* constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSD)
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductPriceUSDFinalImpuestos = newPriceUSD
 
                     constCarritoDeCompra.dataValues.productos[y].dataValues.projectProductCoinBase = dataProduct[0].moneda;
