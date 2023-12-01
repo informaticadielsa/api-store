@@ -110,8 +110,13 @@ router.post('/v3_crear_cotizacion', CotizacionesController.V3crearCotizacion);
 // Agrega producto a una cotización
 router.post('/addProductToQuotes', CotizacionesController.addProductToQuote);
 
+router.post('/updateProductQuantityOfQuote', CotizacionesController.updateProductQuantityOfQuote);
+
 // Elimina producto de una cotización
 router.post('/deleteProductOfQuotes', CotizacionesController.deleteProductOfQuote);
+
+// Actualiza el tipo y dirección de entrega para la cotización
+router.post('/updateDeliberyOfQuotes', CotizacionesController.updateDeliberyOfQuote);
 
 //Obtener el detalle de una cotizacion sin actualizar nada 
 router.post('/cotizacion_detalle/:id', CotizacionesController.getCotizacionesDetalle);
