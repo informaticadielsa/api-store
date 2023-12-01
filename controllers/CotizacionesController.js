@@ -5246,6 +5246,73 @@ export default {
         }
     },
 
+    updateDeliberyOfQuote: async(req, res, next) => {
+        try {
+            const { socio_negocio_id, idCotizacion, idTipoEnvio, idUbicacion } = req.body;
+            
+            const dataQuote = await models.Cotizaciones.findOne({
+                where: {
+                    cot_cotizacion_id: idCotizacion,
+                    cot_sn_socios_negocio_id: socio_negocio_id,
+                }
+            });
+
+            if(idTipoEnvio == 16 && dataQuote){
+                await dataQuote.update({
+                    cot_cmm_tipo_envio_id: idTipoEnvio,
+                    cot_direccion_envio_id: idUbicacion,
+                    cot_alm_almacen_recoleccion: null,
+                });
+            } else if (idTipoEnvio == 17 && dataQuote) {
+                await dataQuote.update({
+                    cot_cmm_tipo_envio_id: idTipoEnvio,
+                    cot_direccion_envio_id: null,
+                    cot_alm_almacen_recoleccion: idUbicacion,
+                });
+            }
+
+            res.status(200).send({
+                message: 'Ubicación actualizada en cotización',
+                error: false,
+            });
+        } catch (error) {
+            res.status(200).send({
+                message: 'Error, al generar la cotización',
+                error
+            });
+            next(error);
+        }
+    },
+
+    updateProductQuantityOfQuote: async(req, res, next) => {
+        try {
+            const { idProductoCotizacion, cantidad } = req.body;
+
+            const respondProduct = await models.CotizacionesProductos.findOne({
+                where: {
+                    cotp_cotizaciones_productos_id: idProductoCotizacion,
+                }
+            });
+
+            if(respondProduct) {
+                await respondProduct.update({
+                    cotp_producto_cantidad: cantidad
+                })
+            }
+
+            res.status(200).send({
+                message: 'Cantidad de producto actualizado correctamente',
+                error: false,
+            });
+        } catch (error) {
+            res.status(200).send({
+                message: 'Error, al generar la cotización',
+                error
+            });
+            next(error);
+        }
+    },
+
     deleteProductOfQuote: async(req, res, next) => {
         try {
             const idProductoCotizacion = req.body.idProductoCotizacion;
