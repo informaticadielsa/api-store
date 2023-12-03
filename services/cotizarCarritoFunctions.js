@@ -6,6 +6,7 @@ import statusControllers from '../mapeos/mapeoControlesMaestrosMultiples';
 import request from 'request-promise';
 import getCheckout from "../services/checkoutAPI";
 import productosUtils from "../services/productosUtils";
+import { log } from 'async';
 
 module.exports = {
     CotizarCarritoFunction: async function (cdc_sn_socio_de_negocio_id, cdc_cmm_tipo_envio_id, cdc_direccion_envio_id, cdc_alm_almacen_recoleccion, cdc_fletera_id, checkoutJson) {

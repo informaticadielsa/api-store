@@ -5194,7 +5194,7 @@ export default {
             const cantidadProd = req.body.cantidad;
 
             // Traer el precio más bajo del producto
-            const dataProduct = await cotizacionesUtils.getPriceForCheaperProduct(socio_negocio_id, idCotizacion, prodSKU, cantidadProd)
+            const dataProduct = await productosUtils.getPriceForCheaperProduct(socio_negocio_id, idCotizacion, prodSKU, cantidadProd)
 
             const dataProductExist = await models.CotizacionesProductos.findOne({
                 where: {
@@ -5202,7 +5202,7 @@ export default {
                     cotp_cotizacion_id: idCotizacion,
                 }
             });
-            
+
             let constCotizacionesProductosInserted = {};
             if(!dataProductExist) {
                 // Datos a insertar a la tabla CotizacionesProductos
@@ -5231,6 +5231,8 @@ export default {
                         cotp_producto_cantidad: dataProductExist.cotp_producto_cantidad + 1
                     });
             }
+
+            await cotizacionesUtils.updatePriceAndTotalOfQuote(socio_negocio_id, idCotizacion);
 
             res.status(200).send({
                 message: 'Cotización actualizada',
@@ -5271,6 +5273,8 @@ export default {
                 });
             }
 
+            await cotizacionesUtils.updatePriceAndTotalOfQuote(socio_negocio_id, idCotizacion);
+
             res.status(200).send({
                 message: 'Ubicación actualizada en cotización',
                 error: false,
@@ -5286,7 +5290,7 @@ export default {
 
     updateProductQuantityOfQuote: async(req, res, next) => {
         try {
-            const { idProductoCotizacion, cantidad } = req.body;
+            const { idProductoCotizacion, cantidad, socio_negocio_id, idCotizacion, prod_sku } = req.body;
 
             const respondProduct = await models.CotizacionesProductos.findOne({
                 where: {
@@ -5299,6 +5303,8 @@ export default {
                     cotp_producto_cantidad: cantidad
                 })
             }
+
+            await cotizacionesUtils.updatePriceAndTotalOfQuote(socio_negocio_id, idCotizacion);
 
             res.status(200).send({
                 message: 'Cantidad de producto actualizado correctamente',
@@ -5315,13 +5321,15 @@ export default {
 
     deleteProductOfQuote: async(req, res, next) => {
         try {
-            const idProductoCotizacion = req.body.idProductoCotizacion;
+            const { idProductoCotizacion, socio_negocio_id, idCotizacion } = req.body;
 
             const respondProduct = await models.CotizacionesProductos.destroy({
                 where: {
                     cotp_cotizaciones_productos_id: idProductoCotizacion,
                 }
             });
+
+            await cotizacionesUtils.updatePriceAndTotalOfQuote(socio_negocio_id, idCotizacion);
             
             res.status(200).send({
                 message: 'Producto eliminidado correctamente',
@@ -5342,6 +5350,9 @@ export default {
         try{
             //cotizacion general
             let requestJson = req.body.socio_negocio_id ? { cot_cotizacion_id: req.params.id,cot_sn_socios_negocio_id: req.body.socio_negocio_id}: {cot_cotizacion_id: req.params.id}
+
+            await cotizacionesUtils.updatePriceAndTotalOfQuote(req.body.socio_negocio_id, req.params.id);
+
             const constCotizaciones = await models.Cotizaciones.findOne(
             {
                 where: requestJson,
@@ -5435,6 +5446,9 @@ export default {
                     where: {
                         cotp_cotizacion_id: constCotizaciones.cot_cotizacion_id
                     },
+                    order: [
+                        ['cotp_cotizaciones_productos_id', 'DESC'],
+                    ],
                 });
 
                 //Obtener informacion del producto
