@@ -71,7 +71,7 @@ export default{
         }
     },
 
-    addProductToCart: async(req, res, next) =>{
+    addProductToCart: async(req, res, next) =>{ 
         try{
             //Borrara todos los metodos de envio al modificar cantidades de productos
             var borrarEnvioBool = await productosUtils.EraseShippingMethod(req.body.cdc_sn_socio_de_negocio_id);
@@ -125,6 +125,7 @@ export default{
                         "pcdc_carrito_de_compra_id": carrito_id,
                         "pcdc_prod_producto_id": producto_id,
                         "pcdc_producto_cantidad": cantidad
+                        
                     };
                     
                     //Const que genera el id del sn

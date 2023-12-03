@@ -8,6 +8,7 @@ import cotizarCarritoFunction from "../services/cotizarCarritoFunctions";
 import CreacionOrdenSAP from "../services/CreacionOrdenSAP";
 const {ordenCreadaEmail} = require('../services/ordenCreadaEmail');
 const { cotizacionEnviar } = require('../services/cotizacionEnviar');
+import {pruebaTester} from '../services/pruebaTester'
 
 
 const {ordenAbiertaCreadaEmail} = require('../services/ordenAbiertaCreadaEmail');
@@ -4845,13 +4846,15 @@ export default {
                         }
                     }
                 //Fin Obtener informacion de impuesto de SN o Prospecto
-            //Fin obtener informacion de iva
+            //Fin obtener informacion de iva 
             console.log("/////////// FIN PASO 0 ///////////")
 
             //PASO COT 1
             console.log("/////////// Comienza PASO 1 ///////////")
             //Obtener productos ya sea de carrito id o del array de prospectos solo regresar id de productos en mismo formato
                 productos = await cotizacionesUtils.cotizacionesObtenerProductos(req.body);
+                
+              // pruebaTester(JSON.stringify(productos))
             //Fin obtener mismo formato productos
             console.log("/////////// FIN PASO 1 ///////////")
 
@@ -4859,13 +4862,16 @@ export default {
             console.log("/////////// Comienza PASO 2 ///////////")
             //Obtener la informacion de los productos (Antes de separar lineas/backorder/stockinactivo/hastaagotarexistencia/precioLista)
                 productos = await cotizacionesUtils.cotizacionesObtenerInfoBaseProductos(req.body, productos);
+             //pruebaTester(JSON.stringify(productos))
             //Fin obtener productos base
             console.log("/////////// FIN PASO 2 ///////////")
 
             //PASO COT 3
             console.log("/////////// Comienza PASO 3 ///////////")
             //Mandar obtener lineas para saber de que almacen se surtiran y obtener si es precio lista, precio hae o si
+          //pruebaTester('JSON:'+JSON.stringify(productos))
                 var lineasProductos = await cotizacionesUtils.cotizacionesObtenerLineasProductos(req.body, productos);
+             //   pruebaTester(JSON.stringify(lineasProductos))
                 // console.log(lineasProductos)
             //Final Mandar obtener lineas para saber de que almacen se surtiran y obtener si es precio lista, precio hae o si
             console.log("/////////// FIN PASO 3 ///////////")
@@ -4874,13 +4880,14 @@ export default {
             console.log("/////////// Comienza PASO 4 ///////////")
             //Recalcular productos base en base a la informacion de las lineas (obtener productos en back etc~)
                 productos = await cotizacionesUtils.cotizacionesObtenerInformacionDeLineas(req.body, productos, lineasProductos);
+               // pruebaTester(JSON.stringify(productos))
             //FIN Recalcular productos base en base a la informacion de las lineas (obtener productos en back etc~)
             console.log("/////////// FIN PASO 4 ///////////")
 
             //PASO COT 5
             console.log("/////////// Comienza PASO 5 ///////////")
             //Obtener promociones a partir de las lineas generadas (Aplicara Backorders tralados etc~)
-                productos = await cotizacionesUtils.cotizacionesObtenerPromocionesProductos(req.body, productos, lineasProductos, req.body.cdc_sn_socio_de_negocio_id);
+                productos = await cotizacionesUtils.cotizacionesObtenerPromocionesProductos(req.body, productos, lineasProductos,req.body.cot_prospecto ? 0 : req.body.cdc_sn_socio_de_negocio_id);
             //FIN Obtener promociones a partir de las lineas generadas
             console.log("/////////// FIN PASO 5 ///////////")
 
@@ -4905,6 +4912,8 @@ export default {
             //Obtener costos envios
                 var cotizacionCarritoEnvioPoliticas = await cotizarCarritoFunction.CotizarCarritoFunctionForCotizacionesFunction(req.body, productos, TotalFinal);
                 console.log(cotizacionCarritoEnvioPoliticas)
+                let json = {boyd:req.body, prod:productos, sk:String(TotalFinal)}
+                //pruebaTester(JSON.stringify(json))
             //FIN Obtener costos envios
             console.log("/////////// FIN PASO 7 ///////////")
 
@@ -4918,7 +4927,7 @@ export default {
             //PASO COT 9
             console.log("/////////// Comienza PASO 9 ///////////")
             //Insertar Cotizacion
-
+            // pruebaTester('Iniciamos')
                 //Obtener tiempo de caducidad cotizacion
                 const constControlMaestroMultiple = await models.ControlMaestroMultiple.findOne(
                 {
@@ -4932,6 +4941,7 @@ export default {
                 var constCotizacionesProductosResult = []
                 if(req.body.cot_prospecto == false)
                 {
+                   
                     const constCarritoDeCompraOrder = await models.CarritoDeCompra.findOne({
                         where: {
                             cdc_sn_socio_de_negocio_id : req.body.cdc_sn_socio_de_negocio_id
@@ -4985,9 +4995,12 @@ export default {
                         cot_iva_cantidad: parseFloat(((TotalBaseYDescuentos.totalPromocion*multiplicadorImpuesto)-TotalBaseYDescuentos.totalPromocion).toFixed(2))
 
                     });
+
+                   // pruebaTester(JSON.stringify(constCotizacionesResult))
                 }
                 else
                 {
+                   // pruebaTester('si pas')
                     var ultimoRowNum = 0
                     const constCartLast = await models.CarritoDeCompra.findOne(
                     {
@@ -5003,6 +5016,7 @@ export default {
                     }
                     var orderID = "Q-"+String(Date.now())+String(ultimoRowNum+1)
 
+                 
                     //Crear cotizaciones
                     constCotizacionesResult = await models.Cotizaciones.create(
                     {
@@ -5046,8 +5060,10 @@ export default {
                         cot_descuento_porcentaje: TotalBaseYDescuentos.descuentoEnPorcentaje,
                         cot_iva_cantidad: parseFloat(((TotalBaseYDescuentos.totalPromocion*multiplicadorImpuesto)-TotalBaseYDescuentos.totalPromocion).toFixed(2))
                     });
-                }
 
+                }
+                //pruebaTester('soy un hijo de XXX')
+                //pruebaTester(JSON.stringify(constCotizacionesResult))
                 console.log('hj: ', constCotizacionesResult)
                 //Si se inserto correctamente la cotizacion insertara ahora los productos
                 if(constCotizacionesResult != '')
@@ -5133,10 +5149,12 @@ export default {
                             snu_super_usuario: true
                         }
                     });
+                    //pruebaTester('si llegamos sin usuario')
                      console.log('enviar correo:'+constSociosNegocioUsuario.snu_correo_electronico+' cotizacion :'+constCotizacionesResult.cot_cotizacion_id)
             await cotizacionEnviar(constSociosNegocioUsuario.snu_correo_electronico,constCotizacionesResult.cot_cotizacion_id, req.body.cot_referencia, 0, constSociosNegocioUsuario.snu_cardcode);
             //constCotizacionesResult.cot_cotizacion_id
             }else{
+                
                
                 const infoCliente = await models.UsuariosProspectos.findOne(
                     {
@@ -5145,7 +5163,8 @@ export default {
                         },
                     });
 
-                    console.log(infoCliente)
+                    //console.log(infoCliente)
+                    //pruebaTester('si con usuario')
                     console.log('enviar correo'+infoCliente.up_email_facturacion+' cotizacion:'+constCotizacionesResult.cot_cotizacion_id)
 
                await cotizacionEnviar(infoCliente.up_email_facturacion,constCotizacionesResult.cot_cotizacion_id,  req.body.cot_referencia,  req.body.up_usuarios_prospectos_id);
@@ -5178,6 +5197,8 @@ export default {
                     }
                 });
             }
+
+            //pruebaTester(JSON.stringify(e))
             
             res.status(200).send({
                 message: 'Error, al generar la cotización',

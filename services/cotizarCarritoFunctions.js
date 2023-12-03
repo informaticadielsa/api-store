@@ -2153,7 +2153,28 @@ module.exports = {
             return "Error al cotizar carrito"
         }
     },
+    CotizarCarritoFunctionForCotizacionesFunction1: async function (body, productos, totalFinal) {
+        try{
+           let CotizacionResult= {
+            tipoEnvio: "Recolección",
+            fleteraID: 1,
+            totalFinal: 0,
+            politicaBool: false,
+            politicaNombre: "Recolección",
+            suertirUnSoloAlmacen: true
+        }
+        var returner = {
+            message: 'Cotizacion envio obtenida con exito',
+            CotizacionResult
+        }
 
+        return returner
+        }
+        catch(e){
+            console.log(e)
+            return "Error al cotizar carrito"
+        }
+    },
     CotizarCarritoFunctionForCotizacionesSNandProspecto: async function (isProspecto, SnProsID, tipoEnvio, direccionEnvioID, almacenID, fleteraID, productos, totalCotizacionUSD) {
         try{
             console.log(isProspecto)

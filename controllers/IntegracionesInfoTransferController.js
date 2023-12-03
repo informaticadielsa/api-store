@@ -4234,7 +4234,7 @@ export default {
                }
             }else{
                  newPrices= constProductoCompraFinalizada[i].dataValues.pcf_precio
-             }
+             } 
            
                   //Variable para Lineas 
                 var jsonArray = {

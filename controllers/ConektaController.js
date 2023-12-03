@@ -425,7 +425,7 @@ export default {
 
         var checkoutJson = await getCheckout.getCheckoutAPI2(cdc_sn_socio_de_negocio_id) 
 
-        pruebaTester(JSON.stringify(checkoutJson))
+       pruebaTester(JSON.stringify(checkoutJson))
         var productos = checkoutJson.dataValues.productos
 
         var array = []
@@ -433,7 +433,10 @@ export default {
 
         for (var i = 0; i < productos.length; i++) 
         {
-          var priceWithoutDot = productos[i].dataValues.precioFinalMasImpuesto.toFixed(2).split('.').join("");
+          
+
+          let newPrice =(productos[i].dataValues.projectProductPriceFinalImpuestos&& (productos[i].dataValues.projectProductPriceFinalImpuestos < productos[i].dataValues.precioFinalMasImpuesto || productos[i].dataValues.precioFinalMasImpuesto ==0)? productos[i].dataValues.projectProductPriceFinalImpuestos: productos[i].dataValues.precioFinalMasImpuesto)
+          var priceWithoutDot = newPrice.toFixed(2).split('.').join("");
 
           var body = {
             "name": productos[i].dataValues.prod_nombre,
@@ -558,7 +561,7 @@ export default {
           return result.toObject()
         }, function (error) {
           console.log(error)
-          pruebaTester(JSON.stringify(error))
+          //pruebaTester(JSON.stringify(error))
           return error
         })
 
@@ -654,7 +657,7 @@ export default {
 
 
           // await pagoAceptado(constSociosNegocioUsuario.snu_correo_electronico, usuario_sn_id, checkoutJson.dataValues.cdc_numero_orden);
-        //  await pagoAceptado("informatica@dielsa.com", constSociosNegocioUsuario.dataValues.snu_usuario_snu_id, checkoutJson.dataValues.cdc_numero_orden, checkoutJson);
+          await pagoAceptado("informatica@dielsa.com", constSociosNegocioUsuario.dataValues.snu_usuario_snu_id, checkoutJson.dataValues.cdc_numero_orden, checkoutJson);
           //await pagoAceptado("gabriel@puntocommerce.com", constSociosNegocioUsuario.dataValues.snu_usuario_snu_id, checkoutJson.dataValues.cdc_numero_orden, checkoutJson);
           // console.log("paso el await")
 
