@@ -4567,7 +4567,8 @@ module.exports = {
 
             if(checkoutJson.dataValues.cdc_forma_pago_codigo == "04" || checkoutJson.dataValues.cdc_forma_pago_codigo == "28")
             {
-               // precioFinalTotal = parseFloat((precioFinalTotal*1.03).toFixed(2))
+                //Revisar esta linea
+               precioFinalTotal = parseFloat((precioFinalTotal*1.03).toFixed(2))
             }
 
             
