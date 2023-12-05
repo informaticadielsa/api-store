@@ -261,6 +261,9 @@ export default {
                 where: {
                     cot_sn_socios_negocio_id: req.params.id
                 },
+                order: [
+                    ['cot_cotizacion_id', 'DESC']
+                ],
             });
 
 

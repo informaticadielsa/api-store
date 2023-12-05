@@ -27,12 +27,13 @@ exports.pagoAceptado = async function (
 ) {
   try {
     //Compra Finalizada order information
-    // const constCompraFinalizada = await models.CompraFinalizada.findOne({
-    //   where: {
-    //     cf_compra_numero_orden: orden,
-    //   },
-    // });
+    const constCompraFinalizada = await models.CompraFinalizada.findOne({
+      where: {
+        cf_compra_finalizada_id: orden,
+      },
+    });
 
+    console.log('constCompraFinalizada ============== ', constCompraFinalizada);
     //Compra Finalizada order information
     // const constCompraFinalizada = await models.CompraFinalizada.findOne({
     //   where: {
@@ -208,15 +209,28 @@ exports.pagoAceptado = async function (
     //-----------------------------------------------------------------
     //Informacion final de pago
 
-    var subTotal = checkout.dataValues.precioTotal;
-    var orderIVA = checkout.dataValues.TotalImpuesto;
-    var costoEnvio = parseFloat(checkout.dataValues.cdc_costo_envio.toFixed(2));
-    var descuentos = checkout.dataValues.totalDescuentos;
+    var subTotal = constCompraFinalizada.cf_resume_mxn.precioTotal;
+    var orderIVA = constCompraFinalizada.cf_resume_mxn.TotalImpuesto;
+    var costoEnvio = constCompraFinalizada.cf_resume_mxn.cdc_costo_envio;
+    var descuentos = constCompraFinalizada.cf_resume_mxn.totalDescuentos;
+    
+    var totalCompra = constCompraFinalizada.cf_resume_mxn.TotalFinal;
 
     subTotal = formatter.format(subTotal);
     orderIVA = formatter.format(orderIVA);
     costoEnvio = formatter.format(costoEnvio);
     descuentos = formatter.format(descuentos);
+
+    totalCompra = formatter.format(totalCompra);
+
+    // _______________Informacion de pago en USD___________________
+    var subTotalUSD = formatter.format(constCompraFinalizada.cf_resume_usd.precioTotal_usd);
+    var orderIVAUSD = formatter.format(constCompraFinalizada.cf_resume_usd.TotalImpuesto_usd);
+    var costoEnvioUSD = formatter.format(constCompraFinalizada.cf_resume_usd.cdc_costo_envio_usd);
+    var descuentosUSD = formatter.format(constCompraFinalizada.cf_resume_usd.totalDescuentos_usd);
+    
+    var totalCompraUSD = formatter.format(constCompraFinalizada.cf_resume_usd.TotalFinal_usd);
+
     //-----------------------------------------------------------------
 
     const pedido = await models.CarritoDeCompra.findOne({
@@ -253,30 +267,6 @@ exports.pagoAceptado = async function (
 
     let direccion_de_envio = "";
     direccion_de_envio += "Dirección predeterminada" + " <br>";
-
-    const total_compra = await sequelize.query(
-      `
-  select 
-      sum(total.total)
-  from(
-  select 
-      case 
-          when pcdc.pcdc_mejor_descuento >= 10 then   (pcdc.pcdc_precio - (pcdc.pcdc_precio * cast(concat('0.' || pcdc.pcdc_mejor_descuento) as float))) * pcdc.pcdc_producto_cantidad
-          when pcdc.pcdc_mejor_descuento <= 9 then    (pcdc.pcdc_precio - (pcdc.pcdc_precio * cast(concat('0.0' || pcdc.pcdc_mejor_descuento) as float))) * pcdc.pcdc_producto_cantidad
-      end as total
-  from carrito_de_compras cdc  
-  left join productos_carrito_de_compra pcdc  on pcdc.pcdc_carrito_de_compra_id  = cdc.cdc_carrito_de_compra_id 
-  where cdc.cdc_carrito_de_compra_id  = ` +
-        pedido.dataValues.cdc_carrito_de_compra_id +
-        `
-  )total
-  `,
-      {
-        type: sequelize.QueryTypes.SELECT,
-      }
-    );
-
-    let total_de_la_compra = total_compra.length > 0 ? total_compra[0].sum : 0;
 
     // Definimos el transporter
     const transporter = nodemailer.createTransport({
@@ -625,6 +615,21 @@ exports.pagoAceptado = async function (
         attributes: ["prod_nombre", "prod_nombre_extranjero"],
       });
 
+      const constProductoCompraFinalizada =
+        await models.ProductoCompraFinalizada.findOne({
+          where: {
+            pcf_cf_compra_finalizada_id: lineasTemporales[x].pcf_cf_compra_finalizada_id,
+            pcf_prod_producto_id: lineasTemporales[x].pcf_prod_producto_id,
+          },
+          order: [["pcf_fecha_entrega", "ASC"]],
+          attributes: [
+            "pcf_prod_producto_id",
+            "pcf_fecha_entrega",
+            "pcf_cantidad_producto",
+            "pcf_precio",
+          ],
+        });
+
       const constImagenProducto = await models.ImagenProducto.findOne({
         where: {
           imgprod_prod_producto_id: lineasTemporales[x].pcf_prod_producto_id,
@@ -637,7 +642,7 @@ exports.pagoAceptado = async function (
       var prod_nombre = constProducto.prod_nombre;
       var prod_nombre_foraneo = constProducto.prod_nombre_extranjero;
       var cantidad = lineasTemporales[x].pcf_cantidad_producto;
-      var precio = lineasTemporales[x].pcf_precio;
+      var precio = constProductoCompraFinalizada.dataValues.pcf_precio // lineasTemporales[x].pcf_precio;
       precio = formatter.format(precio);
 
       if (constImagenProducto) {
@@ -726,46 +731,48 @@ exports.pagoAceptado = async function (
         </section>
       
       <section class='datos' style='background: #F5F5F5; padding: 20px;'>
-        <div style='color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
-          <p>Subtotal</p>
-        </div>
-        <div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; text-align: -webkit-left'>
-          <p>` +
-      subTotal +
-      `</p>
-        </div>
-        <div style='color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
-          <p>Gastos de envío</p>
-        </div>
-        <div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; text-align: -webkit-left'>
-          <p>` +
-      costoEnvio +
-      `</p>
-        </div>
-        <div style='color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
-          <p>Descuento</p>
-        </div>
-        <div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; text-align: -webkit-left'>
-          <p>` +
-      descuentos +
-      `</p>
-        </div>
-        <div style='color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
-          <p>IVA 16%</p>
-        </div>
-        <div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; text-align: -webkit-left'>
-          <p>` +
-      orderIVA +
-      `</p>
-        </div>
-        <div style='color: #000000; font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 20px; text-align: justify;'>
-          <p>Total</p>
-        </div>
-        <div style='color: #000000; font-size: 16px; letter-spacing: 0; line-height: 20px; text-align: -webkit-left'>
-          <p>` +
-      totalCompra +
-      `</p>
-        </div>
+        <table style="width: 500px; font-size: 16px;">
+          <tr>
+            <td></td>
+            <th style="text-align: center;">
+              MXN
+            </th>
+            <th style="text-align: center;">
+              USD
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align: left;">Subtotal</th>
+            <td>`+subTotal+`</td>
+            <td>`+subTotalUSD+`</td>
+          </tr>
+          <tr>
+            <th style="text-align: left;">Gastos de envío</th>
+            <td>`+costoEnvio+`</td>
+            <td>`+costoEnvioUSD+`</td>
+          </tr>
+          <tr>
+            <th style="text-align: left;">
+              Descuento
+            </th>
+            <td>`+descuentos+`</td>
+            <td>`+descuentosUSD+`</td>
+          </tr>
+          <tr>
+            <th style="text-align: left;">
+              IVA 16%
+            </th>
+            <td>`+orderIVA+`</td>
+            <td>`+orderIVAUSD+`</td>
+          </tr>
+          <tr>
+            <th style="text-align: left;">
+              Total
+            </th>
+            <td>`+totalCompra+`</td>
+            <td>`+totalCompraUSD+`</td>
+          </tr>
+        </table>
       </section>
 
     </section>
@@ -901,6 +908,5 @@ exports.pagoAceptado = async function (
     });
   } catch (e) {
     console.log(e);
-    next(e);
   }
 };
