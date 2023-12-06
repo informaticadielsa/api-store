@@ -89,8 +89,12 @@ exports.cotizacionEnviar = async function (email,cotizacion_id, comentarios, idP
       });
       if(constUsuarioVendedor)
       {
+        if(constSocioNegocioSap.sn_vendedor_codigo_sap=='-1'){
+          vendedorAsignado = 'contacto@dielsa.com'
+          correoVendedorAsignado ='contacto@dielsa.com'
+        }else{
         vendedorAsignado = constUsuarioVendedor.usu_nombre //+ " " + constUsuarioVendedor.usu_primer_apellido + " " + (constUsuarioVendedor.usu_segundo_apellido!= null ? constUsuarioVendedor.usu_segundo_apellido :'')
-        correoVendedorAsignado =  constUsuarioVendedor.usu_correo_electronico
+        correoVendedorAsignado =  constUsuarioVendedor.usu_correo_electronico}
       }
 
       //Obtener nombre SN
@@ -786,7 +790,8 @@ htmlBody +=
     {
         maillist = [
             //"ov@dielsa.com"
-            correoVendedorAsignado
+            correoVendedorAsignado,
+            "contacto@dielsa.com"
             //email
         ];
     }
