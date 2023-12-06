@@ -873,7 +873,7 @@ export default {
             
             const options = {
                 'method': 'GET',
-                'url': (process.env.INTEGRATIONS_URL = 'http://35.224.2.75:89' ? 'http://10.128.0.2:90' : process.env.INTEGRATIONS_URL) + '/Service1.svc/proyectos',
+                'url': (process.env.INTEGRATIONS_URL = 'http://10.128.0.2:90' ? 'http://10.128.0.2:90' : process.env.INTEGRATIONS_URL) + '/Service1.svc/proyectos',
                 'headers': {
                     'Authorization': 'Xswirudy9s873g@id%$sk04mcfnaid'
                 } 
