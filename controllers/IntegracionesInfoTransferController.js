@@ -895,7 +895,7 @@ export default {
             for (let index = 0; index < resultJson.proyectos.length; index++) {
                 const element = resultJson.proyectos[index];
                 const evaluacion = socioNegocioCardCode.includes(element.codigoCliente);
-                integracionEmail(JSON.stringify(evaluacion))
+                integracionEmail('Usuario :'+element.codigoCliente + JSON.stringify(evaluacion))
                 if(evaluacion) {
                     const proyectos = await models.Proyectos.findOne({
                         where: {
