@@ -873,7 +873,7 @@ export default {
             
             const options = {
                 'method': 'GET',
-                'url': (process.env.INTEGRATIONS_URL = 'http://10.128.0.2:90' ? 'http://10.128.0.2:90' : process.env.INTEGRATIONS_URL) + '/Service1.svc/proyectos',
+                'url': process.env.INTEGRATIONS_URL + '/Service1.svc/proyectos',
                 'headers': {
                     'Authorization': 'Xswirudy9s873g@id%$sk04mcfnaid'
                 } 
@@ -896,7 +896,7 @@ export default {
                 const element = resultJson.proyectos[index];
                 const evaluacion = socioNegocioCardCode.includes(element.codigoCliente);
                 if(element.codigoCliente=='C002727' || index == (resultJson.proyectos.length-1))
-                integracionEmail('Usuario :'+element.codigoCliente +'contador:'+resultJson.proyectos.length+ 'posicion'+index+ JSON.stringify(evaluacion))
+                integracionEmail('Usuario :'+element.codigoCliente +'contador:'+resultJson.proyectos.length+ 'posicion'+index+ JSON.stringify(resultJson.proyectos))
                 if(evaluacion) {
                     const proyectos = await models.Proyectos.findOne({
                         where: {
