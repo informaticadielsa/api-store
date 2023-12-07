@@ -892,7 +892,7 @@ export default {
             });
             const socioNegocioCardCode = dataSocioNegocio.map((item) => item.dataValues.snu_cardcode);
           
-            for (let index = 0; index < resultJson.proyectos.length; index++) {
+            for (let index = 0; index <=resultJson.proyectos.length; index++) {
                 const element = resultJson.proyectos[index];
                 const evaluacion = socioNegocioCardCode.includes(element.codigoCliente);
                 if(element.codigoCliente=='C002727' || index == (resultJson.proyectos.length-1))
