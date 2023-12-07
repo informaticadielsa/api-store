@@ -791,7 +791,7 @@ htmlBody +=
         maillist = [
             //"ov@dielsa.com"
             correoVendedorAsignado,
-            "contacto@dielsa.com"
+            //"contacto@dielsa.com"
             //email
         ];
     }
