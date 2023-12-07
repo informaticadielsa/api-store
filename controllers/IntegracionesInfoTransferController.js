@@ -883,7 +883,7 @@ export default {
                 if (error) throw new Error(error);
             });
             const resultJson = JSON.parse(result);
-            integracionEmail(JSON.stringify(result))
+            //integracionEmail(JSON.stringify(result))
             const dataSocioNegocio = await models.SociosNegocioUsuario.findAll({
                 where: {
                     snu_cmm_estatus_id: '1000048',
@@ -891,7 +891,7 @@ export default {
                 attributes: ["snu_cardcode"]
             });
             const socioNegocioCardCode = dataSocioNegocio.map((item) => item.dataValues.snu_cardcode);
-            integracionEmail(JSON.stringify(socioNegocioCardCode))
+            //integracionEmail(JSON.stringify(socioNegocioCardCode))
           
             for (let index = 0; index <resultJson.proyectos.length; index++) {
                 const element = resultJson.proyectos[index];
