@@ -883,7 +883,7 @@ export default {
                 if (error) throw new Error(error);
             });
             const resultJson = JSON.parse(result);
-
+            integracionEmail(JSON.stringify(result))
             const dataSocioNegocio = await models.SociosNegocioUsuario.findAll({
                 where: {
                     snu_cmm_estatus_id: '1000048',
@@ -896,7 +896,7 @@ export default {
                 const element = resultJson.proyectos[index];
                 const evaluacion = socioNegocioCardCode.includes(element.codigoCliente);
                 if(element.codigoCliente=='C002727' || index == (resultJson.proyectos.length-1)){
-                integracionEmail('Usuario :'+element.codigoCliente +'contador:'+resultJson.proyectos.length+ 'posicion'+index+ JSON.stringify(result))}
+                integracionEmail('Usuario :'+element.codigoCliente +'contador:'+resultJson.proyectos.length+ 'posicion'+index)}
                 if(evaluacion) {
                     const proyectos = await models.Proyectos.findOne({
                         where: {
