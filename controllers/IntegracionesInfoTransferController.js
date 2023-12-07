@@ -894,7 +894,8 @@ export default {
             //integracionEmail(JSON.stringify(socioNegocioCardCode))
           
             for (let index = 0; index <resultJson.proyectos.length; index++) {
-                const element = resultJson.proyectos[index];
+                const element = resultJson.proyectos[index]; 
+                
                 const evaluacion = socioNegocioCardCode.includes(element.codigoCliente);
                 
                 if(evaluacion) {
