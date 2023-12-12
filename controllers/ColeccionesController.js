@@ -8,6 +8,7 @@ import fs from 'fs';
 import request from 'request-promise';
 import XLSX from  'xlsx';
 import fileUploadUtil from "../services/fileUploadUtil";
+import Coleccion from '../models/ColeccionModel';
 const fsPromises = fs.promises;
 export default {
 
@@ -310,10 +311,67 @@ export default {
                 next(e);
             }
         },
+    updateCollectionProducts: async(req,res,next)=>{
+            try {
+                   if(req.body.idColeccion){
+                   const  coleccion = await models.Colecciones.findOne({ 
+                    where: { 
+                        id: req.body.idColeccion
+    
+                    }
+                     })
 
+                   
 
+                   if(coleccion){
+                    const updCole =await coleccion.update({nombre: req.body.nombre, descripcion: req.body.descripcion })
+                   
+                    for(let i=0; i<req.body.productos.length; i++){
+                        const  productoColeccion = await models.ProductosColecciones.findOne({where:{idColeccion:req.body.idColeccion, 
+                            producto_Sku: req.body.productos[i].productoSku
+                        }})
+                        if(productoColeccion){
+                           await  productoColeccion.update({estatus:req.body.productos[i].estatus})
+                        }
+                    }
+                    
+                       
 
-
+                    res.status(200).send(
+                        {
+                           // arrayProducts,
+                            //coleccion,
+                            //productosColeccion:newDataLineasProyecto,
+                            message: 'Se actualizo correctamente la coleccion y el detalle de sus productos.',
+                            status:'success'
+                        })
+                   }else{
+                    res.status(500).send(
+                        {
+                          message: 'No existe la coleccion.',
+                          status:'fail'
+                        });
+                   }
+                }else{
+                    res.status(500).send(
+                        {
+                          message: 'No existe la coleccion, no se puede actualizar',
+                          status:'fail'
+                        });
+                }
+        
+        
+            }catch(e)
+            {
+                res.status(500).send(
+                {
+                  message: 'Tuvimos un error al actualizar la coleccion y sus productos',
+                  status:'fail',
+                  e
+                });
+                next(e);
+            }
+            },
 
     getCollectionId: async(req, res, next)=>{
         await models.Colecciones.create()
