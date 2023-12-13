@@ -27,6 +27,12 @@ const Colecciones = sequelize.define('Colecciones', {
         type: Sequelize.DATE,
         allowNull: false,
     },
+    link: {
+        type: Sequelize.STRING,
+    },
+    orden: {
+        type: Sequelize.INTEGER
+    }
 },
 {
     //Options

@@ -27,7 +27,8 @@ export default {
                 descripcion: req.body.descripcion,
                 estatus: req.body.estatus,
                 createdAt: Date(),
-                updatedAt:Date ()
+                updatedAt:Date (),
+                link: req.body.link
             
             })
             if(coleccionId.dataValues.id){
@@ -324,7 +325,7 @@ export default {
                    
 
                    if(coleccion){
-                    const updCole =await coleccion.update({nombre: req.body.nombre, descripcion: req.body.descripcion })
+                    const updCole =await coleccion.update({nombre: req.body.nombre, descripcion: req.body.descripcion, orden: req.body.orden, link: req.body.link})
                    
                     for(let i=0; i<req.body.productos.length; i++){
                         const  productoColeccion = await models.ProductosColecciones.findOne({where:{idColeccion:req.body.idColeccion, 
