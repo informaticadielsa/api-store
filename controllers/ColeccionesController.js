@@ -263,7 +263,7 @@ export default {
                                              })
 
                                          if(coleccion){
-                                           const  productosColeccion = await models.ProductosColecciones.findOne({where:{producto_Sku:xlData[i].Sku_Producto}
+                                           const  productosColeccion = await models.ProductosColecciones.findOne({where:{idColeccion:parseInt(xlData[i].Id_coleccion), producto_Sku:xlData[i].Sku_Producto}
                                             })
                                         if(!productosColeccion){
                                             const  productosColeccion = await models.ProductosColecciones.create({
