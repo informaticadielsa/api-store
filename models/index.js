@@ -128,6 +128,8 @@ import Proyectos from './ProyectosModel';
 import LineasProyectos from './LineasProyectosModel';
 import ProyectoSolicitudes from './ProyectoSolicitudesModel';
 import Registros from './RegistrosModel'
+import Colecciones from './ColeccionesModel'
+import ProductosColecciones from './ProductosColeccionesModel'
 export default {
     Usuario,
     ControlMaestroMultiple,
@@ -242,5 +244,7 @@ export default {
     Proyectos,
     LineasProyectos,
     ProyectoSolicitudes,
-    Registros
+    Registros,
+    Colecciones,
+    ProductosColecciones
 }

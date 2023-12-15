@@ -6146,7 +6146,7 @@ export default {
                 }   
 
                 await systemLog.insertLog('Integracion de PRODUCTOS VENDIDOS','Integracion de PRODUCTOS VENDIDOS: correctamente.', '1.-webApi', 'Sistema', 'informative')
-                integracionEmail('Integracion de PRODUCTOS VENDIDOS: correctamente.')
+                //integracionEmail('Integracion de PRODUCTOS VENDIDOS: correctamente.')
                 res.status(200).send({
                     message: "Finalizo con exito"
                 })

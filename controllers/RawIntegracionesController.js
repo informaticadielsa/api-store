@@ -122,7 +122,7 @@ export default {
             }
 
             await systemLog.insertLog('Integracion Socio Negocios Raw','Integracion Socio Negocios Raw: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Socio Negocios Raw: correctamente.')
+          //  integracionEmail('Integracion Socio Negocios Raw: correctamente.')
 
             //Response
             res.status(200).send(
@@ -349,7 +349,7 @@ export default {
 
 
             await systemLog.insertLog('Integracion SN Propiedades Raw','Integracion SN Propiedades Raw: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion SN Propiedades Raw: correctamente.')
+           // integracionEmail('Integracion SN Propiedades Raw: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -428,7 +428,7 @@ export default {
             }
 
             await systemLog.insertLog('Integracion sn Grupos Raw','Integracion sn Grupos Raw: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion sn Grupos Raw: correctamente.')
+           // integracionEmail('Integracion sn Grupos Raw: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -547,7 +547,7 @@ export default {
                 }
 
                 await systemLog.insertLog('Integracion Articulos raw','Integracion Articulos raw: correctamente.', '1.-webApi', 'Sistema', 'informative')
-                integracionEmail('Integracion Articulos raw: correctamente.')
+              //  integracionEmail('Integracion Articulos raw: correctamente.')
 
 
             //Response
@@ -696,7 +696,7 @@ export default {
 
             }
             await systemLog.insertLog('Integracion Articulos Grupos','Integracion Articulos Grupos: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Articulos Grupos: correctamente.')
+           // integracionEmail('Integracion Articulos Grupos: correctamente.')
 
 
             //Response
@@ -888,7 +888,7 @@ export default {
            
 
             await systemLog.insertLog('Integracion Almacenes','Integracion Almacenes: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Almacenes: correctamente.')
+           // integracionEmail('Integracion Almacenes: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1966,7 +1966,7 @@ export default {
             }
 
             await systemLog.insertLog('Integracion Nombre Listas Precios','Integracion Nombre Listas Precios: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Nombre Listas Precios: correctamente.')
+           // integracionEmail('Integracion Nombre Listas Precios: correctamente.')
 
             //Response
             res.status(200).send(
@@ -2186,7 +2186,7 @@ export default {
             }
 
             await systemLog.insertLog('Integracion Listas Precios Basicas raw','Integracion Listas Precios Basicas raw: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Listas Precios Basicas raw: correctamente.')
+            //integracionEmail('Integracion Listas Precios Basicas raw: correctamente.')
             //Response
             res.status(200).send(
             {

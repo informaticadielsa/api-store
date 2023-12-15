@@ -275,7 +275,7 @@ export default {
                     //Integrar 
 
                     await systemLog.insertLog('Integracion tipo de cambio','Integracion tipo de cambio: se actualizo correctamente el tipo de cambio: '+jsonApi[0].tipoCambio, '1.-webApi', 'Sistema', 'informative')
-                    integracionEmail('Integracion tipo de cambio: se actualizo correctamente el tipo de cambio: ' +jsonApi[0].tipoCambio)
+                   // integracionEmail('Integracion tipo de cambio: se actualizo correctamente el tipo de cambio: ' +jsonApi[0].tipoCambio)
 
                     //Response
                     res.status(200).send(
@@ -496,7 +496,7 @@ export default {
             }
 
             await systemLog.insertLog('Integraciones Socio de Negocios','Integraciones Socio de Negocios: correctamente', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integraciones Socio de Negocios: correctamente')
+            //integracionEmail('Integraciones Socio de Negocios: correctamente')
             //Response
             res.status(200).send(
             {
@@ -696,7 +696,7 @@ export default {
             }
 
             await systemLog.insertLog('Integraciones Socio de Negocios Transfer','Integraciones Socio de Negocios Transfer: se integra correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integraciones Socio de Negocios Transfer: se integra correctamente.')
+            //integracionEmail('Integraciones Socio de Negocios Transfer: se integra correctamente.')
             //Response
             res.status(200).send(
             {
@@ -850,7 +850,7 @@ export default {
             }//Fin FOR
 
             await systemLog.insertLog('Integraciones Socio de Negocios Transfer Direcciones','Integraciones Socio de Negocios Transfer Direcciones: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integraciones Socio de Negocios Transfer Direcciones: correctamente')
+           // integracionEmail('Integraciones Socio de Negocios Transfer Direcciones: correctamente')
             //Response
             res.status(200).send(
             {
@@ -873,7 +873,7 @@ export default {
             
             const options = {
                 'method': 'GET',
-                'url': (process.env.INTEGRATIONS_URL = 'http://35.224.2.75:89' ? 'http://10.128.0.2:90' : process.env.INTEGRATIONS_URL) + '/Service1.svc/proyectos',
+                'url': process.env.INTEGRATIONS_URL + '/Service1.svc/proyectos',
                 'headers': {
                     'Authorization': 'Xswirudy9s873g@id%$sk04mcfnaid'
                 } 
@@ -883,7 +883,7 @@ export default {
                 if (error) throw new Error(error);
             });
             const resultJson = JSON.parse(result);
-
+            //integracionEmail(JSON.stringify(result))
             const dataSocioNegocio = await models.SociosNegocioUsuario.findAll({
                 where: {
                     snu_cmm_estatus_id: '1000048',
@@ -891,8 +891,9 @@ export default {
                 attributes: ["snu_cardcode"]
             });
             const socioNegocioCardCode = dataSocioNegocio.map((item) => item.dataValues.snu_cardcode);
+            //integracionEmail(JSON.stringify(socioNegocioCardCode))
           
-            for (let index = 0; index < resultJson.proyectos.length; index++) {
+            for (let index = 0; index <resultJson.proyectos.length; index++) {
                 const element = resultJson.proyectos[index];
                 const evaluacion = socioNegocioCardCode.includes(element.codigoCliente);
                 
@@ -981,7 +982,7 @@ export default {
 
             
             await systemLog.insertLog('Integracion de proyectos','Integracion de proyectos: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion de proyectos: correctamente.')
+           // integracionEmail('Integracion de proyectos: correctamente.')
             res.status(200).send(
             {
               
@@ -1093,7 +1094,7 @@ export default {
                 }
             }
             await systemLog.insertLog('Integracion de Transfer SN Descuentos','Integracion de Transfer SN Descuentos: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion de Transfer SN Descuentos: correctamente.')
+           // integracionEmail('Integracion de Transfer SN Descuentos: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1249,7 +1250,7 @@ export default {
             //Response
 
             await systemLog.insertLog('Integracion de Transfer SN Direcciones','Integracion de Transfer SN Direcciones: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion de Transfer SN Direcciones: correctamente.')
+           // integracionEmail('Integracion de Transfer SN Direcciones: correctamente.')
             res.status(200).send(
             {
                 message: 'Integracion Transfer SN Direcciones Correcta',
@@ -1333,7 +1334,7 @@ export default {
             }
             
             await systemLog.insertLog('Integracion Transfer Asignacion SN a vendedores','Integracion Transfer Asignacion SN a vendedores: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion de Transfer SN Direcciones: correctamente.')
+          //  integracionEmail('Integracion de Transfer SN Direcciones: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1455,7 +1456,7 @@ export default {
 
 
             await systemLog.insertLog('Integracion Transfer Almacenes','Integracion Transfer Almacenes: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Transfer Almacenes: correctamente.')
+           // integracionEmail('Integracion Transfer Almacenes: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1547,7 +1548,7 @@ export default {
             }
 
             await systemLog.insertLog('Integracion Transfer Categorias from Articulos Grupos','Integracion Transfer Categorias from Articulos Grupos: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Transfer Categorias from Articulos Grupos: correctamente.')
+           // integracionEmail('Integracion Transfer Categorias from Articulos Grupos: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1640,7 +1641,7 @@ export default {
             }
 
             await systemLog.insertLog('Integracion Marcas directo a tablas PCP','Integracion Marcas directo a tablas PCP: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Marcas directo a tablas PCP: correctamente.')
+           // integracionEmail('Integracion Marcas directo a tablas PCP: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1905,7 +1906,7 @@ export default {
             }
 
             await systemLog.insertLog('Integracion Transfer Productos Padres e Hijos','Integracion Transfer Productos Padres e Hijos: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Transfer Productos Padres e Hijos: correctamente.')
+           // integracionEmail('Integracion Transfer Productos Padres e Hijos: correctamente.')
             //Response
             res.status(200).send(
             {
@@ -1984,7 +1985,7 @@ export default {
                 }
             }
             await systemLog.insertLog('Integracion Transfer Listas Precios (Nombres Codigos)','Integracion Transfer Listas Precios (Nombres Codigos): correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Transfer Listas Precios (Nombres Codigos): correctamente.')
+           // integracionEmail('Integracion Transfer Listas Precios (Nombres Codigos): correctamente.')
             //Response
             res.status(200).send(
             {
@@ -2457,7 +2458,7 @@ export default {
             }//Fin for i (lista de productos base (SKU))
             
             await systemLog.insertLog('Integracion Info Transfer Productos Listas Precios','Integracion Info Transfer Productos Listas Precios: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Info Transfer Productos Listas Precios: correctamente.')
+            //integracionEmail('Integracion Info Transfer Productos Listas Precios: correctamente.')
 
             //Response
             res.status(200).send(
@@ -5589,7 +5590,7 @@ export default {
         
 
             await systemLog.insertLog('Integracion Info Transfer Paises Estados','Integracion Info Transfer Paises Estados: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integracion Info Transfer Paises Estados: correctamente.')
+          //  integracionEmail('Integracion Info Transfer Paises Estados: correctamente.')
 
             //Response
             res.status(200).send(
@@ -6564,7 +6565,7 @@ export default {
 
 
             await systemLog.insertLog('Integraciones de correos','Integraciones de correos: correctamente.', '1.-webApi', 'Sistema', 'informative')
-            integracionEmail('Integraciones de correos: correctamente.')
+          //  integracionEmail('Integraciones de correos: correctamente.')
 
 
             //Response
@@ -6945,7 +6946,7 @@ export default {
 
 
             await systemLog.insertLog('Integracion Productos Admin','Integracion Productos Admin: correctamente.', '2.-Administrador', 'Portal Admin', 'informative')
-            integracionEmail('Integracion Productos Admin: correctamente.')
+           // integracionEmail('Integracion Productos Admin: correctamente.')
  
           
             //Response

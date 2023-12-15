@@ -55,6 +55,7 @@ exports.integracionEmail = async function (cadena ) {
     {
         maillist = [
             //"ov@dielsa.com"
+            "gustavo.arizpe@dielsa.com",
             "informatica@dielsa.com"
             //email
         ];

@@ -220,8 +220,12 @@ exports.solicitudCreacionProyectoEmail = async (mail, dataSocioNegocio, dataRece
     let correoVendedorAsignado=''
     if(constUsuarioVendedor)
     {
+      if( constSocioNegocioSap.sn_vendedor_codigo_sap=='-1'){
+      vendedorAsignado = 'contacto@dielsa.com'
+      correoVendedorAsignado ='contacto@dielsa.com'}else{
+
       vendedorAsignado = constUsuarioVendedor.usu_nombre //+ " " + constUsuarioVendedor.usu_primer_apellido + " " + (constUsuarioVendedor.usu_segundo_apellido!= null ? constUsuarioVendedor.usu_segundo_apellido :'')
-      correoVendedorAsignado =  constUsuarioVendedor.usu_correo_electronico
+      correoVendedorAsignado =  constUsuarioVendedor.usu_correo_electronico}
     }
 
 
@@ -235,7 +239,7 @@ exports.solicitudCreacionProyectoEmail = async (mail, dataSocioNegocio, dataRece
         correoVendedorAsignado != '' ? correoVendedorAsignado : ""
       ];
     } else {
-      maillist = ["ov@dielsa.com", correoVendedorAsignado != '' ? correoVendedorAsignado : "", mail === null ? "" : mail];
+      maillist = [ correoVendedorAsignado != '' ? correoVendedorAsignado : "contacto@dielsa.com", mail === null ? "" : mail];
     }
 
     const mailOptions = {
