@@ -86,12 +86,14 @@ export default {
         try {
                const  coleccion = await models.Colecciones.findOne({ 
                 where: { 
-                    id: req.params.id 
+                    //id: req.params.id
+                    orden:req.params.id 
 
                 }
                  })
 
-               const  productosColeccion = await models.ProductosColecciones.findAll({where:{idColeccion:req.params.id}
+               const  productosColeccion = await models.ProductosColecciones.findAll({where:{//idColeccion:req.params.id, 
+                                                                                        idColeccion: coleccion.id}
             
             })
 
@@ -150,13 +152,13 @@ export default {
         try {
                const  coleccion = await models.Colecciones.findOne({ 
                 where: { 
-                    id: req.params.id 
-
+                    id:  req.params.id
+                    //orden:req.params.id
                 }
                  })
 
-               const  productosColeccion = await models.ProductosColecciones.findAll({where:{idColeccion:req.params.id}
-            
+               const  productosColeccion = await models.ProductosColecciones.findAll({where:{  idColeccion: coleccion.id}
+                // idColeccion:req.params.id}
             })
 
                if(coleccion && productosColeccion){
