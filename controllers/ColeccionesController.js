@@ -157,8 +157,8 @@ export default {
                 }
                  })
 
-               const  productosColeccion = await models.ProductosColecciones.findAll({where:{  idColeccion: coleccion.id}
-                // idColeccion:req.params.id}
+               const  productosColeccion = await models.ProductosColecciones.findAll({where:{  
+                 idColeccion:req.params.id}
             })
 
                if(coleccion && productosColeccion){
