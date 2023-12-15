@@ -69,19 +69,39 @@ export default {
                 attributes: ['prod_descripcion'],
                 where: {
                     prod_cmm_estatus_id: 1000016,
-                    prod_descripcion: {
-                        [Op.iLike]: Sequelize.fn("LOWER", `${word}%`),
-                    }
+                    [Op.or]: [
+                        {
+                            prod_descripcion: {
+                                [Op.iLike]: Sequelize.fn("LOWER", `${word}%`),
+                            },
+                            prod_descripcion: {
+                                [Op.iLike]: Sequelize.fn("LOWER", `%${word}%`),
+                            }
+                        }
+                    ],
                 },
                 limit: 10,
             });
 
             respondProdDesc = respondProdDesc.map((item) => {
-                return { prod_nombre: item.prod_descripcion.substring(0, 55) }
+                let textoEncontrado = '';
+                const palabrasDivididas = word.split(/\s+/);
+                const expresionRegular = new RegExp(`\\b${palabrasDivididas.join('\\s*')}\\w*\\b`, 'i');
+                const coincidencia = item.prod_descripcion.match(expresionRegular);
+                if (coincidencia) {
+                    const indiceInicio = coincidencia.index;
+                    const indiceFin = indiceInicio + 55;
+
+                    textoEncontrado = item.prod_descripcion.substring(indiceInicio, Math.min(indiceFin, item.prod_descripcion.length));
+                  }
+                return {
+                    prod_nombre: textoEncontrado
+                }
             });
 
-            const dataProd = [...respondProductsId, ...respondProductMarca, ...respondProduct, ...respondProdDesc];
-
+            const dataProdResult = [...respondProductsId, ...respondProductMarca, ...respondProduct, ...respondProdDesc];
+            const setSinDuplicados = new Set(dataProdResult);
+            const dataProd = setSinDuplicados;
             res.status(200).send(
             {
                 message: 'Busqueda realizada correctamente',
