@@ -111,7 +111,7 @@ export default {
                         type: sequelize.QueryTypes.SELECT 
                     });
                     if (dataLineasProyecto){
-                        newDataLineasProyecto.push(dataLineasProyecto)
+                        newDataLineasProyecto.push(dataLineasProyecto[0])
                     }
 
                     }
