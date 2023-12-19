@@ -375,6 +375,70 @@ export default {
                 next(e);
             }
             },
+    updateProductCollection: async(req,res,next)=>{
+                try {
+                       if(req.body.idColeccion){
+                       const  coleccion = await models.Colecciones.findOne({ 
+                        where: { 
+                            id: req.body.idColeccion
+        
+                        }
+                         })
+    
+                       
+    
+                       if(coleccion){
+                          const  productoColeccion = await models.ProductosColecciones.findOne({where:{idColeccion:req.body.idColeccion, 
+                                producto_Sku: req.body.productoSku
+                            }})
+                        
+                        
+                           
+                            if(productoColeccion){
+                                await  productoColeccion.update({estatus:req.body.estatus})
+                        res.status(200).send(
+                            {
+                               // arrayProducts,
+                                //coleccion,
+                                //productosColeccion:newDataLineasProyecto,
+                                message: 'Se actualizo correctamente el producto.',
+                                status:'success'
+                            })}else{
+                                res.status(500).send(
+                                    {
+                                      message: 'No existe el producto en la colección.',
+                                      status:'fail'
+                                    });
+                               }
+                            
+
+                       }else{
+                        res.status(500).send(
+                            {
+                              message: 'No existe la coleccion.',
+                              status:'fail'
+                            });
+                       }
+                    }else{
+                        res.status(500).send(
+                            {
+                              message: 'No existe la coleccion, no se puede actualizar',
+                              status:'fail'
+                            });
+                    }
+            
+            
+                }catch(e)
+                {
+                    res.status(500).send(
+                    {
+                      message: 'Tuvimos un error al actualizar la coleccion y sus productos',
+                      status:'fail',
+                      e
+                    });
+                    next(e);
+                }
+                },
 
     getCollectionId: async(req, res, next)=>{
         await models.Colecciones.create()

@@ -10,7 +10,7 @@ router.get('/collections/:id', ColeccionesController.getCollectionIdFind);
 router.get('/colecctions-products/:id', ColeccionesController.getCollectionProducts)
 router.post('/upload-file-products', upload.array('excel', 5), ColeccionesController.uploadExcelProductsCollection);
 router.post('/update-products-collection',  ColeccionesController.updateCollectionProducts);
-
+router.post('/update-product-collection',  ColeccionesController.updateProductCollection);
 
 
 /*//Actualizamos la coleccion
