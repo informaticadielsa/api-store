@@ -314,6 +314,55 @@ export default {
                 next(e);
             }
         },
+    updateCollection: async(req,res,next)=>{
+            try {
+                   if(req.body.idColeccion){
+                   const  coleccion = await models.Colecciones.findOne({ 
+                    where: { 
+                        id: req.body.idColeccion
+    
+                    }
+                     })
+                   if(coleccion){
+                    if(req.body.estatus==3){
+                        await models.ProductosColecciones.destroy({where:{idColeccion: req.body.idColeccion}}) 
+                        await models.Colecciones.destroy({where:{ id: req.body.idColeccion}})
+                    }else{
+                    const updCole =await coleccion.update({nombre: req.body.nombre, descripcion: req.body.descripcion, orden: req.body.orden, estatus: req.body.estatus})
+                    }
+                  
+                    res.status(200).send(
+                        {
+                            message: 'Se actualizo correctamente la coleccion.',
+                            status:'success'
+                        })
+                   }else{
+                    res.status(500).send(
+                        {
+                          message: 'No existe la coleccion.',
+                          status:'fail'
+                        });
+                   }
+                }else{
+                    res.status(500).send(
+                        {
+                          message: 'No existe la coleccion, no se puede actualizar',
+                          status:'fail'
+                        });
+                }
+        
+        
+            }catch(e)
+            {
+                res.status(500).send(
+                {
+                  message: 'Tuvimos un error al actualizar la coleccion y sus productos',
+                  status:'fail',
+                  e
+                });
+                next(e);
+            }
+            },
     updateCollectionProducts: async(req,res,next)=>{
             try {
                    if(req.body.idColeccion){
