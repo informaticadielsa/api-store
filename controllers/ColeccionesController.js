@@ -28,7 +28,7 @@ export default {
                 estatus: req.body.estatus,
                 createdAt: Date(),
                 updatedAt:Date (),
-                link: req.body.link
+                orden: req.body.orden
             
             })
             if(coleccionId.dataValues.id){
