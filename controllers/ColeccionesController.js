@@ -396,7 +396,7 @@ export default {
                            
                             if(productoColeccion){
                                 if (req.body.estatus ===3){
-                                await models.productoColeccion.destroy({where:{idColeccion: req.body.idColeccion, producto_Sku: req.body.productoSku}})
+                                await models.ProductosColecciones.destroy({where:{idColeccion: req.body.idColeccion, producto_Sku: req.body.productoSku}})
                                 }else{
                                 await  productoColeccion.update({estatus:req.body.estatus})}
                             
