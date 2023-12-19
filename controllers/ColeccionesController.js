@@ -395,7 +395,11 @@ export default {
                         
                            
                             if(productoColeccion){
-                                await  productoColeccion.update({estatus:req.body.estatus})
+                                if (req.body.estatus ===3){
+                                await models.productoColeccion.destroy({where:{idColeccion: req.body.idColeccion, producto_Sku: req.body.productoSku}})
+                                }else{
+                                await  productoColeccion.update({estatus:req.body.estatus})}
+                            
                         res.status(200).send(
                             {
                                // arrayProducts,
