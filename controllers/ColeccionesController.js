@@ -9,6 +9,7 @@ import request from 'request-promise';
 import XLSX from  'xlsx';
 import fileUploadUtil from "../services/fileUploadUtil";
 import Coleccion from '../models/ColeccionModel';
+import productosUtils from "../services/productosUtils";
 const fsPromises = fs.promises;
 export default {
 
@@ -97,44 +98,38 @@ export default {
             
             })
 
-               if(coleccion && productosColeccion){
+            if(coleccion && productosColeccion) {
                 let newDataLineasProyecto = [];
-                    for(let i=0; i< productosColeccion.length; i++){
-                        const dataLineasProyecto = await sequelize.query(`
-                        SELECT distinct on (pro.prod_nombre_extranjero) pro.prod_nombre_extranjero,pro.prod_producto_id,pro.prod_sku,pro.prod_nombre, lpro.*, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM productos_coleccion AS lpro
-                        LEFT JOIN productos AS pro ON pro."prod_nombre_extranjero" = lpro."producto_Sku"
-                        LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
-                        WHERE lpro."producto_Sku" = '${productosColeccion[i].producto_Sku}'
-                        
-                        `,
+                for(let i=0; i< productosColeccion.length; i++) {
+                    const dataLineasProyecto = await sequelize.query(`
+                    SELECT distinct on (pro.prod_nombre_extranjero) pro.prod_nombre_extranjero, pro.prod_producto_id ,pro.prod_prod_producto_padre_sku ,pro.prod_sku,pro.prod_nombre, lpro.*, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM productos_coleccion AS lpro
+                    LEFT JOIN productos AS pro ON pro."prod_nombre_extranjero" = lpro."producto_Sku"
+                    LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
+                    WHERE lpro."producto_Sku" = '${productosColeccion[i].producto_Sku}'
+                    
+                    `,
                     {
                         type: sequelize.QueryTypes.SELECT 
                     });
-                    if (dataLineasProyecto){
+                    if(dataLineasProyecto) {
                         newDataLineasProyecto.push(dataLineasProyecto[0])
                     }
+                }
 
-                    }
+                newDataLineasProyecto = await productosUtils.getChildsFathersIDOnlyChilds(newDataLineasProyecto);
 
-                  
-
- 
-
-                res.status(200).send(
-                    {
-                       // arrayProducts,
-                        coleccion,
-                        productosColeccion:newDataLineasProyecto,
-                        message: 'Se obtuvo correctamente la coleccion y el detalle.',
-                        status:'success'
-                    })
-               }else{
-                res.status(500).send(
-                    {
-                      message: 'No existe la coleccion.',
-                      status:'fail'
-                    });
-               }
+                res.status(200).send({
+                    coleccion,
+                    productosColeccion: newDataLineasProyecto,
+                    message: 'Se obtuvo correctamente la coleccion y el detalle.',
+                    status:'success',
+                })
+            }else{
+                res.status(500).send({
+                    message: 'No existe la coleccion.',
+                    status:'fail'
+                });
+            }
     
     
         }catch(e)
