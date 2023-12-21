@@ -147,7 +147,73 @@ export default {
             });
             next(e);
         }
-        }
+        },
+    getCollectionIdFind2: async(req,res,next)=>{
+            try {
+                   const  coleccion = await models.Colecciones.findOne({ 
+                    where: { 
+                        id: req.params.id
+                        //orden:req.params.id 
+    
+                    }
+                     })
+    
+                   const  productosColeccion = await models.ProductosColecciones.findAll({where:{//idColeccion:req.params.id, 
+                                                                                            idColeccion: coleccion.id}
+                
+                })
+    
+                   if(coleccion && productosColeccion){
+                    let newDataLineasProyecto = [];
+                        for(let i=0; i< productosColeccion.length; i++){
+                            const dataLineasProyecto = await sequelize.query(`
+                            SELECT distinct on (pro.prod_nombre_extranjero) pro.prod_nombre_extranjero,pro.prod_producto_id,pro.prod_sku,pro.prod_nombre, lpro.*, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM productos_coleccion AS lpro
+                            LEFT JOIN productos AS pro ON pro."prod_nombre_extranjero" = lpro."producto_Sku"
+                            LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
+                            WHERE lpro."producto_Sku" = '${productosColeccion[i].producto_Sku}'
+                            
+                            `,
+                        {
+                            type: sequelize.QueryTypes.SELECT 
+                        });
+                        if (dataLineasProyecto){
+                            newDataLineasProyecto.push(dataLineasProyecto[0])
+                        }
+    
+                        }
+    
+                      
+    
+     
+    
+                    res.status(200).send(
+                        {
+                           // arrayProducts,
+                            coleccion,
+                            productosColeccion:newDataLineasProyecto,
+                            message: 'Se obtuvo correctamente la coleccion y el detalle.',
+                            status:'success'
+                        })
+                   }else{
+                    res.status(500).send(
+                        {
+                          message: 'No existe la coleccion.',
+                          status:'fail'
+                        });
+                   }
+        
+        
+            }catch(e)
+            {
+                res.status(500).send(
+                {
+                  message: 'Tuvimos un error al obtener las colecciones',
+                  status:'fail',
+                  e
+                });
+                next(e);
+            }
+            }
     ,getCollectionProducts: async(req,res,next)=>{
         try {
                const  coleccion = await models.Colecciones.findOne({ 

@@ -7,6 +7,7 @@ const router = routerx();
 router.post('/create-collection', ColeccionesController.createCollection);
 router.get('/list-collections',ColeccionesController.getCollections );
 router.get('/collections/:id', ColeccionesController.getCollectionIdFind);
+router.get('/collection/:id', ColeccionesController.getCollectionIdFind2);
 router.get('/colecctions-products/:id', ColeccionesController.getCollectionProducts)
 router.post('/upload-file-products', upload.array('excel', 5), ColeccionesController.uploadExcelProductsCollection);
 router.post('/update-products-collection',  ColeccionesController.updateCollectionProducts);
