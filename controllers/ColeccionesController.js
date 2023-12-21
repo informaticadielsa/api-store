@@ -106,6 +106,7 @@ export default {
                     LEFT JOIN productos AS pro ON pro."prod_nombre_extranjero" = lpro."producto_Sku"
                     LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
                     WHERE lpro."producto_Sku" = '${productosColeccion[i].producto_Sku}'
+                    and lpro."idColeccion" = '${coleccion.id}'
                     
                     `,
                     {
@@ -166,6 +167,7 @@ export default {
                             LEFT JOIN productos AS pro ON pro."prod_nombre_extranjero" = lpro."producto_Sku"
                             LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
                             WHERE lpro."producto_Sku" = '${productosColeccion[i].producto_Sku}'
+                            and lpro."idColeccion" = '${coleccion.id}'
                             
                             `,
                         {
