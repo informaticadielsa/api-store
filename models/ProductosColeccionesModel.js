@@ -10,7 +10,7 @@ const ProductosColecciones = sequelize.define('ProductosColecciones', {
         autoIncrement: true,
     },
     producto_Sku: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
     idColeccion: {
         type: Sequelize.INTEGER

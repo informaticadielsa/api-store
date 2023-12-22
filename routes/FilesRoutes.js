@@ -60,6 +60,7 @@ router.delete('/delete_file_home', auth.verifyToken, fileUploadController.delete
 
 //Cargar excel
 router.post('/excel_file', auth.verifyToken, upload.array('excel', 5), fileUploadController.fileExcelUplad);
+
 router.post('/excel_carga_masiva', auth.verifyToken, upload.array('excel', 1), fileUploadController.fileExcelCargaMasivaUpload);
 
 
