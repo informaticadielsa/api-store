@@ -106,7 +106,7 @@ export default {
                     m2.mar_nombre,
                     c2.nombre,
                     lpro.*, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM productos_coleccion AS lpro
-                    LEFT JOIN productos AS pro ON pro."prod_sku" = lpro.producto_Sku
+                    LEFT JOIN productos AS pro ON pro."prod_sku" = lpro."producto_Sku"
                     left join categorias c2 on pro.prod_cat_categoria_id = c2.cat_categoria_id
                     left join marcas m2 on pro.prod_mar_marca_id = m2.mar_marca_id
                     LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
@@ -172,7 +172,7 @@ export default {
                             m2.mar_nombre,
                             c2.nombre,
                             lpro.*, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM productos_coleccion AS lpro
-                            LEFT JOIN productos AS pro ON pro."prod_sku" = lpro.producto_Sku
+                            LEFT JOIN productos AS pro ON pro."prod_sku" = lpro."producto_Sku"
                             left join categorias c2 on pro.prod_cat_categoria_id = c2.cat_categoria_id
                             left join marcas m2 on pro.prod_mar_marca_id = m2.mar_marca_id
                             LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
