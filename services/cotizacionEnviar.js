@@ -616,6 +616,7 @@ var cantidad =
 
 var precio =idProspecto ==0? constCotizacionesProductos[x].dataValues.cotp_precio_base_lista :constCotizacionesProductos[x].dataValues.cotp_precio_menos_promociones ;
 precio = formatter.format(precio);
+precio = precio == 0.00 ? 'Sin precio, se esta revisando.': precio
 
 if (constImagenProducto) {
   imagen = constImagenProducto.imgprod_ruta_archivo;
