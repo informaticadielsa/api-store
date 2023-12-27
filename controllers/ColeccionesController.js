@@ -102,8 +102,11 @@ export default {
                 let newDataLineasProyecto = [];
                 for(let i=0; i< productosColeccion.length; i++) {
                     const dataLineasProyecto = await sequelize.query(`
-                    SELECT distinct on (pro.prod_nombre_extranjero) pro.prod_nombre_extranjero, pro.prod_producto_id ,pro.prod_prod_producto_padre_sku ,pro.prod_sku,pro.prod_nombre, lpro.*, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM productos_coleccion AS lpro
-                    LEFT JOIN productos AS pro ON pro."prod_nombre_extranjero" = lpro."producto_Sku"
+                    SELECT distinct on (pro.prod_nombre_extranjero) pro.prod_nombre_extranjero, pro.prod_producto_id ,pro.prod_prod_producto_padre_sku ,pro.prod_sku,pro.prod_nombre,
+                   
+                    lpro.*, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM productos_coleccion AS lpro
+                    LEFT JOIN productos AS pro ON pro."prod_sku" = lpro."producto_Sku"
+                    
                     LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
                     WHERE lpro."producto_Sku" = '${productosColeccion[i].producto_Sku}'
                     and lpro."idColeccion" = '${coleccion.id}'
@@ -163,8 +166,9 @@ export default {
                     let newDataLineasProyecto = [];
                         for(let i=0; i< productosColeccion.length; i++){
                             const dataLineasProyecto = await sequelize.query(`
-                            SELECT distinct on (pro.prod_nombre_extranjero) pro.prod_nombre_extranjero,pro.prod_producto_id,pro.prod_sku,pro.prod_nombre, lpro.*, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM productos_coleccion AS lpro
-                            LEFT JOIN productos AS pro ON pro."prod_nombre_extranjero" = lpro."producto_Sku"
+                            SELECT distinct on (pro.prod_nombre_extranjero) pro.prod_nombre_extranjero, pro.prod_producto_id ,pro.prod_prod_producto_padre_sku ,pro.prod_sku,pro.prod_nombre,
+                            lpro.*, img.imgprod_nombre_archivo, img.imgprod_ruta_archivo FROM productos_coleccion AS lpro
+                            LEFT JOIN productos AS pro ON pro."prod_sku" = lpro."producto_Sku"
                             LEFT JOIN imagenes_producto AS img ON img.imgprod_prod_producto_id = pro.prod_producto_id
                             WHERE lpro."producto_Sku" = '${productosColeccion[i].producto_Sku}'
                             and lpro."idColeccion" = '${coleccion.id}'
