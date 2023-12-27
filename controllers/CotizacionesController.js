@@ -259,7 +259,10 @@ export default {
             const constCotizaciones = await models.Cotizaciones.findAll(
             {
                 where: {
-                    cot_sn_socios_negocio_id: req.params.id
+                    cot_sn_socios_negocio_id: req.params.id,
+                    cot_cmm_estatus_id: {
+                        [Sequelize.Op.ne]: 1000179
+                    },
                 },
                 order: [
                     ['cot_cotizacion_id', 'DESC']
@@ -277,6 +280,40 @@ export default {
                 e
             });
             next(e);
+        }
+    },
+    quotation_delete: async(req, res, next) => {
+        try {
+            const constCotizaciones = await models.Cotizaciones.findOne(
+            {
+                where: {
+                    cot_sn_socios_negocio_id: req.body.socio_negocio_id,
+                    cot_cotizacion_id: req.body.idCotizacion,
+                },
+                order: [
+                    ['cot_cotizacion_id', 'DESC']
+                ],
+            });
+
+            if(constCotizaciones) {
+                await constCotizaciones.update({
+                    cot_cmm_estatus_id: 1000179,
+                });
+                res.status(200).send({
+                    message: 'Cotizacion eliminada correctamente'
+                });
+            } else {
+                res.status(404).send({
+                    message: 'La cotizacion no fue eliminada debido a que su ID no fue encontrado.'
+                });
+            }
+
+        } catch (error) {
+            res.status(500).send({
+                message: 'Error al eliminar cotizacion',
+                error
+            });
+            next(error);
         }
     },
     updateCotizacionesLinea: async(req, res, next) =>{
