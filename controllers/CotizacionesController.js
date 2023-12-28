@@ -290,9 +290,6 @@ export default {
                     cot_sn_socios_negocio_id: req.body.socio_negocio_id,
                     cot_cotizacion_id: req.body.idCotizacion,
                 },
-                order: [
-                    ['cot_cotizacion_id', 'DESC']
-                ],
             });
 
             if(constCotizaciones) {
@@ -300,11 +297,11 @@ export default {
                     cot_cmm_estatus_id: 1000179,
                 });
                 res.status(200).send({
-                    message: 'Cotizacion eliminada correctamente'
+                    message: 'Cotización eliminada correctamente'
                 });
             } else {
                 res.status(404).send({
-                    message: 'La cotizacion no fue eliminada debido a que su ID no fue encontrado.'
+                    message: 'La cotización no fue eliminada debido a que su ID no fue encontrado.'
                 });
             }
 
@@ -312,6 +309,63 @@ export default {
             res.status(500).send({
                 message: 'Error al eliminar cotizacion',
                 error
+            });
+            next(error);
+        }
+    },
+    duplicateQuote: async(req, res, next) => {
+        try {
+            const constCotizaciones = await models.Cotizaciones.findOne({
+                where: {
+                    cot_sn_socios_negocio_id: req.body.socio_negocio_id,
+                    cot_cotizacion_id: req.body.idCotizacion,
+                },
+            });
+
+            if(constCotizaciones) {
+                const cotizacionesData = await models.Cotizaciones.create({
+                    ...constCotizaciones.dataValues,
+                    cot_cotizacion_id: null,
+                    createdAt: null,
+                    updatedAt: null,
+                });
+
+                const cotProductosData = await models.CotizacionesProductos.findAll({
+                    where: {
+                        cotp_cotizacion_id: req.body.idCotizacion,
+                    }
+                });
+
+                for (let index = 0; index < cotProductosData.length; index++) {
+                    const element = cotProductosData[index].dataValues;
+                    console.log('Productos ----> ', element)
+                    await models.CotizacionesProductos.create({
+                        ...element,
+                        cotp_cotizaciones_productos_id: null,
+                        cotp_cotizacion_id: cotizacionesData.dataValues.cot_cotizacion_id,
+                        createdAt: null,
+                        updatedAt: null,
+                        cotp_fecha_entrega: Date(),
+                    });
+                }
+
+                res.status(200).send({
+                    message: 'Cotización duplicada correctamente',
+                    data: cotizacionesData.dataValues.cot_cotizacion_id,
+                    error: false,
+                });
+            } else {
+                res.status(404).send({
+                    message: 'La cotización no fue duplicada debido a que su ID no fue encontrado.',
+                    error: true,
+                });
+            }
+
+        } catch (error) {
+            res.status(500).send({
+                message: 'Error al eliminar cotización',
+                detail: error,
+                error: true,
             });
             next(error);
         }
