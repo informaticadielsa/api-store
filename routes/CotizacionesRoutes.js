@@ -14,6 +14,8 @@ router.delete('/cancelar_Cotizacion', CotizacionesController.cancelarCotizacion)
 router.get('/list', CotizacionesController.getAllCotizaciones);
 //Crear cotizacion a partir de carrito
 router.get('/list_sn/:id', CotizacionesController.getCotizacionesBySN);
+router.post('/quotation_delete', CotizacionesController.quotation_delete);
+router.post('/duplicate_quote', CotizacionesController.duplicateQuote);
 
 //Crear cotizacion a partir de carrito V2 con reglas del diagrama (Version del diagrama vieja y toda amontonada)
 router.get('/v2_cotizacion_detalle/:id', CotizacionesController.V2getCotizacionesDetalle);
