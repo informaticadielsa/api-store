@@ -8,7 +8,7 @@ export default {
 
     searchPrediction: async (req, res) => {
         try
-        {
+        { 
             const wordToSearch = req.body.wordToSearch.toUpperCase();
             const word = wordToSearch.trim();
 
@@ -18,6 +18,9 @@ export default {
                     prod_cmm_estatus_id: 1000016,
                     prod_nombre_extranjero: {
                         [Sequelize.Op.like]: `${word}%`,
+                    },
+                    prod_prod_producto_padre_sku: {
+                        [Op.ne]: null
                     }
                 },
                 limit: 10,
@@ -37,6 +40,7 @@ export default {
                 },
                 limit: 10,
             });
+
 
             respondProductMarca = respondProductMarca.map((item) => {
                 return { prod_nombre: item.mar_nombre }
@@ -98,9 +102,11 @@ export default {
                     prod_nombre: textoEncontrado
                 }
             });
-
+          
             const dataProdResult = [...respondProductsId, ...respondProductMarca, ...respondProduct, ...respondProdDesc];
+         
             const setSinDuplicados = new Set(dataProdResult);
+           
             const dataProd = setSinDuplicados;
             res.status(200).send(
             {
