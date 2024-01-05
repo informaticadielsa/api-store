@@ -10537,14 +10537,22 @@ export default {
             var searchBy = req.body.searchBy
             var ASCDESC = req.body.ASCDESC
             var orderByFinal = ''
-            var searchCondition = req.body.palabraBuscar.toUpperCase()
-            searchCondition = searchCondition.trim()
+            const searchCondition = (req.body.palabraBuscar.toUpperCase()).trim()
 
+            const filtroCategoria = req.body.filtroCategoria;
+            const filtroSubcategoria = req.body.filtroSubcategoria;
+            const filtroMarca = req.body.filtroMarca;
+            const filtroDisponibilidad = req.body.filtroDisponibilidad;           
+            
+            const filtroRangoPrecioArray = req.body.filtroRangoPrecio;
 
-            var searchConditionSQL = searchCondition.replace(/ /g, " & ")
-            var searchConditionSQLDinamico = searchCondition.replace(/ /g, " | ")
+            const filtroRangoPrecio = (filtroRangoPrecioArray)
+                ? ` AND p5.prod_precio BETWEEN ${filtroRangoPrecioArray[0]} AND ${filtroRangoPrecioArray[1]}`
+                : null;
 
-
+            const filtroDescuento = req.body.filtroDescuento;
+            // console.log('filtroRangoPrecio ', filtroRangoPrecio);
+            // return null;
             //Variable en caso de que venga socio de negocio se obtendran precios de su lista de precios
             var idSocioNegocio
 
@@ -10653,7 +10661,10 @@ export default {
                 var sqlLimiteAndPage = ` LIMIT `+varlimit+` OFFSET `+varoffset
 
 
-                
+                // console.log('Primera condicion ', (filtroCategoria && !filtroSubcategoria));
+                // console.log('segunda condicion ', (filtroSubcategoria && !filtroCategoria));
+                // console.log('condiciones', filtroCategoria, filtroSubcategoria);
+                // return null;
                 sqlBusqueda = `
                     where p5.prod_producto_id in 
                     (
@@ -10750,8 +10761,59 @@ export default {
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
                             )
-                        )  as p1 
+                        )  as p1
+                        ${filtroDisponibilidad
+                            ? `where p1.prod_producto_id in (
+                                select
+                                    sp.sp_prod_producto_id
+                                from stocks_productos sp
+                                join almacenes alm on alm_almacen_id = sp.sp_almacen_id
+                                where sp.sp_prod_producto_id = p1.prod_producto_id
+                                and alm.alm_cmm_estatus_id = 1000036
+                                and alm.alm_pickup_stores = 't'
+                                GROUP BY sp.sp_prod_producto_id
+                                HAVING SUM(sp.sp_cantidad) > 0
+                            )`
+                            : ''
+                        }
                     ) 
+                    ${(filtroCategoria && filtroSubcategoria)
+                        ? ' AND c2.cat_categoria_id = ' + filtroSubcategoria +
+                        ' AND c2.cat_cat_categoria_padre_id = ' + filtroCategoria
+                        :
+                        
+                        (filtroSubcategoria)
+                            ? ' AND c2.cat_categoria_id = ' + filtroSubcategoria
+                            :
+                            (filtroCategoria)
+                                ? ' AND c2.cat_cat_categoria_padre_id = ' + filtroCategoria
+                                : ''
+                        
+                    }
+                    ${filtroMarca
+                        ? ' AND cast(p5.prod_codigo_marca as int) = '+filtroMarca+' AND m2.mar_marca_id = '+filtroMarca
+                        : ''
+                    }
+                    ${filtroRangoPrecio ? filtroRangoPrecio : ''}
+                    ${filtroDescuento
+                        ? ` AND p5.prod_producto_id in (
+                                select
+                                        pp.prodprom_prod_producto_id
+                                from 
+                                        promociones_descuentos pd 
+                                        left join productos_promociones pp ON pd.promdes_promocion_descuento_id = pp.prodprom_promdes_promocion_descuento_id 
+                                        left join controles_maestros_multiples cmm ON pd.promdes_tipo_descuento_id = cmm.cmm_control_id 
+                                where 
+                                        pp.prodprom_prod_producto_id = p5.prod_producto_id
+                                        and pd.promdes_estatus_id = 1000059
+                                        and pd.promdes_fecha_inicio_validez <= current_date
+                                        and pd.promdes_fecha_finalizacion_validez >=  current_date
+                                order by 
+                                        pd.promdes_prioridad asc 
+                                        limit 1
+                        )`
+                        : ''
+                    }
                     `;
                 
                 sqlBusquedaDinamico = `
@@ -10773,7 +10835,7 @@ export default {
                                     productos p1 
                                     left join categorias c2 on cast (p1.prod_codigo_grupo as int) = c2.cat_categoria_id
                                     left join proveedores pv on p1.prod_proveedor_id = pv.prv_proveedores_id 
-                                    left join marcas m2 on p1.prod_mar_marca_id = m2.mar_marca_id 
+                                    left join marcas m2 on p1.prod_mar_marca_id = m2.mar_marca_id ${filtroMarca ? ' AND m2.mar_marca_id = '+ filtroMarca : ''}
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
@@ -10782,6 +10844,10 @@ export default {
                                     and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
+                                    ${filtroCategoria ? 'AND c2.cat_categoria_id = ' + filtroCategoria : ''}
+                                    ${filtroMarca
+                                        ? ' AND cast (p1.prod_codigo_marca as int) = ' + filtroMarca + ' AND m2.mar_marca_id = '+ filtroMarca
+                                        : ''}
                             )
                             --Search Child by Categoria
                             union
@@ -10796,7 +10862,7 @@ export default {
                                     productos p1 
                                     left join categorias c2 on cast (p1.prod_codigo_grupo as int) = c2.cat_categoria_id
                                     left join proveedores pv on p1.prod_proveedor_id = pv.prv_proveedores_id 
-                                    left join marcas m2 on p1.prod_mar_marca_id = m2.mar_marca_id 
+                                    left join marcas m2 on p1.prod_mar_marca_id = m2.mar_marca_id ${filtroMarca ? ' AND m2.mar_marca_id = '+ filtroMarca : ''}
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
@@ -10805,6 +10871,10 @@ export default {
                                     and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
+                                    ${filtroCategoria ? 'AND c2.cat_categoria_id = ' + filtroCategoria : ''}
+                                    ${filtroMarca
+                                        ? ' AND cast (p1.prod_codigo_marca as int) = ' + filtroMarca + ' AND m2.mar_marca_id = '+ filtroMarca
+                                        : ''}
                             )
                             --Search Child by description
                             union 
@@ -10818,7 +10888,7 @@ export default {
                                     productos p1 
                                     left join categorias c2 on cast (p1.prod_codigo_grupo as int) = c2.cat_categoria_id
                                     left join proveedores pv on p1.prod_proveedor_id = pv.prv_proveedores_id 
-                                    left join marcas m2 on p1.prod_mar_marca_id = m2.mar_marca_id 
+                                    left join marcas m2 on p1.prod_mar_marca_id = m2.mar_marca_id ${filtroMarca ? ' AND m2.mar_marca_id = '+ filtroMarca : ''}
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
@@ -10828,6 +10898,10 @@ export default {
                                     and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
+                                    ${filtroCategoria ? 'AND c2.cat_categoria_id = ' + filtroCategoria : ''}
+                                    ${filtroMarca
+                                        ? ' AND cast (p1.prod_codigo_marca as int) = ' + filtroMarca + ' AND m2.mar_marca_id = '+ filtroMarca
+                                        : ''}
                             )
                             --Search Child by Categoria
                             union 
@@ -10841,7 +10915,7 @@ export default {
                                     productos p1 
                                     left join categorias c2 on cast (p1.prod_codigo_grupo as int) = c2.cat_categoria_id
                                     left join proveedores pv on p1.prod_proveedor_id = pv.prv_proveedores_id 
-                                    left join marcas m2 on p1.prod_mar_marca_id = m2.mar_marca_id 
+                                    left join marcas m2 on p1.prod_mar_marca_id = m2.mar_marca_id ${filtroMarca ? ' AND m2.mar_marca_id = '+ filtroMarca : ''}
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
@@ -10850,6 +10924,10 @@ export default {
                                     and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
+                                    ${filtroCategoria ? 'AND c2.cat_categoria_id = ' + filtroCategoria : ''}
+                                    ${filtroMarca
+                                        ? ' AND cast (p1.prod_codigo_marca as int) = ' + filtroMarca + ' AND m2.mar_marca_id = '+ filtroMarca
+                                        : ''}
                             )
                             --Search Child by Marca
                             union 
@@ -10863,7 +10941,7 @@ export default {
                                     productos p1 
                                     left join categorias c2 on cast (p1.prod_codigo_grupo as int) = c2.cat_categoria_id
                                     left join proveedores pv on p1.prod_proveedor_id = pv.prv_proveedores_id 
-                                    left join marcas m2 on cast (p1.prod_codigo_marca as int) = m2.mar_marca_id 
+                                    left join marcas m2 on cast (p1.prod_codigo_marca as int) = m2.mar_marca_id ${filtroMarca ? ' AND m2.mar_marca_id = '+ filtroMarca : ''}
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
@@ -10872,6 +10950,10 @@ export default {
                                     and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
+                                    ${filtroCategoria ? 'AND c2.cat_categoria_id = ' + filtroCategoria : ''}
+                                    ${filtroMarca
+                                        ? ' AND cast (p1.prod_codigo_marca as int) = ' + filtroMarca + ' AND m2.mar_marca_id = '+ filtroMarca
+                                        : ''}
                             )
                             --Search Child by Marca abreviatura
                             union 
@@ -10885,7 +10967,7 @@ export default {
                                     productos p1 
                                     left join categorias c2 on cast (p1.prod_codigo_grupo as int) = c2.cat_categoria_id
                                     left join proveedores pv on p1.prod_proveedor_id = pv.prv_proveedores_id 
-                                    left join marcas m2 on cast (p1.prod_codigo_marca as int) = m2.mar_marca_id 
+                                    left join marcas m2 on cast (p1.prod_codigo_marca as int) = m2.mar_marca_id ${filtroMarca ? ' AND m2.mar_marca_id = '+ filtroMarca : ''}
                                     left join controles_maestros_multiples cmm on p1.prod_cmm_estatus_id = cmm.cmm_control_id 
                                     left join controles_maestros_multiples cmm2 on c2.cat_cmm_estatus_id = cmm2.cmm_control_id 
                                 where 
@@ -10894,11 +10976,16 @@ export default {
                                     and prod_prod_producto_padre_sku is not null 
                                     and prod_mostrar_en_tienda = true
                                     and c2.cat_cmm_estatus_id = 1000010
+                                    ${filtroCategoria ? 'AND c2.cat_categoria_id = ' + filtroCategoria : ''}
+                                    ${filtroMarca
+                                        ? ' AND cast (p1.prod_codigo_marca as int) = ' + filtroMarca
+                                        : ''}
                             ) 
                         )  as p1 
                     ) 
                     `;
                 
+                // var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal;
 
                 //Variables que concatenan TODO
                 var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
@@ -10909,7 +10996,7 @@ export default {
                 {
                     type: sequelize.QueryTypes.SELECT 
                 });
-
+                // console.log('rows ', rows);
             
 
                // console.log('pagina res', rows2)
@@ -11006,6 +11093,8 @@ export default {
 
             // Obtener el precio del dollar y se hace la conversión
             rows = await productosUtils.getConversionUSD(rows);
+
+            // rows = rows.slice(varoffset, varoffset + varlimit);
               
            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
@@ -11395,6 +11484,9 @@ export default {
             var sqlFinalRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal + sqlLimiteAndPage
             var sqlFinalRowsCount = sqlRowsCount + sqlFrom + sqlBusqueda 
           
+            // const sqlFiltrosRows = sqlRows + sqlFrom + sqlBusqueda + orderByFinal;
+            // console.log('sqlFiltrosRows ', sqlFiltrosRows);
+            // return null;
          
            
             //Obtener Rows
