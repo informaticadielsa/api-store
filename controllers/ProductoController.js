@@ -11095,12 +11095,89 @@ export default {
             rows = await productosUtils.getConversionUSD(rows);
 
             // rows = rows.slice(varoffset, varoffset + varlimit);
-              
+
            if(parseInt(req.body.pagina) == (numPaginas-1)  && constCount[0].count != 0  && parseInt(req.body.pagina) !=0 ){  
                 rows = await productosUtils.setFiltrarProductsFinImagen(rows);
-                }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0){     
+            }else if( parseInt(req.body.pagina) < (numPaginas-1)  && constCount[0].count != 0){     
                 rows = await productosUtils.setFiltrarProductsSinImagen(rows);
-                }
+            }
+
+            // RESULTADO DE BUSQUEDA RELACIONADAS CON MARCAS
+            const queryMarcas = `
+            SELECT
+                m2.mar_marca_id,
+                m2.mar_nombre
+            FROM marcas AS m2
+            JOIN (
+                    SELECT
+                        cast (prod.prod_codigo_marca AS INT) as codigo
+                    FROM productos AS prod
+                    WHERE prod.prod_nombre ILIKE '%${searchCondition}%'
+                    AND prod.prod_cmm_estatus_id = 1000016 
+                    AND prod.prod_prod_producto_padre_sku is not null 
+                    AND prod.prod_mostrar_en_tienda = true
+                    GROUP BY prod.prod_codigo_marca
+            ) AS prod ON prod.codigo = m2.mar_marca_id
+            WHERE m2.mar_cmm_estatus_id = 1000042 OR m2.mar_nombre ILIKE '%${searchCondition}%';
+            `
+            const marcasDataFiltro = await sequelize.query(queryMarcas,
+            { 
+                type: sequelize.QueryTypes.SELECT 
+            });
+
+            // RESULTADO DE BUSQUEDA RELACIONADAS CON CATEGORIAS
+            const queryCategorias = `
+            SELECT
+                c2.cat_categoria_id,
+                c2.cat_nombre
+            FROM categorias c2
+            JOIN (
+                    SELECT
+                        cast (prod.prod_codigo_grupo AS INT) as codigo
+                    FROM productos AS prod
+                    WHERE prod.prod_nombre ILIKE '%${searchCondition}%'
+                    AND prod.prod_cmm_estatus_id = 1000016 
+                    AND prod.prod_prod_producto_padre_sku is not null 
+                    AND prod.prod_mostrar_en_tienda = true
+                    GROUP BY prod.prod_codigo_grupo
+            ) AS prod ON prod.codigo = c2.cat_categoria_id OR c2.cat_nombre ILIKE '%${searchCondition}%'
+            WHERE c2.cat_cmm_estatus_id = 1000010 AND c2.cat_cat_categoria_padre_id IS NULL
+            GROUP BY c2.cat_categoria_id;
+            `
+            const categoriasDataFiltro = await sequelize.query(queryCategorias,
+            { 
+                type: sequelize.QueryTypes.SELECT 
+            });
+
+            // RESULTADO DE BUSQUEDA RELACIONADAS CON SUBCATEGORIAS
+            const querySubCategorias = `
+            SELECT
+                c2.cat_categoria_id,
+                c2.cat_nombre,
+                c2.cat_cat_categoria_padre_id
+            FROM categorias c2
+            JOIN (SELECT
+                cast (prod.prod_codigo_grupo AS INT) as codigo
+            FROM productos AS prod
+            WHERE prod.prod_nombre ILIKE '%${searchCondition}%'
+            AND prod.prod_cmm_estatus_id = 1000016 
+            AND prod.prod_prod_producto_padre_sku is not null 
+            AND prod.prod_mostrar_en_tienda = true
+            GROUP BY prod.prod_codigo_grupo) AS prod ON prod.codigo = c2.cat_categoria_id OR c2.cat_nombre ILIKE '%${searchCondition}%'
+            WHERE c2.cat_cmm_estatus_id = 1000010 AND c2.cat_cat_categoria_padre_id IS NOT NULL
+            GROUP BY c2.cat_categoria_id;
+            `
+            const subCategoriasDataFiltro = await sequelize.query(querySubCategorias,
+            { 
+                type: sequelize.QueryTypes.SELECT 
+            });
+
+            const dataFilters = {
+                marcasDataFiltro,
+                categoriasDataFiltro,
+                subCategoriasDataFiltro,
+            }
+
             const mainConsultaProductos = {
                 count: parseInt(constCount[0].count),
                 rows
@@ -11108,7 +11185,8 @@ export default {
 
             res.status(200).send({
                 message: 'Lista de productos',
-                mainConsultaProductos
+                mainConsultaProductos,
+                dataFilters,
             })
 
         }catch(e){
